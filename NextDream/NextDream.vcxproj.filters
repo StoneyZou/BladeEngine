@@ -45,5 +45,8 @@
     <ClInclude Include="Scourse\Core\Memory.h">
       <Filter>头文件\Scource\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Scourse\RHI\RHIEnum.h">
+      <Filter>头文件\Scource\RHI</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

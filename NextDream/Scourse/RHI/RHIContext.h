@@ -3,19 +3,27 @@
 
 namespace BladeEngine
 {
-	class IRHIContextBase
-	{
-	public:
-		void SetShaderTexture()
-		{
+    namespace RHI
+    {
+        class IRHIContextBase
+        {
+        public:
+            void SetShaderTexture()
+            {
 
-		}
-	};
+            }
+        };
 
-	class IRHIImmediateContextBase
-	{
+        class RHIImmediateContext : public IRHIContextBase
+        {
 
-	};
+        };
+
+        class RHIDeferredContext : public IRHIContextBase
+        {
+
+        };
+    }
 }
 
 #endif // !__BLADE_RHI_RHI_CONTEXT_H__

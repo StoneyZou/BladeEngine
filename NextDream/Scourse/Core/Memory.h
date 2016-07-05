@@ -42,11 +42,6 @@ namespace BladeEngine
 #endif // DEBUG
     };
 
-#ifdef DEBUG
-    #define Alloc(inSize) Alloc(inSize, )
-#endif // DEBUG
-
-
     void* operator new (SIZE_T inSize)
     {
         return SystemMalloc::GetInstance().Alloc(inSize);
