@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\Scource">
+      <UniqueIdentifier>{31361183-339d-4924-8cb9-c25c051cc2ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Scource\RHI">
+      <UniqueIdentifier>{ffd5b670-eeb4-4bbc-88c3-0987d5e06475}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Scource\Core">
+      <UniqueIdentifier>{1ab40965-407d-4857-93cf-0875142b7dbe}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Scourse\Core\Utility.h">
+      <Filter>头文件\Scource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Scourse\RHI\RHI.h">
+      <Filter>头文件\Scource\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="Scourse\RHI\RHIContext.h">
+      <Filter>头文件\Scource\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="Scourse\RHI\RHIDevice.h">
+      <Filter>头文件\Scource\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="Scourse\Core\TypeDefine.h">
+      <Filter>头文件\Scource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Scourse\Core\CharDefine.h">
+      <Filter>头文件\Scource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Scourse\Core\Memory.h">
+      <Filter>头文件\Scource\Core</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
