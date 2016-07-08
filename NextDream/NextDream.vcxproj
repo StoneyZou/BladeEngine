@@ -25,10 +25,11 @@
     <ClInclude Include="Scourse\RHI\RHI.h" />
     <ClInclude Include="Scourse\RHI\RHIContext.h" />
     <ClInclude Include="Scourse\RHI\RHIDevice.h" />
-    <ClInclude Include="Scourse\RHI\RHIEnum.h" />
+    <ClInclude Include="Source\Core\Logger.h" />
     <ClInclude Include="Source\Core\Utility.h" />
     <ClInclude Include="Source\DirectX11\RHIDirectX11Device.h" />
     <ClInclude Include="Source\DirectX11\RHIDirectXEnumMapping.h" />
+    <ClInclude Include="Source\RHI\RHIEnum.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C8A5591A-0BD7-4617-820A-E1844B8D9DDC}</ProjectGuid>

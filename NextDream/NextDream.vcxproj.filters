@@ -45,9 +45,6 @@
     <ClInclude Include="Scourse\Core\Memory.h">
       <Filter>头文件\Source\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Scourse\RHI\RHIEnum.h">
-      <Filter>头文件\Source\RHI</Filter>
-    </ClInclude>
     <ClInclude Include="Source\DirectX11\RHIDirectX11Device.h">
       <Filter>头文件\Source\DirectX11</Filter>
     </ClInclude>
@@ -56,6 +53,12 @@
     </ClInclude>
     <ClInclude Include="Source\DirectX11\RHIDirectXEnumMapping.h">
       <Filter>头文件\Source\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\RHIEnum.h">
+      <Filter>头文件\Source\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Logger.h">
+      <Filter>头文件\Source\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -20,26 +20,55 @@ namespace BladeEngine
         public:
             virtual RHITextureBaseRef CreateTexture2D(const RHITexture2DCreateInfo& inCreateInfo)
             {
-                D3D11_TEXTURE2D_DESC tDesc = { 0 };
+                D3D11_TEXTURE2D_DESC tTextureDesc = { 0 };
                 //tDesc.BindFlags
-                tDesc.Width = inCreateInfo.Width;
-                tDesc.Height = inCreateInfo.Height;
-                tDesc.Usage = inCreateInfo.Writable ? D3D11_USAGE_DYNAMIC : D3D11_USAGE_DEFAULT;
-                tDesc.CPUAccessFlags = inCreateInfo.Writable ? D3D11_CPU_ACCESS_WRITE : 0;
-                tDesc.SampleDesc.Count = 1;
-                tDesc.SampleDesc.Quality = 0;
-                tDesc.ArraySize = 1;
-                tDesc.MipLevels = 0;
-                tDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | (inCreateInfo.AsRenderTarget ? D3D11_BIND_RENDER_TARGET : 0);
-                tDesc.MiscFlags = 0;
-                tDesc.Format = RHIDirectXEnumMapping::Get(inCreateInfo.Format);
+                tTextureDesc.Width = inCreateInfo.Width;
+                tTextureDesc.Height = inCreateInfo.Height;
+                tTextureDesc.Usage = inCreateInfo.Writable ? D3D11_USAGE_DYNAMIC : D3D11_USAGE_DEFAULT;
+                tTextureDesc.CPUAccessFlags = inCreateInfo.Writable ? D3D11_CPU_ACCESS_WRITE : 0;
+                tTextureDesc.SampleDesc.Count = 1;
+                tTextureDesc.SampleDesc.Quality = 0;
+                tTextureDesc.ArraySize = 1;
+                tTextureDesc.MipLevels = 0;
+                tTextureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | (inCreateInfo.AsRenderTarget ? D3D11_BIND_RENDER_TARGET : 0);
+                tTextureDesc.MiscFlags = 0;
+                tTextureDesc.Format = RHIDirectXEnumMapping::Get(inCreateInfo.Format);
                 
+                D3D11_SUBRESOURCE_DATA tTextureData = { 0 };
+                tTextureData.pSysMem = inCreateInfo.Data;
+                tTextureData.SysMemPitch = 0;
+                tTextureData.SysMemSlicePitch = 0;
+                
+                ID3D11Texture2D* pD3D11Texture2D = NULL;
+                HRESULT hr = m_pDevice->CreateTexture2D(&tTextureDesc, &tTextureData, &pD3D11Texture2D);
 
+                if (FAILED(hr))
+                {
+                    //Logger::Log()
+                    return NULL;
+                }
+                
+                D3D11_SHADER_RESOURCE_VIEW_DESC tShaderResViewDesc;
+                tShaderResViewDesc.Format = tTextureDesc.Format;
+                tShaderResViewDesc.ViewDimension = D3D_SRV_DIMENSION_TEXTURE2D;
+                tShaderResViewDesc.Texture2D.MipLevels = 0;
+                tShaderResViewDesc.Texture2D.MostDetailedMip = 0;
+                
+                ID3D11ShaderResourceView* pD3D11ShaderResourceView = NULL;
+                hr = m_pDevice->CreateShaderResourceView(pD3D11Texture2D, &tShaderResViewDesc, &pD3D11ShaderResourceView);
 
-                m_pDevice->CreateTexture2D(&tDesc, inCreateInfo.Data, )
+                if (FAILED(hr))
+                {
+                    //Logger::Log()
+                    return NULL;
+                }
             }
 
-            virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo) = 0;
+            virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo& inCreateInfo)
+            {
+                ID3D11VertexShader* pD3D11VertexShader = NULL;
+                HRESULT hr = m_pDevice->CreateVertexShader(inCreateInfo.Data, inCreateInfo.DataSize, NULL, &pD3D11VertexShader);
+            }
 
             virtual RHIPixelShaderRef CreatePixelShader(const RHIShaderCreateInfo) = 0;
 
