@@ -45,7 +45,7 @@ namespace BladeEngine
 	*/
 
 	template <typename T, const unsigned int Size>
-	struct TCharBase
+	struct _CharBase
 	{
 		typedef T CharType;
 
@@ -59,7 +59,7 @@ namespace BladeEngine
 	};
 
 	template <typename T>
-	struct TCharBase<T, 1>
+	struct _CharBase<T, 1>
 	{
 		typedef T CharType;
 
@@ -76,13 +76,13 @@ namespace BladeEngine
 		typedef T CharType;
 		static inline bool IsLinebreak(CharType c)
 		{
-			return	c == TCharBase<CharType, Size>::LineFeed
-				|| c == TCharBase<CharType, Size>::VerticalTab
-				|| c == TCharBase<CharType, Size>::FormFeed
-				|| c == TCharBase<CharType, Size>::CarriageReturn
-				|| c == TCharBase<CharType, Size>::NextLine
-				|| c == TCharBase<CharType, Size>::LineSeparator
-				|| c == TCharBase<CharType, Size>::ParagraphSeparator;
+			return	c == _CharBase<CharType, Size>::LineFeed
+				|| c == _CharBase<CharType, Size>::VerticalTab
+				|| c == _CharBase<CharType, Size>::FormFeed
+				|| c == _CharBase<CharType, Size>::CarriageReturn
+				|| c == _CharBase<CharType, Size>::NextLine
+				|| c == _CharBase<CharType, Size>::LineSeparator
+				|| c == _CharBase<CharType, Size>::ParagraphSeparator;
 		}
 	};
 
@@ -92,16 +92,16 @@ namespace BladeEngine
 		typedef T CharType;
 		static inline bool IsLinebreak(CharType c)
 		{
-			return	c == TCharBase<CharType, 1>::LineFeed
-				|| c == TCharBase<CharType, 1>::VerticalTab
-				|| c == TCharBase<CharType, 1>::FormFeed
-				|| c == TCharBase<CharType, 1>::CarriageReturn
-				|| c == TCharBase<CharType, 1>::NextLine;
+			return	c == _CharBase<CharType, 1>::LineFeed
+				|| c == _CharBase<CharType, 1>::VerticalTab
+				|| c == _CharBase<CharType, 1>::FormFeed
+				|| c == _CharBase<CharType, 1>::CarriageReturn
+				|| c == _CharBase<CharType, 1>::NextLine;
 		}
 	};
 
 	template <typename T>
-	struct TChar : public TCharBase<T, sizeof(T)>
+	struct _CharUtil : public _CharBase<T, sizeof(T)>
 	{
 		typedef T CharType;
 	public:
@@ -134,38 +134,38 @@ namespace BladeEngine
 		static inline bool IsLinebreak(CharType Char) { return LineBreakImplementation<CharType, sizeof(CharType)>::IsLinebreak(Char); }
 	};
 
-	typedef TChar<TCHAR>    FChar;
-	typedef TChar<WIDECHAR> FCharWide;
-	typedef TChar<ANSICHAR> FCharAnsi;
+	typedef _CharUtil<TCHAR>        TCharUtil;
+	typedef _CharUtil<WIDECHAR>     WideCharUtil;
+	typedef _CharUtil<ANSICHAR>     AnsiCharMiscUtil;
 
 	/*-----------------------------------------------------------------------------
 	TCHAR specialized functions
 	-----------------------------------------------------------------------------*/
 
-	template <> inline TChar<WIDECHAR>::CharType TChar<WIDECHAR>::ToUpper(CharType Char) { return ::towupper(Char); }
-	template <> inline TChar<WIDECHAR>::CharType TChar<WIDECHAR>::ToLower(CharType Char) { return ::towlower(Char); }
-	template <> inline bool TChar<WIDECHAR>::IsUpper(CharType Char) { return ::iswupper(Char) != 0; }
-	template <> inline bool TChar<WIDECHAR>::IsLower(CharType Char) { return ::iswlower(Char) != 0; }
-	template <> inline bool TChar<WIDECHAR>::IsAlpha(CharType Char) { return ::iswalpha(Char) != 0; }
-	template <> inline bool TChar<WIDECHAR>::IsPunct(CharType Char) { return ::iswpunct(Char) != 0; }
-	template <> inline bool TChar<WIDECHAR>::IsAlnum(CharType Char) { return ::iswalnum(Char) != 0; }
-	template <> inline bool TChar<WIDECHAR>::IsDigit(CharType Char) { return ::iswdigit(Char) != 0; }
-	template <> inline bool TChar<WIDECHAR>::IsHexDigit(CharType Char) { return ::iswxdigit(Char) != 0; }
-	template <> inline bool TChar<WIDECHAR>::IsWhitespace(CharType Char) { return ::iswspace(Char) != 0; }
+	template <> inline _CharUtil<WIDECHAR>::CharType _CharUtil<WIDECHAR>::ToUpper(CharType Char) { return ::towupper(Char); }
+	template <> inline _CharUtil<WIDECHAR>::CharType _CharUtil<WIDECHAR>::ToLower(CharType Char) { return ::towlower(Char); }
+	template <> inline bool _CharUtil<WIDECHAR>::IsUpper(CharType Char) { return ::iswupper(Char) != 0; }
+	template <> inline bool _CharUtil<WIDECHAR>::IsLower(CharType Char) { return ::iswlower(Char) != 0; }
+	template <> inline bool _CharUtil<WIDECHAR>::IsAlpha(CharType Char) { return ::iswalpha(Char) != 0; }
+	template <> inline bool _CharUtil<WIDECHAR>::IsPunct(CharType Char) { return ::iswpunct(Char) != 0; }
+	template <> inline bool _CharUtil<WIDECHAR>::IsAlnum(CharType Char) { return ::iswalnum(Char) != 0; }
+	template <> inline bool _CharUtil<WIDECHAR>::IsDigit(CharType Char) { return ::iswdigit(Char) != 0; }
+	template <> inline bool _CharUtil<WIDECHAR>::IsHexDigit(CharType Char) { return ::iswxdigit(Char) != 0; }
+	template <> inline bool _CharUtil<WIDECHAR>::IsWhitespace(CharType Char) { return ::iswspace(Char) != 0; }
 
 	/*-----------------------------------------------------------------------------
 	ANSICHAR specialized functions
 	-----------------------------------------------------------------------------*/
-	template <> inline TChar<ANSICHAR>::CharType TChar<ANSICHAR>::ToUpper(CharType Char) { return ::toupper(Char); }
-	template <> inline TChar<ANSICHAR>::CharType TChar<ANSICHAR>::ToLower(CharType Char) { return ::tolower(Char); }
-	template <> inline bool TChar<ANSICHAR>::IsUpper(CharType Char) { return ::isupper((unsigned char)Char) != 0; }
-	template <> inline bool TChar<ANSICHAR>::IsLower(CharType Char) { return ::islower((unsigned char)Char) != 0; }
-	template <> inline bool TChar<ANSICHAR>::IsAlpha(CharType Char) { return ::isalpha((unsigned char)Char) != 0; }
-	template <> inline bool TChar<ANSICHAR>::IsPunct(CharType Char) { return ::ispunct((unsigned char)Char) != 0; }
-	template <> inline bool TChar<ANSICHAR>::IsAlnum(CharType Char) { return ::isalnum((unsigned char)Char) != 0; }
-	template <> inline bool TChar<ANSICHAR>::IsDigit(CharType Char) { return ::isdigit((unsigned char)Char) != 0; }
-	template <> inline bool TChar<ANSICHAR>::IsHexDigit(CharType Char) { return ::isxdigit((unsigned char)Char) != 0; }
-	template <> inline bool TChar<ANSICHAR>::IsWhitespace(CharType Char) { return ::isspace((unsigned char)Char) != 0; }
+	template <> inline _CharUtil<ANSICHAR>::CharType _CharUtil<ANSICHAR>::ToUpper(CharType Char) { return ::toupper(Char); }
+	template <> inline _CharUtil<ANSICHAR>::CharType _CharUtil<ANSICHAR>::ToLower(CharType Char) { return ::tolower(Char); }
+	template <> inline bool _CharUtil<ANSICHAR>::IsUpper(CharType Char) { return ::isupper((unsigned char)Char) != 0; }
+	template <> inline bool _CharUtil<ANSICHAR>::IsLower(CharType Char) { return ::islower((unsigned char)Char) != 0; }
+	template <> inline bool _CharUtil<ANSICHAR>::IsAlpha(CharType Char) { return ::isalpha((unsigned char)Char) != 0; }
+	template <> inline bool _CharUtil<ANSICHAR>::IsPunct(CharType Char) { return ::ispunct((unsigned char)Char) != 0; }
+	template <> inline bool _CharUtil<ANSICHAR>::IsAlnum(CharType Char) { return ::isalnum((unsigned char)Char) != 0; }
+	template <> inline bool _CharUtil<ANSICHAR>::IsDigit(CharType Char) { return ::isdigit((unsigned char)Char) != 0; }
+	template <> inline bool _CharUtil<ANSICHAR>::IsHexDigit(CharType Char) { return ::isxdigit((unsigned char)Char) != 0; }
+	template <> inline bool _CharUtil<ANSICHAR>::IsWhitespace(CharType Char) { return ::isspace((unsigned char)Char) != 0; }
 
 }
 }

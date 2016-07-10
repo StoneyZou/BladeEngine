@@ -1,6 +1,8 @@
 #ifndef __BLADE_RHI_RHI_CONTEXT_H__
 #define __BLADE_RHI_RHI_CONTEXT_H__
 
+#include <RHIDevice.h>
+
 namespace BladeEngine
 {
     namespace RHI
@@ -8,14 +10,12 @@ namespace BladeEngine
         class IRHIContextBase
         {
         public:
-            void SetShaderTexture()
-            {
-
-            }
+            virtual bool SetVertexShader(const RHIVertexShaderRef& inRHIShader) = 0;
         };
 
         class RHIImmediateContext : public IRHIContextBase
         {
+        public:
 
         };
 

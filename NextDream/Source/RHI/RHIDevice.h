@@ -1,13 +1,35 @@
 #ifndef __BLADE_RHI_RHI_DEVICE_H__
 #define __BLADE_RHI_RHI_DEVICE_H__
 
-#include "Utility.h"
-#include "RHIEnum.h"
+#include <Utility.h>
+#include <RHIEnum.h>
+#include <TArray.h>
+#include <String.h>
 
 namespace BladeEngine
 {
     namespace RHI
     {
+        #define MAX_SHADER_DEFINE_NUM 32
+
+        class RHIShaderBase
+        {
+        private:
+            struct AttributionDesc
+            {
+                SIZE_T Offset;
+                SIZE_T Size;
+                ESHADER_ATTRIB_TYPE Type;
+            };
+
+        private:
+            
+            TArray<AttributionDesc> m_AttributionDesc
+
+        public:
+
+        };
+
         template<ENUM_SHADER_TYPE ShaderType>
         class RHIShader : RHIShaderBase
         {};
@@ -55,6 +77,10 @@ namespace BladeEngine
         struct RHIShaderCreateInfo
         {
         public:
+            TArray<String> Defines;
+            TArray<uint32> DefinesHash;
+            TArray<SIZE_T> CodeOffsetWithDefines;
+            TArray<SIZE_T> CodeSizeWithDefines;
             uint32 DataSize;
             void* Data;
         };

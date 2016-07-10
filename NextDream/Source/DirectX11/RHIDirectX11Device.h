@@ -66,11 +66,50 @@ namespace BladeEngine
 
             virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo& inCreateInfo)
             {
+                BladeAssert(inCreateInfo.Defines.Length() <= MAX_SHADER_DEFINE_NUM);
+                BladeAssert(inCreateInfo.CodeOffsetWithDefines.Length() == inCreateInfo.CodeSizeWithDefines.Length());
+
                 ID3D11VertexShader* pD3D11VertexShader = NULL;
-                HRESULT hr = m_pDevice->CreateVertexShader(inCreateInfo.Data, inCreateInfo.DataSize, NULL, &pD3D11VertexShader);
+                HRESULT hr = S_OK;
+
+                for (int i = 0; i < inCreateInfo.CodeOffsetWithDefines.Length(); ++i)
+                {
+                    inCreateInfo.Data;
+                    SIZE_T codeOffest = inCreateInfo.CodeOffsetWithDefines[i];
+                    SIZE_T codeSize = inCreateInfo.CodeSizeWithDefines[i];
+
+                    hr = m_pDevice->CreateVertexShader(((const char*)inCreateInfo.Data + codeOffest) , codeSize, NULL, &pD3D11VertexShader);
+                    if (FAILED(hr))
+                    {
+                        //Logger::Log()
+                        return NULL;
+                    }
+                }
             }
 
-            virtual RHIPixelShaderRef CreatePixelShader(const RHIShaderCreateInfo) = 0;
+            virtual RHIPixelShaderRef CreatePixelShader(const RHIShaderCreateInfo& inCreateInfo))
+            {
+                BladeAssert(inCreateInfo.Defines.Length() <= MAX_SHADER_DEFINE_NUM);
+                BladeAssert(inCreateInfo.CodeOffsetWithDefines.Length() == inCreateInfo.CodeSizeWithDefines.Length());
+
+                ID3D11PixelShader* pD3D11PixelShader = NULL;
+                HRESULT hr = S_OK;
+
+                for (int i = 0; i < inCreateInfo.CodeOffsetWithDefines.Length(); ++i)
+                {
+                    inCreateInfo.Data;
+                    SIZE_T codeOffest = inCreateInfo.CodeOffsetWithDefines[i];
+                    SIZE_T codeSize = inCreateInfo.CodeSizeWithDefines[i];
+
+                    hr = m_pDevice->CreatePixelShader(((const char*)inCreateInfo.Data + codeOffest), codeSize, NULL, &pD3D11PixelShader);
+                    if (FAILED(hr))
+                    {
+                        //Logger::Log()
+                        return NULL;
+                    }
+                }
+            }
+
 
             virtual RHIHullShaderRef CreateHullShader(const RHIShaderCreateInfo) = 0;
 

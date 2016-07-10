@@ -42,12 +42,12 @@ namespace BladeEngine
 #endif // DEBUG
     };
 
-    void* operator new (SIZE_T inSize)
+    void* operator new (size_t inSize)
     {
         return SystemMalloc::GetInstance().Alloc(inSize);
     }
 
-    void* operator new[] (SIZE_T inSize)
+    void* operator new[] (size_t inSize)
     {
         return SystemMalloc::GetInstance().Alloc(inSize);
     }

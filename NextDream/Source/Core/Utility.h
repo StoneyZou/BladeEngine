@@ -17,6 +17,14 @@ namespace BladeEngine
 	#define BladeAssert(condition) _BladeAssert_Impl(condition, "Condition of assertion couldn't be satisfied!", __FILE__,  __LINE__);
 	//#define BladeAssert(condition, message) _BladeAssert_Impl(condition, message, __FILE__,  __LINE__);
 
+    class INoncopyable
+    {
+    public:
+        INoncopyable() {}
+        INoncopyable(const INoncopyable&);
+        INoncopyable& operator = (const INoncopyable&);
+    };
+
 	class IRefCountBase
 	{
 	public:

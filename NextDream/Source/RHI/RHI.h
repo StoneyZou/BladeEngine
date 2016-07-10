@@ -6,31 +6,31 @@
 
 namespace BladeEngine
 {
-	namespace RHI
-	{
-		class RHICommandList : INoncopyable
-		{
-		private:
-			RHICommandBase m_Root;
+    namespace RHI
+    {
+        class RHICommandList : INoncopyable
+        {
+        private:
+            RHICommandBase m_Root;
 
-		public:
+        public:
 
-		};
+        };
 
-		class RHICommandBase : public INoncopyable
-		{
-			friend class RHICommandList;
-		private:
-			typedef void(*ExecuteFunc)(bool inImmediate, RHICommandBase* inCmd);
-		private:
-			ExecuteFunc m_pExecuteFunc;
-			RHICommandBase* m_pNext;
+        class RHICommandBase : public INoncopyable
+        {
+        friend class RHICommandList;
+        private:
+            typedef void(*ExecuteFunc)(bool inImmediate, RHICommandBase* inCmd);
+        private:
+            ExecuteFunc m_pExecuteFunc;
+            RHICommandBase* m_pNext;
 
-		private:
-			RHICommandBase() : m_pExecuteFunc(NULL), m_pNext(NULL)
-			{}
+        private:
+            RHICommandBase() : m_pExecuteFunc(NULL), m_pNext(NULL)
+            {}
 
-		public:
+        public:
 			RHICommandBase(ExecuteFunc inExecuteFunc, RHICommandBase* inParent) :
 				m_pExecuteFunc(inExecuteFunc)
 			{

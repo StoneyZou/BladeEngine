@@ -25,26 +25,14 @@
     <Filter Include="头文件\Source\DirectX11">
       <UniqueIdentifier>{8fac3d94-c72f-4735-8bdf-4733fff87a05}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Source\Contains">
+      <UniqueIdentifier>{504a3c72-e50d-4d9b-ab06-4ca40240f424}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Source\Core\Platform">
+      <UniqueIdentifier>{b82d1889-e6ad-4a79-93af-8b11662c2070}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Scourse\RHI\RHI.h">
-      <Filter>头文件\Source\RHI</Filter>
-    </ClInclude>
-    <ClInclude Include="Scourse\RHI\RHIContext.h">
-      <Filter>头文件\Source\RHI</Filter>
-    </ClInclude>
-    <ClInclude Include="Scourse\RHI\RHIDevice.h">
-      <Filter>头文件\Source\RHI</Filter>
-    </ClInclude>
-    <ClInclude Include="Scourse\Core\TypeDefine.h">
-      <Filter>头文件\Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Scourse\Core\CharDefine.h">
-      <Filter>头文件\Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Scourse\Core\Memory.h">
-      <Filter>头文件\Source\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Source\DirectX11\RHIDirectX11Device.h">
       <Filter>头文件\Source\DirectX11</Filter>
     </ClInclude>
@@ -59,6 +47,45 @@
     </ClInclude>
     <ClInclude Include="Source\Core\Logger.h">
       <Filter>头文件\Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\CharDefine.h">
+      <Filter>头文件\Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\TypeDefine.h">
+      <Filter>头文件\Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Memory.h">
+      <Filter>头文件\Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Guid.h">
+      <Filter>头文件\Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Contains\String.h">
+      <Filter>头文件\Source\Contains</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Platforms\MemUtil.h">
+      <Filter>头文件\Source\Core\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Platforms\StringUtil.h">
+      <Filter>头文件\Source\Core\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Contains\TArray.h">
+      <Filter>头文件\Source\Contains</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\RHI.h">
+      <Filter>头文件\Source\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\RHIContext.h">
+      <Filter>头文件\Source\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\RHIDevice.h">
+      <Filter>头文件\Source\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DirectX11\RHIDirectX11Context.h">
+      <Filter>头文件\Source\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DirectX11\TMap.h">
+      <Filter>头文件\Source\Contains</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
