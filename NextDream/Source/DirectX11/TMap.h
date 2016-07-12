@@ -10,7 +10,7 @@ namespace BladeEngine
         template<typename Type>
         struct DefaultCompareFunc
         {
-            int32 Compare(const Type& lh, const Type& rh)
+            static int32 Compare(const Type& lh, const Type& rh)
             {
                 return (lh < rh ? 1 : (rh < lh ? -1 : 0));
             }
@@ -18,7 +18,7 @@ namespace BladeEngine
     }
 
     template<typename KeyType, typename ValueType, typename CompareFunc = Contains::DefaultCompareFunc<KeyType>>
-    class TMap : public INoncopyable
+    class TMap
     {
     private:
         const uint32 Black = 0;
@@ -32,7 +32,7 @@ namespace BladeEngine
             _RBTree_Node* RightNode;
             KeyType Key;
             ValueType Value;
-        };    
+        };
 
     private:
         _RBTree_Node* m_Root;
@@ -58,7 +58,7 @@ namespace BladeEngine
                 }
                 else
                 {
-                    parentNode->RightNode = rightNode£»
+                    parentNode->RightNode = rightNode;
                 }
             }
 
@@ -68,8 +68,8 @@ namespace BladeEngine
             if (rightLeftNode != NULL)
             {
                 rightLeftNode->ParentNode = inNode;
-                inNode->RightNode = rightLeftNode;
             }
+            inNode->RightNode = rightLeftNode;
         }
 
         void _RBTreeRotateRight(_RBTree_Node* inNode, _RBTree_Node** inRoot)
@@ -106,12 +106,12 @@ namespace BladeEngine
             inNode->LeftNode = leftRightNode;
         }
 
-        _RBTree_Node* _RBTreeSreachNode(KeyType inKey, _RBTree_Node* inRoot)
+        _RBTree_Node* _RBTreeSreachNode(const KeyType& inKey, _RBTree_Node* inRoot)
         {
             _RBTree_Node* node = inRoot;
             int32 result = 0;
 
-            while (node == NULL)
+            while (node != NULL)
             {
                 int32 result = CompareFunc::Compare(node->Key, inKey);
                 if (result > 0)
@@ -134,13 +134,14 @@ namespace BladeEngine
         int32 _RBTreeInsert_SreachParentNode(KeyType inKey, _RBTree_Node* inRoot, _RBTree_Node** inParent)
         {
             _RBTree_Node* node = inRoot;
-            _RBTree_Node* insertNode = NULL;
+            _RBTree_Node* insertParentNode = NULL;
             int32 result = 0;
 
-            while (node == NULL)
+            while (node != NULL)
             {
-                insertNode = node;
-                int32 result = CompareFunc::Compare(node->Key, inKey);
+                insertParentNode = node;
+                result = CompareFunc::Compare(node->Key, inKey);
+
                 if (result > 0)
                 {
                     node = node->RightNode;
@@ -155,7 +156,11 @@ namespace BladeEngine
                 }
             }
 
-            return insertNode;
+            if (inParent != nullptr)
+            {
+                *inParent = insertParentNode;
+            }
+            return result;
         }
 
         _RBTree_Node* _RBTreeInsert(const KeyType& inKey, const ValueType& inValue, _RBTree_Node** inRoot)
@@ -184,48 +189,56 @@ namespace BladeEngine
             {
                 parentNode->LeftNode = insertNode;
             }
+            insertNode->ParentNode = parentNode;
 
-            _RBTreeInsert_SreachParentNode(insertNode, inRoot);
+            _RBTreeInsertBalance(insertNode, inRoot);
+
+            return insertNode;
         }
 
-        void _RBTreeInsertBalance(_RBTree_Node inNode, _RBTree_Node* inRoot)
+        void _RBTreeInsertBalance(_RBTree_Node* inNode, _RBTree_Node** inRoot)
         {
+            if (inNode->ParentNode == NULL || inNode->ParentNode->ParentNode == NULL)
+            {
+                return;
+            }
+
             _RBTree_Node* node = inNode;
             _RBTree_Node* parent = node->ParentNode;
             _RBTree_Node* grandParent = parent->ParentNode;
-            _RBTree_Node* uncle = grandParetn->LeftNode == parent ? grandParetn->RightNode : grandParetn->LeftNode;
+            _RBTree_Node* uncle = grandParent->LeftNode == parent ? grandParent->RightNode : grandParent->LeftNode;
 
-            while (grandParent != NULL && parent != NULL && parent->Color != Black)
+            while (parent->Color != Black)
             {
                 if (uncle == NULL || uncle->Color == Black)
                 {
                     if (grandParent->LeftNode == parent)
                     {
-                        if (parent->RightNode = node)
+                        if (parent->RightNode == node)
                         {
-                            _RBTreeRotateLeft(parent, &inRoot);
+                            _RBTreeRotateLeft(parent, inRoot);
                             _RBTree_Node* temp = node;
                             node = parent;
-                            parent = node;
+                            parent = temp;
                         }
 
                         grandParent->Color = Red;
                         parent->Color = Black;
-                        _RBTreeRotateLeft(grandParent, &inRoot);
+                        _RBTreeRotateRight(grandParent, inRoot);
                     }
                     else
                     {
-                        if (parent->RightNode = node)
+                        if (parent->LeftNode == node)
                         {
-                            _RBTreeRotateLeft(parent, &inRoot);
+                            _RBTreeRotateRight(parent, inRoot);
                             _RBTree_Node* temp = node;
                             node = parent;
-                            parent = node;
+                            parent = temp;
                         }
 
                         grandParent->Color = Red;
                         parent->Color = Black;
-                        _RBTreeRotateRight(grandParent, &inRoot);
+                        _RBTreeRotateLeft(grandParent, inRoot);
                     }
                 }
                 else
@@ -236,10 +249,6 @@ namespace BladeEngine
 
                     node = grandParent;
                 }
-
-                parent = node->ParentNode;
-                grandParent = parent->ParentNode;
-                uncle = grandParent->LeftNode == parent ? grandParent->RightNode : parent;
             }
 
             parent->Color = Black;
@@ -247,42 +256,134 @@ namespace BladeEngine
 
         void _RBTreeErase(const KeyType& inKey, _RBTree_Node** inRoot)
         {
-            _RBTree_Node* eraseNode = _RBTreeSreachNode(inKey, inRoot);
+            _RBTree_Node* eraseNode = _RBTreeSreachNode(inKey, *inRoot);
             if (eraseNode == NULL)
             {
                 return;
             }
 
-            // greater than erase node but less than other children in erase node
-            _RBTree_Node* replaceNode = eraseNode->RightNode;  
-            while (replaceNode->LeftNode != NULL)
-            {
-                replaceNode = replaceNode->LeftNode;
-            }
+            int32 balanceColor = Red;
+            _RBTree_Node* balanceNode = NULL;
+            _RBTree_Node* balanceParentNode = NULL;
 
-            // swap replace node and erase node
-            if( replaceNode->ParentNode->LeftNode == replaceNode )
+            if (eraseNode->LeftNode != NULL && eraseNode->RightNode != NULL)
             {
-                replaceNode->ParentNode->LeftNode = NULL;
+                // greater than erase node but less than other children in erase node
+                _RBTree_Node* replaceNode = eraseNode->RightNode;
+                while (replaceNode->LeftNode != NULL)
+                {
+                    replaceNode = replaceNode->LeftNode;
+                }
+
+                balanceColor = replaceNode->Color;
+                balanceNode = replaceNode->RightNode;
+
+                if (replaceNode != eraseNode->RightNode)
+                {
+                    // swap replace node and erase node
+                    if (replaceNode->ParentNode->LeftNode == replaceNode)
+                    {
+                        replaceNode->ParentNode->LeftNode = replaceNode->RightNode;
+                    }
+                    else
+                    {
+                        replaceNode->ParentNode->RightNode = replaceNode->RightNode;
+                    }
+
+                    if (replaceNode->RightNode != NULL)
+                    {
+                        replaceNode->RightNode->ParentNode = replaceNode->ParentNode;
+                    }
+
+                    replaceNode->Color = eraseNode->Color;
+                    replaceNode->ParentNode = eraseNode->ParentNode;
+                    replaceNode->LeftNode = eraseNode->LeftNode;
+                    replaceNode->RightNode = eraseNode->RightNode;
+
+                    eraseNode->LeftNode->ParentNode = replaceNode;
+                    eraseNode->RightNode->ParentNode = replaceNode;
+
+                    balanceParentNode = eraseNode->RightNode;
+                }
+                else
+                {
+                    replaceNode->Color = eraseNode->Color;
+                    replaceNode->ParentNode = eraseNode->ParentNode;
+                    replaceNode->LeftNode = eraseNode->LeftNode;
+
+                    eraseNode->LeftNode->ParentNode = replaceNode;
+
+                    balanceParentNode = eraseNode->RightNode;
+                }
+
+                if (eraseNode == *inRoot)
+                {
+                    *inRoot = replaceNode;
+                }
+                else
+                {
+                    if (eraseNode->ParentNode->LeftNode == eraseNode)
+                    {
+                        eraseNode->ParentNode->LeftNode = replaceNode;
+                    }
+                    else
+                    {
+                        eraseNode->ParentNode->RightNode = replaceNode;
+                    }
+                }
             }
             else
             {
-                replaceNode->ParentNode->RightNode = NULL;
+                balanceColor = eraseNode->Color;
+
+                if (eraseNode->RightNode != NULL)
+                {
+                    balanceNode = eraseNode->RightNode;
+                }
+                else
+                {
+                    balanceNode = eraseNode->LeftNode;
+                }
+
+                if (balanceNode != NULL)
+                {
+                    balanceNode->ParentNode = eraseNode->ParentNode;
+                }
+                balanceParentNode = eraseNode->ParentNode;
+
+                if (eraseNode == *inRoot)
+                {
+                    *inRoot = balanceNode;
+                }
+                else
+                {
+                    if (eraseNode->ParentNode->LeftNode == eraseNode)
+                    {
+                        eraseNode->ParentNode->LeftNode = balanceNode;
+                    }
+                    else
+                    {
+                        eraseNode->ParentNode->RightNode = balanceNode;
+                    }
+                }
             }
-            
-            replaceNode->ParentNode = eraseNode->ParentNode;
-            replaceNode->LeftNode = eraseNode->LeftNode;
-            replaceNode->RightNode = eraseNode->RightNode;
 
             SystemMalloc::GetInstance().Free(eraseNode);
-
-            _RBTreeEraseBalance(replaceNode, inRoot);
+            if (balanceColor == Black)
+            {
+                _RBTreeEraseBalance(balanceNode, balanceParentNode, inRoot);
+            }
         }
 
-        void _RBTreeEraseBalance(_RBTree_Node inNode, _RBTree_Node* inRoot)
+        void _RBTreeEraseBalance(_RBTree_Node* inNode, _RBTree_Node* inParent, _RBTree_Node** inRoot)
         {
+            if (inParent == NULL)
+            {
+                return;
+            }
+
             _RBTree_Node* node = inNode;
-            _RBTree_Node* parent = node->ParentNode;
+            _RBTree_Node* parent = inParent;
             _RBTree_Node* brother = parent->LeftNode == inNode ? parent->RightNode : parent->LeftNode;
 
             while (node != NULL && node->Color == Black && node != *inRoot)
@@ -312,20 +413,20 @@ namespace BladeEngine
                     //          N(b)    B(b)                N(b)    B(r)
                     //              BL(b)   BR(b)               BL(b)   BR(b)
                     if ((brother->LeftNode == NULL || brother->LeftNode->Color) &&
-                        (brother->RightNode == NULL || brother->RightNode->Color)
+                        (brother->RightNode == NULL || brother->RightNode->Color))
                     {
                         brother->Color = Red;
 
                         if (parent->Color == Red)
                         {
                             // node's subtree the number of black node is equal than which before erase node
-                            parent->Color == Black;
+                            parent->Color = Black;
                             break;
                         }
                         else
                         {
                             // the number of parent's subtree decrease one black node but is balanced. set parent as node.
-                            parent->Color == Black;
+                            parent->Color = Black;
                             node = parent;
                             continue;
                         }
@@ -350,7 +451,7 @@ namespace BladeEngine
                             //  ...     ...         BLL(X-1,?)       B(X-1,r)
                             //                                 BLR(x-1,?)    BR(X-1,b)
                             brother->Color = Red;
-                            brother->RightNode = Black;
+                            brother->RightNode->Color = Black;
                             // left rotate
                             _RBTreeRotateRight(brother, inRoot);
                             // update brother node
@@ -371,8 +472,7 @@ namespace BladeEngine
                         // 
                         //  
                         brother->Color = parent->Color;
-                        brother->RightNode =
-                            parent->Color = Red;
+                        brother->RightNode->Color = Red;
                         // node's subtree the number of black node is equal than which before erase node
                         _RBTreeRotateLeft(parent, inRoot);
                         break;
@@ -380,7 +480,7 @@ namespace BladeEngine
                 }
                 else
                 {
-                    if(brother->Color == Red)
+                    if (brother->Color == Red)
                     {
                         BladeAssert(parent->Color == Black);
                         // make brother's color to black
@@ -392,18 +492,18 @@ namespace BladeEngine
                     }
 
                     BladeAssert(brother->Color == Black);
-                    if( (brother->LeftNode == NULL || brother->LeftNode->Color == Black) &&
-                        (brother->RightNode == NULL || brother->RightNode->Color == Black) )
+                    if ((brother->LeftNode == NULL || brother->LeftNode->Color == Black) &&
+                        (brother->RightNode == NULL || brother->RightNode->Color == Black))
                     {
                         brother->Color = Red;
-                        if(parent->Color == Red)
+                        if (parent->Color == Red)
                         {
                             parent->Color = Black;
                             break;
                         }
                         else
                         {
-                            parent->Color == Black;
+                            parent->Color = Black;
                             node = parent;
                             continue;
                         }
@@ -436,6 +536,9 @@ namespace BladeEngine
         }
 
     public:
+        TMap() : m_Root(NULL)
+        {}
+
         bool TryGetValue(const KeyType& inKey, ValueType* outValue)
         {
             _RBTree_Node* node = _RBTreeSreachNode(inKey, &m_Root);
@@ -444,7 +547,7 @@ namespace BladeEngine
                 return false;
             }
 
-            if(outValue != NULL)
+            if (outValue != NULL)
             {
                 *outValue = node->Value;
             }
@@ -453,15 +556,40 @@ namespace BladeEngine
 
         void Insert(const KeyType& inKey, const ValueType& inValue)
         {
-            _RBTreeInsert(inKey, inValue);
+            _RBTreeInsert(inKey, inValue, &m_Root);
         }
 
         void Erase(const KeyType& inKey)
         {
-            _RBTreeErase(inKey);
+            _RBTreeErase(inKey, &m_Root);
         }
     };
 
+    /*void main()
+    {
+        TMap<int, int> map;
+        map.Insert(4, 000);
+        map.Insert(1, 100);
+        map.Insert(9, 200);
+        map.Insert(5, 300);
+        map.Insert(2, 400);
+        map.Insert(0, 500);
+        map.Insert(8, 600);
+        map.Insert(7, 700);
+        map.Insert(6, 800);
+        map.Insert(3, 900);
+
+        map.Erase(4);
+        map.Erase(5);
+        map.Erase(6);
+        map.Erase(8);
+        map.Erase(0);
+        map.Erase(1);
+        map.Erase(9);
+        map.Erase(3);
+        map.Erase(7);
+        map.Erase(2);
+    }*/
 }
 
 #endif // !__BLADE_CONTAINS_TMAP_H__

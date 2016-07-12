@@ -88,9 +88,4 @@
       <Filter>头文件\Source\Contains</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>头文件\Source</Filter>
-    </ClCompile>
-  </ItemGroup>
 </Project>
