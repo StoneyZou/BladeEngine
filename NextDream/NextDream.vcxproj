@@ -38,6 +38,9 @@
     <ClInclude Include="Source\RHI\RHIDevice.h" />
     <ClInclude Include="Source\RHI\RHIEnum.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C8A5591A-0BD7-4617-820A-E1844B8D9DDC}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

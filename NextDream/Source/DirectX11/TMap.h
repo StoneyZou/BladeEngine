@@ -24,24 +24,27 @@ namespace BladeEngine
         const uint32 Black = 0;
         const uint32 Red = 1;
 
-        struct RBTree_Node
+        struct _RBTree_Node
         {
             uint32 Color;
-            RBTree_Node* ParentNode;
-            RBTree_Node* LeftNode;
-            RBTree_Node* RightNode;
+            _RBTree_Node* ParentNode;
+            _RBTree_Node* LeftNode;
+            _RBTree_Node* RightNode;
             KeyType Key;
             ValueType Value;
         };    
 
     private:
-        void _RBTreeRotateLeft(RBTree_Node* inNode, RBTree_Node** inRoot)
+        _RBTree_Node* m_Root;
+
+    private:
+        void _RBTreeRotateLeft(_RBTree_Node* inNode, _RBTree_Node** inRoot)
         {
             BladeAssert(inNode->RightNode != NULL);
 
-            RBTree_Node* parentNode = inNode->ParentNode;
-            RBTree_Node* rightNode = inNode->RightNode;
-            RBTree_Node* rightLeftNode = inNode->RightNode->LeftNode;
+            _RBTree_Node* parentNode = inNode->ParentNode;
+            _RBTree_Node* rightNode = inNode->RightNode;
+            _RBTree_Node* rightLeftNode = inNode->RightNode->LeftNode;
 
             if ((rightNode->ParentNode = parentNode) == NULL)
             {
@@ -69,13 +72,13 @@ namespace BladeEngine
             }
         }
 
-        void _RBTreeRotateRight(RBTree_Node* inNode, RBTree_Node** inRoot)
+        void _RBTreeRotateRight(_RBTree_Node* inNode, _RBTree_Node** inRoot)
         {
             BladeAssert(inNode->LeftNode != NULL);
 
-            RBTree_Node* parentNode = inNode->ParentNode;
-            RBTree_Node* leftNode = inNode->LeftNode;
-            RBTree_Node* leftRightNode = inNode->LeftNode->RightNode;
+            _RBTree_Node* parentNode = inNode->ParentNode;
+            _RBTree_Node* leftNode = inNode->LeftNode;
+            _RBTree_Node* leftRightNode = inNode->LeftNode->RightNode;
 
             if ((leftNode->ParentNode = parentNode) == NULL)
             {
@@ -103,9 +106,9 @@ namespace BladeEngine
             inNode->LeftNode = leftRightNode;
         }
 
-        RBTree_Node* _RBTreeSreachNode(KeyType inKey, RBTree_Node* inRoot)
+        _RBTree_Node* _RBTreeSreachNode(KeyType inKey, _RBTree_Node* inRoot)
         {
-            RBTree_Node* node = inRoot;
+            _RBTree_Node* node = inRoot;
             int32 result = 0;
 
             while (node == NULL)
@@ -128,10 +131,10 @@ namespace BladeEngine
             return node;
         }
 
-        int32 _RBTreeInsert_SreachParentNode(KeyType inKey, RBTree_Node* inRoot, RBTree_Node** inParent)
+        int32 _RBTreeInsert_SreachParentNode(KeyType inKey, _RBTree_Node* inRoot, _RBTree_Node** inParent)
         {
-            RBTree_Node* node = inRoot;
-            RBTree_Node* insertNode = NULL;
+            _RBTree_Node* node = inRoot;
+            _RBTree_Node* insertNode = NULL;
             int32 result = 0;
 
             while (node == NULL)
@@ -155,9 +158,9 @@ namespace BladeEngine
             return insertNode;
         }
 
-        RBTree_Node* _RBTreeInsert(const KeyType& inKey, const ValueType& inValue, RBTree_Node** inRoot)
+        _RBTree_Node* _RBTreeInsert(const KeyType& inKey, const ValueType& inValue, _RBTree_Node** inRoot)
         {
-            RBTree_Node* insertNode = (RBTree_Node*)SystemMalloc::GetInstance().Alloc(sizeof(RBTree_Node));
+            _RBTree_Node* insertNode = (_RBTree_Node*)SystemMalloc::GetInstance().Alloc(sizeof(_RBTree_Node));
             insertNode->Key = inKey;
             insertNode->Value = inValue;
             insertNode->ParentNode = NULL;
@@ -165,7 +168,7 @@ namespace BladeEngine
             insertNode->RightNode = NULL;
             insertNode->Color = Red;
 
-            RBTree_Node* parentNode = NULL;
+            _RBTree_Node* parentNode = NULL;
             int32 result = _RBTreeInsert_SreachParentNode(inKey, *inRoot, &parentNode);
             if (parentNode == NULL)
             {
@@ -185,12 +188,12 @@ namespace BladeEngine
             _RBTreeInsert_SreachParentNode(insertNode, inRoot);
         }
 
-        void _RBTreeInsertBalance(RBTree_Node inNode, RBTree_Node* inRoot)
+        void _RBTreeInsertBalance(_RBTree_Node inNode, _RBTree_Node* inRoot)
         {
-            RBTree_Node* node = inNode;
-            RBTree_Node* parent = node->ParentNode;
-            RBTree_Node* grandParent = parent->ParentNode;
-            RBTree_Node* uncle = grandParetn->LeftNode == parent ? grandParetn->RightNode : grandParetn->LeftNode;
+            _RBTree_Node* node = inNode;
+            _RBTree_Node* parent = node->ParentNode;
+            _RBTree_Node* grandParent = parent->ParentNode;
+            _RBTree_Node* uncle = grandParetn->LeftNode == parent ? grandParetn->RightNode : grandParetn->LeftNode;
 
             while (grandParent != NULL && parent != NULL && parent->Color != Black)
             {
@@ -201,7 +204,7 @@ namespace BladeEngine
                         if (parent->RightNode = node)
                         {
                             _RBTreeRotateLeft(parent, &inRoot);
-                            RBTree_Node* temp = node;
+                            _RBTree_Node* temp = node;
                             node = parent;
                             parent = node;
                         }
@@ -215,7 +218,7 @@ namespace BladeEngine
                         if (parent->RightNode = node)
                         {
                             _RBTreeRotateLeft(parent, &inRoot);
-                            RBTree_Node* temp = node;
+                            _RBTree_Node* temp = node;
                             node = parent;
                             parent = node;
                         }
@@ -242,22 +245,221 @@ namespace BladeEngine
             parent->Color = Black;
         }
 
-        void _RBTreeErase(const KeyType& inKey, RBTree_Node* inRoot)
+        void _RBTreeErase(const KeyType& inKey, _RBTree_Node** inRoot)
         {
-            RBTree_Node* eraseNode = _RBTreeSreachNode(inKey, inRoot);
+            _RBTree_Node* eraseNode = _RBTreeSreachNode(inKey, inRoot);
             if (eraseNode == NULL)
             {
                 return;
             }
 
-            while ()
+            // greater than erase node but less than other children in erase node
+            _RBTree_Node* replaceNode = eraseNode->RightNode;  
+            while (replaceNode->LeftNode != NULL)
             {
+                replaceNode = replaceNode->LeftNode;
+            }
 
+            // swap replace node and erase node
+            if( replaceNode->ParentNode->LeftNode == replaceNode )
+            {
+                replaceNode->ParentNode->LeftNode = NULL;
+            }
+            else
+            {
+                replaceNode->ParentNode->RightNode = NULL;
+            }
+            
+            replaceNode->ParentNode = eraseNode->ParentNode;
+            replaceNode->LeftNode = eraseNode->LeftNode;
+            replaceNode->RightNode = eraseNode->RightNode;
+
+            SystemMalloc::GetInstance().Free(eraseNode);
+
+            _RBTreeEraseBalance(replaceNode, inRoot);
+        }
+
+        void _RBTreeEraseBalance(_RBTree_Node inNode, _RBTree_Node* inRoot)
+        {
+            _RBTree_Node* node = inNode;
+            _RBTree_Node* parent = node->ParentNode;
+            _RBTree_Node* brother = parent->LeftNode == inNode ? parent->RightNode : parent->LeftNode;
+
+            while (node != NULL && node->Color == Black && node != *inRoot)
+            {
+                if (parent->LeftNode == node)
+                {
+                    // change       P(b)       to          B(b)
+                    //          N(b)    B(r)           P(r)
+                    //                              B(b)    BL(b)
+                    // change case1 to case2\3\4 
+                    if (brother->Color == Red)
+                    {
+                        BladeAssert(parent->Color == Black);
+
+                        // make brother's color to black
+                        parent->Color = Red;
+                        brother->Color = Black;
+                        _RBTreeRotateLeft(parent, inRoot);
+                        // update brother
+                        brother = parent->LeftNode;
+                    }
+
+                    BladeAssert(brother->Color == Black);
+
+                    // brother must bleck at this moment
+                    // change       P(r/b)          to          P(b)
+                    //          N(b)    B(b)                N(b)    B(r)
+                    //              BL(b)   BR(b)               BL(b)   BR(b)
+                    if ((brother->LeftNode == NULL || brother->LeftNode->Color) &&
+                        (brother->RightNode == NULL || brother->RightNode->Color)
+                    {
+                        brother->Color = Red;
+
+                        if (parent->Color == Red)
+                        {
+                            // node's subtree the number of black node is equal than which before erase node
+                            parent->Color == Black;
+                            break;
+                        }
+                        else
+                        {
+                            // the number of parent's subtree decrease one black node but is balanced. set parent as node.
+                            parent->Color == Black;
+                            node = parent;
+                            continue;
+                        }
+
+                    }
+                    else
+                    {
+                        // P's color must black
+                        //                  P(?,?)
+                        //      N(X-1,b)                B(X,b)
+                        //  ...     ...         BL(X-1,?)       BR(X-1,?)
+                        if (brother->RightNode != NULL && brother->RightNode->Color == Black)
+                        {
+                            // P's color must black. if color of brother's left node isn't Red
+                            //                  P(?,?)
+                            //      N(X-1,b)                B(X,b)
+                            //  ...     ...         BL(X-1,r)           BR(X-1,b)
+                            //             BLL(x-1,?)      BLR(x-1,?)
+                            // change to 
+                            //                  P(?,?)
+                            //      N(X-1,b)                BL(X,b)
+                            //  ...     ...         BLL(X-1,?)       B(X-1,r)
+                            //                                 BLR(x-1,?)    BR(X-1,b)
+                            brother->Color = Red;
+                            brother->RightNode = Black;
+                            // left rotate
+                            _RBTreeRotateRight(brother, inRoot);
+                            // update brother node
+                            brother = parent->RightNode;
+                        }
+
+                        BladeAssert(brother->Color == Black);
+                        BladeAssert(brother->RightNode != NULL);
+                        BladeAssert(brother->RightNode->Color == Red);
+                        // P's color must black. if color of brother's left node is red
+                        //                  P(X+1,b)                            or                      P(X,r)                            
+                        //      N(X-1,b)                B(X,b)                                N(X-1,b)                B(X,b)
+                        //  ...     ...         BL(X-1,b)       BR(X-1,r)                ...     ...         BL(X-1,b)       BR(X-1,r)
+                        // change to                                                 change to        
+                        //                  B(X+1,b)                                                    B(X,r)    
+                        //          P(X,b)                BR(X,b)                            P(X,b)                BR(X,b)
+                        //  N(X-1,b)     B(X-1,r)                                     N(X-1,b)     B(X-1,r)    
+                        // 
+                        //  
+                        brother->Color = parent->Color;
+                        brother->RightNode =
+                            parent->Color = Red;
+                        // node's subtree the number of black node is equal than which before erase node
+                        _RBTreeRotateLeft(parent, inRoot);
+                        break;
+                    }
+                }
+                else
+                {
+                    if(brother->Color == Red)
+                    {
+                        BladeAssert(parent->Color == Black);
+                        // make brother's color to black
+                        parent->Color = Red;
+                        brother->Color = Black;
+                        _RBTreeRotateRight(parent, inRoot);
+                        // update brother
+                        brother = parent->LeftNode;
+                    }
+
+                    BladeAssert(brother->Color == Black);
+                    if( (brother->LeftNode == NULL || brother->LeftNode->Color == Black) &&
+                        (brother->RightNode == NULL || brother->RightNode->Color == Black) )
+                    {
+                        brother->Color = Red;
+                        if(parent->Color == Red)
+                        {
+                            parent->Color = Black;
+                            break;
+                        }
+                        else
+                        {
+                            parent->Color == Black;
+                            node = parent;
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        if (brother->LeftNode == NULL || brother->LeftNode->Color == Black)
+                        {
+                            // make color of brother's left node to red
+                            brother->Color = Red;
+                            brother->RightNode->Color = Black;
+                            _RBTreeRotateLeft(brother, inRoot);
+                            // updete brother
+                            brother = parent->LeftNode;
+                        }
+
+                        BladeAssert(brother->Color == Black);
+                        BladeAssert(brother->LeftNode != NULL);
+                        BladeAssert(brother->LeftNode->Color == Red);
+
+                        // balance
+                        parent->Color = Black;
+                        brother->Color = parent->Color;
+                        brother->LeftNode->Color = Black;
+                        _RBTreeRotateRight(parent, inRoot);
+                        break;
+                    }
+                }
             }
         }
 
     public:
-        
+        bool TryGetValue(const KeyType& inKey, ValueType* outValue)
+        {
+            _RBTree_Node* node = _RBTreeSreachNode(inKey, &m_Root);
+            if (node == NULL)
+            {
+                return false;
+            }
+
+            if(outValue != NULL)
+            {
+                *outValue = node->Value;
+            }
+            return true;
+        }
+
+        void Insert(const KeyType& inKey, const ValueType& inValue)
+        {
+            _RBTreeInsert(inKey, inValue);
+        }
+
+        void Erase(const KeyType& inKey)
+        {
+            _RBTreeErase(inKey);
+        }
     };
 
 }
