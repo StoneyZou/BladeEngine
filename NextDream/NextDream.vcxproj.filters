@@ -60,9 +60,6 @@
     <ClInclude Include="Source\Core\Guid.h">
       <Filter>头文件\Source\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Contains\String.h">
-      <Filter>头文件\Source\Contains</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\Platforms\MemUtil.h">
       <Filter>头文件\Source\Core\Platform</Filter>
     </ClInclude>
@@ -87,5 +84,13 @@
     <ClInclude Include="Source\DirectX11\TMap.h">
       <Filter>头文件\Source\Contains</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Contains\BString.h">
+      <Filter>头文件\Source\Contains</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>头文件\Source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

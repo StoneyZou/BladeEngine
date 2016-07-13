@@ -3,11 +3,10 @@
 
 #include <CharDefine.h>
 #include <TypeDefine.h>
+#include <cstring>
 
 namespace BladeEngine
 {
-    #include <cstring>
-
     class StringUtil
     {
     public:

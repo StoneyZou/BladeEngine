@@ -1,10 +1,11 @@
 #ifndef __BLADE_CORE_CHAR_DEFINE_H__
 #define __BLADE_CORE_CHAR_DEFINE_H__
 
+#include <cctype>
+#include <cwctype>
+
 namespace BladeEngine
 {
-	#include <cctype>
-	#include <cwctype>
 
 	typedef char			ANSICHAR;
 	typedef wchar_t			WIDECHAR;
@@ -167,7 +168,6 @@ namespace BladeEngine
 	template <> inline bool _CharUtil<ANSICHAR>::IsHexDigit(CharType Char) { return ::isxdigit((unsigned char)Char) != 0; }
 	template <> inline bool _CharUtil<ANSICHAR>::IsWhitespace(CharType Char) { return ::isspace((unsigned char)Char) != 0; }
 
-}
 }
 
 #endif // !__BLADE_CORE_CHAR_DEFINE_H__

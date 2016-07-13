@@ -41,26 +41,7 @@ namespace BladeEngine
         void Dump() {}
 #endif // DEBUG
     };
-
-    void* operator new (size_t inSize)
-    {
-        return SystemMalloc::GetInstance().Alloc(inSize);
-    }
-
-    void* operator new[] (size_t inSize)
-    {
-        return SystemMalloc::GetInstance().Alloc(inSize);
-    }
-
-    void operator delete (void* inBlock)
-    {
-       SystemMalloc::GetInstance().Free(inBlock);
-    }
-
-    void operator delete[] (void* inBlock)
-    {
-        SystemMalloc::GetInstance().Free(inBlock);
-    }
+    SystemMalloc SystemMalloc::s_Instance;
 }
 
 #endif // !__BLADE_CORE_MEMORY_H__

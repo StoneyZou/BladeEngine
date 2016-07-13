@@ -87,7 +87,7 @@ namespace BladeEngine
 			}
 		}
 
-		RefCountObject& operator= (const IRefCountObject& rl)
+		RefCountObject& operator = (const RefCountObject& rl)
 		{
 			if (rl.m_pPtr == m_pPtr)
 			{

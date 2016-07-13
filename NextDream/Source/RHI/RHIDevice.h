@@ -1,10 +1,11 @@
 #ifndef __BLADE_RHI_RHI_DEVICE_H__
 #define __BLADE_RHI_RHI_DEVICE_H__
 
-#include <Utility.h>
 #include <RHIEnum.h>
 #include <TArray.h>
-#include <String.h>
+#include <TMap.h>
+#include <BString.h>
+#include <Utility.h>
 
 namespace BladeEngine
 {
@@ -12,7 +13,7 @@ namespace BladeEngine
     {
         #define MAX_SHADER_DEFINE_NUM 32
 
-        class RHIShaderBase
+        class RHIShaderPass
         {
         private:
             struct AttributionDesc
@@ -23,8 +24,13 @@ namespace BladeEngine
             };
 
         private:
-            
-            TArray<AttributionDesc> m_AttributionDesc
+            TArray<AttributionDesc> m_AttributionDescs;
+            TMap<BString, int32> m_AttributionDescMap;
+        };
+
+        class RHIShaderBase
+        {
+        
 
         public:
 
@@ -77,7 +83,7 @@ namespace BladeEngine
         struct RHIShaderCreateInfo
         {
         public:
-            TArray<String> Defines;
+            TArray<BString> Defines;
             TArray<uint32> DefinesHash;
             TArray<SIZE_T> CodeOffsetWithDefines;
             TArray<SIZE_T> CodeSizeWithDefines;

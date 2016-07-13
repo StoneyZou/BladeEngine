@@ -2,6 +2,7 @@
 #define __BLADE_CONTAINS_TMAP_H__
 
 #include <Utility.h>
+#include <new>
 
 namespace BladeEngine
 {
@@ -38,6 +39,24 @@ namespace BladeEngine
         _RBTree_Node* m_Root;
 
     private:
+        _RBTree_Node* _RBTreeCreateNode(const KeyType& inKey, const ValueType& inValue)
+        {
+            void* buffer = SystemMalloc::GetInstance().Alloc(sizeof(_RBTree_Node));
+            _RBTree_Node* node = new(buffer)_RBTree_Node;
+
+            node->Color = Red;
+            node->LeftNode = NULL;
+            node->RightNode = NULL;
+            node->ParentNode = NULL;
+
+            return node;
+        }
+
+        void _RBTreeDestoryNode(_RBTree_Node* inNode)
+        {
+            SystemMalloc::GetInstance().Free(eraseNode);
+        }
+
         void _RBTreeRotateLeft(_RBTree_Node* inNode, _RBTree_Node** inRoot)
         {
             BladeAssert(inNode->RightNode != NULL);
@@ -165,7 +184,8 @@ namespace BladeEngine
 
         _RBTree_Node* _RBTreeInsert(const KeyType& inKey, const ValueType& inValue, _RBTree_Node** inRoot)
         {
-            _RBTree_Node* insertNode = (_RBTree_Node*)SystemMalloc::GetInstance().Alloc(sizeof(_RBTree_Node));
+            _RBTree_Node* insertNode = _RBTreeCreateNode(inKey, inValue);
+
             insertNode->Key = inKey;
             insertNode->Value = inValue;
             insertNode->ParentNode = NULL;
