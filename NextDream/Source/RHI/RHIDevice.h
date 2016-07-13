@@ -12,7 +12,31 @@ namespace BladeEngine
     {
         #define MAX_SHADER_DEFINE_NUM 32
 
-        class RHIShaderBase
+        class RHIResource : public INoncopyable
+        {
+        public:
+            static TArray<RHIResource*> s_DeferedDeleteResources;
+
+        private:
+            NotThreadSafeRefCount m_RefCount;
+
+        public:
+            ~RHIResource() 
+            {}
+
+        public:
+            int32 AddRef() { return m_RefCount.AddRef(); }
+            int32 Release() 
+            { 
+                if (m_RefCount.Release() == 0) {
+                    s_DeferedDeleteResources.Add(this);
+                }
+            }
+            int32 GetRefCount() const { return m_RefCount.GetRefCount(); }
+        };
+        TArray<RHIResource*> RHIResource::s_DeferedDeleteResources;
+
+        class RHIShaderUniformBuffer : public RHIResource
         {
         private:
             struct AttributionDesc
@@ -23,22 +47,17 @@ namespace BladeEngine
             };
 
         private:
-            
-            TArray<AttributionDesc> m_AttributionDesc
-
-        public:
-
+            TArray<AttributionDesc> m_AttributionDescs;
         };
 
-        template<ENUM_SHADER_TYPE ShaderType>
-        class RHIShader : RHIShaderBase
+        class RHIShaderBase
         {};
 
-        typedef RHIShader<VERTEX_SHADER> RHIVertexShader;
-        typedef RHIShader<HULL_SHADER> RHIHullShader;
-        typedef RHIShader<DOMAIM_SHADER> RHIDomainShader;
-        typedef RHIShader<GEOMETRY_SHADER> RHIGeometryShader;
-        typedef RHIShader<PIXEL_SHADER> RHIPixelShader;
+        class RHIVertexShader : public RHIShaderBase {};
+        class RHIHullShader : public RHIShaderBase {};
+        class RHIDomainShader : public RHIShaderBase {};
+        class RHIGeometryShader : public RHIShaderBase {};
+        class RHIPixelShader : public RHIShaderBase {};
 
         class RHITextureBase;
         typedef RefCountObject<RHITextureBase> RHITextureBaseRef;

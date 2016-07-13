@@ -17,6 +17,11 @@ namespace BladeEngine
 	#define BladeAssert(condition) _BladeAssert_Impl(condition, "Condition of assertion couldn't be satisfied!", __FILE__,  __LINE__);
 	//#define BladeAssert(condition, message) _BladeAssert_Impl(condition, message, __FILE__,  __LINE__);
 
+
+    #define BladeConstruct(ptr, type) new((void*)ptr)type();
+    #define BladeCopyConstruct(ptr, value, type) new((void*)ptr)type(value);
+    #define BladeDestruct(ptr, type) ((type*)ptr)->~type();
+
     class INoncopyable
     {
     public:
@@ -25,37 +30,29 @@ namespace BladeEngine
         INoncopyable& operator = (const INoncopyable&);
     };
 
-	class IRefCountBase
-	{
-	public:
-		virtual uint32 AddRef() = 0;
-		virtual uint32 Release() = 0;
-		virtual uint32 GetRefCount() = 0;
-	};
-
 	struct NotThreadSafeRefCount
 	{
 	public:
 		NotThreadSafeRefCount() : m_iRefCount(0)
 		{}
 
-		uint32 AddRef()
+		int32 AddRef()
 		{
 			return (++m_iRefCount);
 		}
 
-		uint32 Release()
+		int32 Release()
 		{
 			return (--m_iRefCount);
 		}
 
-		uint32 GetRefCount()
+		int32 GetRefCount() const
 		{
 			return m_iRefCount;
 		}
 
 	private:
-		uint32 m_iRefCount;
+		int32 m_iRefCount;
 	};
 
 	template<typename T>
@@ -72,7 +69,9 @@ namespace BladeEngine
 		{}
 
 		RefCountObject(ReferenceType* inPtr) : m_pPtr(m_pPtr)
-		{}
+		{
+            m_pPtr->AddRef();
+        }
 
 		RefCountObject(const RefCountObject& rl) : m_pPtr(rl._pPtr)
 		{
