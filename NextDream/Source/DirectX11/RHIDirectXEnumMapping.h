@@ -26,6 +26,46 @@ namespace BladeEngine
 
                 return result;
             }
+
+            static D3D11_MAP Get(ELOCK_TYPE inType)
+            {
+                return D3D11_MAP_READ;
+            }
+
+            static D3D11_USAGE Get(ECPU_GPU_ACCESS_MODE inMode)
+            {
+                if(inMode & EGPU_READ != 0)
+                {
+                    if(inMode & EGPU_WRITE != 0)
+                    {
+                        return D3D11_USAGE_DEFAULT;
+                    }
+                    else if(inMode & ECPU_WRITE != 0)
+                    {
+                        return D3D11_USAGE_DYNAMIC;
+                    }
+                    else if (inMode & ECPU_WRITE == 0 && inMode & EGPU_WRITE == 0)
+                    {
+                        return D3D11_USAGE_IMMUTABLE;
+                    }
+                    else
+                    {
+                        //log
+                    }
+                }
+                else if(inMode & ECPU_READ != 0)
+                {
+                    if (inMode & ECPU_WRITE != 0)
+                    {
+                        return D3D11_USAGE_STAGING;
+                    }
+                    else
+                    {
+                        //log
+                    }
+                }
+                //log
+            }
         };
     }
 }

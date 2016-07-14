@@ -19,8 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="RHIDirectX11Resource.h" />
+    <ClInclude Include="RHIDirectX11ShaderBase.h" />
+    <ClInclude Include="RHIShaderBase.h" />
     <ClInclude Include="Source\Contains\BString.h" />
     <ClInclude Include="Source\Contains\TArray.h" />
+    <ClInclude Include="Source\Contains\TMap.h" />
     <ClInclude Include="Source\Core\CharDefine.h" />
     <ClInclude Include="Source\Core\Guid.h" />
     <ClInclude Include="Source\Core\Logger.h" />
@@ -32,7 +36,6 @@
     <ClInclude Include="Source\DirectX11\RHIDirectX11Context.h" />
     <ClInclude Include="Source\DirectX11\RHIDirectX11Device.h" />
     <ClInclude Include="Source\DirectX11\RHIDirectXEnumMapping.h" />
-    <ClInclude Include="Source\DirectX11\TMap.h" />
     <ClInclude Include="Source\RHI\RHI.h" />
     <ClInclude Include="Source\RHI\RHIContext.h" />
     <ClInclude Include="Source\RHI\RHIDevice.h" />

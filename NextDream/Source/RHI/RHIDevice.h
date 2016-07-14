@@ -19,11 +19,20 @@ namespace BladeEngine
             static TArray<RHIResource*> s_DeferedDeleteResources;
 
         private:
+            ECPU_GPU_ACCESS_MODE m_AccessMode;
             NotThreadSafeRefCount m_RefCount;
 
         public:
-            ~RHIResource() 
+            RHIResource(ECPU_GPU_ACCESS_MODE inAccessMode) : m_AccessMode(inAccessMode)
             {}
+
+            virtual ~RHIResource() {}
+
+        public:
+            virtual void* GetPlatformSpecificPtr() = 0;
+            const void* GetPlatformSpecificPtr() const { return GetPlatformSpecificPtr(); };
+
+            ECPU_GPU_ACCESS_MODE GetAccessMode() const { return m_AccessMode; }
 
         public:
             int32 AddRef() { return m_RefCount.AddRef(); }
@@ -37,35 +46,11 @@ namespace BladeEngine
         };
         TArray<RHIResource*> RHIResource::s_DeferedDeleteResources;
 
-        class RHIShaderUniformBuffer : public RHIResource
-        {
-        private:
-            struct AttributionDesc
-            {
-                SIZE_T Offset;
-                SIZE_T Size;
-                ESHADER_ATTRIB_TYPE Type;
-            };
-
-        private:
-
-            TMap<BString, int32> m_AttributionDescMap;
-        };
-
-        class RHIShaderBase
-        {};
-
-        class RHIVertexShader : public RHIShaderBase {};
-        class RHIHullShader : public RHIShaderBase {};
-        class RHIDomainShader : public RHIShaderBase {};
-        class RHIGeometryShader : public RHIShaderBase {};
-        class RHIPixelShader : public RHIShaderBase {};
+        class RHIResource;
+        typedef RefCountObject<RHIResource> RHIResourceRef;
 
         class RHITextureBase;
         typedef RefCountObject<RHITextureBase> RHITextureBaseRef;
-
-        class RHIShaderBase;
-        typedef RefCountObject<RHIShaderBase> RHIShaderBaseRef;
 
         class RHIVertexBuffer;
         typedef RefCountObject<RHIVertexBuffer> RHIVertexBufferRef;
@@ -73,36 +58,11 @@ namespace BladeEngine
         class RHIIndexBuffer;
         typedef RefCountObject<RHIIndexBuffer> RHIIndexBufferRef;
 
-        typedef RefCountObject<RHIVertexShader> RHIVertexShaderRef;
-        typedef RefCountObject<RHIHullShader> RHIHullShaderRef;
-        typedef RefCountObject<RHIDomainShader> RHIDomainShaderRef;
-        typedef RefCountObject<RHIGeometryShader> RHIGeometryShaderRef;
-        typedef RefCountObject<RHIPixelShader> RHIPixelShaderRef;
-
-        /** 
-        * @Desc                 Structure contains all infomations to create a 2d texture
-        * @param EnableWrite    if value is true, it mean the texture can be writen by cpu, but can't use as render target 
-        */
-        struct RHITexture2DCreateInfo
-        {
-        public:
-            uint32 Width;
-            uint32 Height;
-            ERHI_PIXEL_FORMAT Format;
-            bool Writable; 
-            bool AsRenderTarget;
-            uint32 DataSize;
-            void* Data;
-        };
+        struct RHITexture2DCreateInfo;
 
         struct RHIShaderCreateInfo
         {
-        public:
-
-            TArray<BString> Defines;
-            TArray<uint32> DefinesHash;
-            TArray<SIZE_T> CodeOffsetWithDefines;
-            TArray<SIZE_T> CodeSizeWithDefines;
+            BString Defines;
             uint32 DataSize;
             void* Data;
         };
@@ -127,6 +87,12 @@ namespace BladeEngine
         {
         public:
            virtual RHITextureBaseRef CreateTexture2D(const RHITexture2DCreateInfo& inCreateInfo) = 0;
+
+           virtual void* Lock(RHIResourceRef& inResource, ELOCK_TYPE inType, const SIZE_T inIndex = 0) = 0;
+
+           virtual void Unlock(RHIResourceRef& inResource, const SIZE_T inIndex = 0) = 0;
+
+           virtual void Copy(RHIResourceRef& inDest, RHIResourceRef& inSrc) = 0;
 
            virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo) = 0;
 

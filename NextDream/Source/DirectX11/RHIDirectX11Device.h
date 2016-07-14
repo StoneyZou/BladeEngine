@@ -3,19 +3,22 @@
 
 #include "RHIDevice.h"
 #include "RHIDirectXEnumMapping.h"
+#include <d3d11.h>
+#include <RHITextureBase.h>
+
 
 namespace BladeEngine
 {
     namespace RHI
     {
-        #include <d3d11.h>
-
         typedef RefCountObject<ID3D11Device> ID3D11DeviceRef;
+        typedef RefCountObject<ID3D11DeviceContext> ID3D11ContextRef;
 
         class RHIDirectX11Device : public IRHIDevice
         {
         private:
             ID3D11DeviceRef m_pDevice;
+            ID3D11ContextRef m_pContext;
 
         public:
             virtual RHITextureBaseRef CreateTexture2D(const RHITexture2DCreateInfo& inCreateInfo)
@@ -24,7 +27,7 @@ namespace BladeEngine
                 //tDesc.BindFlags
                 tTextureDesc.Width = inCreateInfo.Width;
                 tTextureDesc.Height = inCreateInfo.Height;
-                tTextureDesc.Usage = inCreateInfo.Writable ? D3D11_USAGE_DYNAMIC : D3D11_USAGE_DEFAULT;
+                tTextureDesc.Usage = RHIDirectXEnumMapping::Get(inCreateInfo.AccessMode);
                 tTextureDesc.CPUAccessFlags = inCreateInfo.Writable ? D3D11_CPU_ACCESS_WRITE : 0;
                 tTextureDesc.SampleDesc.Count = 1;
                 tTextureDesc.SampleDesc.Quality = 0;
@@ -62,6 +65,37 @@ namespace BladeEngine
                     //Logger::Log()
                     return NULL;
                 }
+            }
+
+            virtual void* Lock(RHIResourceRef& inResource, ELOCK_TYPE inType, const SIZE_T inIndex = 0)
+            {
+                if(inResource->GetAccessMode() )
+
+                ID3D11Resource* d3d11Resource = (ID3D11Resource*)inResource->GetPlatformSpecificPtr();
+                D3D11_MAPPED_SUBRESOURCE subResource;
+
+                HRESULT hr = m_pContext->Map(d3d11Resource, inIndex, RHIDirectXEnumMapping::Get(inType), D3D11_MAP_FLAG_DO_NOT_WAIT, &subResource);
+                if (FAILED(hr))
+                {
+                    //Logger::Log()
+                    return NULL;
+                }
+
+                return subResource.pData;
+            }
+
+            virtual void Unlock(RHIResourceRef& inResource, const SIZE_T inIndex = 0)
+            {
+                ID3D11Resource* d3d11Resource = (ID3D11Resource*)inResource->GetPlatformSpecificPtr();
+                m_pContext->Unmap(d3d11Resource, inIndex);
+            }
+
+            virtual void Copy(RHIResourceRef& inDest, RHIResourceRef& inSrc)
+            {
+                ID3D11Resource* d3d11ResourceSrc = (ID3D11Resource*)inSrc->GetPlatformSpecificPtr();
+                ID3D11Resource* d3d11ResourceDest = (ID3D11Resource*)inDest->GetPlatformSpecificPtr();
+
+                m_pContext->CopyResource(d3d11ResourceDest, d3d11ResourceSrc);
             }
 
             virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo& inCreateInfo)

@@ -78,6 +78,12 @@ namespace BladeEngine
 			rl.m_pPtr->AddRef();
 		}
 
+        template<typename Other>
+        RefCountObject(const RefCountObject<Other>& rl) : m_pPtr(rl._pPtr)
+        {
+            rl.m_pPtr->AddRef();
+        }
+
 		~RefCountObject()
 		{
 			if (m_pPtr != NULL)
