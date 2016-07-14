@@ -41,8 +41,8 @@ namespace BladeEngine
     private:
         _RBTree_Node* _RBTreeCreateNode(const KeyType& inKey, const ValueType& inValue)
         {
-            void* buffer = SystemMalloc::GetInstance().Alloc(sizeof(_RBTree_Node));
-            _RBTree_Node* node = new(buffer)_RBTree_Node;
+            _RBTree_Node* node = (_RBTree_Node*)SystemMalloc::GetInstance().Alloc(sizeof(_RBTree_Node));
+            BladeConstruct(node, _RBTree_Node);
 
             node->Color = Red;
             node->LeftNode = NULL;
@@ -185,6 +185,7 @@ namespace BladeEngine
         _RBTree_Node* _RBTreeInsert(const KeyType& inKey, const ValueType& inValue, _RBTree_Node** inRoot)
         {
             _RBTree_Node* insertNode = _RBTreeCreateNode(inKey, inValue);
+
 
             insertNode->Key = inKey;
             insertNode->Value = inValue;
@@ -388,7 +389,9 @@ namespace BladeEngine
                 }
             }
 
+            BladeDestruct(eraseNode, _RBTree_Node);
             SystemMalloc::GetInstance().Free(eraseNode);
+
             if (balanceColor == Black)
             {
                 _RBTreeEraseBalance(balanceNode, balanceParentNode, inRoot);
