@@ -38,6 +38,30 @@ namespace BladeEngine
             ESHADER_ATTRIB_TEX3D_ARRAY,
             ESHADER_ATTRIB_TEXCUBE_ARRAY,
         };
+
+        enum ESHADER_RESOURCE_TYPE
+        {
+            ESHADER_RESOURCE_UNKNOWN = -1,
+            ESHADER_RESOURCE_TEXTURE2D = 0,
+            ESHADER_RESOURCE_SAMPLER,
+        };
+
+        enum ESHADER_SEMANTIC_TYPE
+        {
+            ESHADER_SEMANTIC_UNKNOWN = -1,
+            ESHADER_SEMANTIC_POSITION = 0,
+            ESHADER_SEMANTIC_NORMAL,
+            ESHADER_SEMANTIC_COLOR,
+            ESHADER_SEMANTIC_TANGNET,
+            ESHADER_SEMANTIC_TEXCOORD,
+        };
+
+        enum ECPU_GPU_ACCESS_MODE
+        {
+            ECPU_READ_CPU_WRITE,
+            EGPU_READ_CPU_WRITE,
+            EGPU_READ_GPU_WRITE,
+        };
     }
 }
 

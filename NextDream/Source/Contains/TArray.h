@@ -84,7 +84,7 @@ namespace BladeEngine
             }
         }
 
-        void Add(const Type& inValue)
+        Type& Add(const Type& inValue)
         {
             if (m_Length >= m_Capacity)
             {
@@ -93,9 +93,11 @@ namespace BladeEngine
             
             BladeCopyConstruct(&m_pData[m_Length], inValue, Type);
             m_Length = m_Length + 1;
+
+            return m_pData[m_Length - 1];
         }
 
-        void Insert(SIZE_T index, const Type& inValue)
+        Type& Insert(SIZE_T index, const Type& inValue)
         {
             if (m_Length >= m_Capacity)
             {
@@ -115,6 +117,8 @@ namespace BladeEngine
                 BladeCopyConstruct(&m_pData[index], inValue, Type);
             }
             m_Length = m_Length + 1;
+
+            return m_pData[index];
         }
 
         void RemoveAt(SIZE_T index)

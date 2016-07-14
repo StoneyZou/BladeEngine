@@ -37,47 +37,14 @@ namespace BladeEngine
         };
         TArray<RHIResource*> RHIResource::s_DeferedDeleteResources;
 
-        class RHIShaderUniformBuffer : public RHIResource
-        {
-        private:
-            struct AttributionDesc
-            {
-                SIZE_T Offset;
-                SIZE_T Size;
-                ESHADER_ATTRIB_TYPE Type;
-            };
-
-        private:
-
-            TMap<BString, int32> m_AttributionDescMap;
-        };
-
-        class RHIShaderBase
-        {};
-
-        class RHIVertexShader : public RHIShaderBase {};
-        class RHIHullShader : public RHIShaderBase {};
-        class RHIDomainShader : public RHIShaderBase {};
-        class RHIGeometryShader : public RHIShaderBase {};
-        class RHIPixelShader : public RHIShaderBase {};
-
         class RHITextureBase;
         typedef RefCountObject<RHITextureBase> RHITextureBaseRef;
-
-        class RHIShaderBase;
-        typedef RefCountObject<RHIShaderBase> RHIShaderBaseRef;
 
         class RHIVertexBuffer;
         typedef RefCountObject<RHIVertexBuffer> RHIVertexBufferRef;
 
         class RHIIndexBuffer;
         typedef RefCountObject<RHIIndexBuffer> RHIIndexBufferRef;
-
-        typedef RefCountObject<RHIVertexShader> RHIVertexShaderRef;
-        typedef RefCountObject<RHIHullShader> RHIHullShaderRef;
-        typedef RefCountObject<RHIDomainShader> RHIDomainShaderRef;
-        typedef RefCountObject<RHIGeometryShader> RHIGeometryShaderRef;
-        typedef RefCountObject<RHIPixelShader> RHIPixelShaderRef;
 
         /** 
         * @Desc                 Structure contains all infomations to create a 2d texture
@@ -89,8 +56,7 @@ namespace BladeEngine
             uint32 Width;
             uint32 Height;
             ERHI_PIXEL_FORMAT Format;
-            bool Writable; 
-            bool AsRenderTarget;
+            ECPU_GPU_ACCESS_MODE AccessMode;
             uint32 DataSize;
             void* Data;
         };
