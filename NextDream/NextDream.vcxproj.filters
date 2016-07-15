@@ -96,6 +96,15 @@
     <ClInclude Include="Source\Contains\TMap.h">
       <Filter>头文件\Source\Contains</Filter>
     </ClInclude>
+    <ClInclude Include="RHIShaderBase.h">
+      <Filter>头文件\Source\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="RHITextureBase.h">
+      <Filter>头文件\Source\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="RHIDirectX11ShaderBase.h">
+      <Filter>头文件\Source\DirectX11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
