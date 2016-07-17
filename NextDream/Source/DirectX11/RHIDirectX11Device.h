@@ -5,7 +5,8 @@
 #include "RHIDirectXEnumMapping.h"
 #include <d3d11.h>
 #include <RHITextureBase.h>
-
+#include <RHIShaderBase.h>
+#include <TMap.h>
 
 namespace BladeEngine
 {
@@ -17,8 +18,27 @@ namespace BladeEngine
         class RHIDirectX11Device : public IRHIDevice
         {
         private:
+            template<typename Type>
+            struct MemCompareFunc
+            {
+            public:
+                int32 Compare(const Type& lh, const Type& rh)
+                {
+                    return MemUtil::Memcmp(&lh, &rh, sizeof(Type));
+                }
+            };
+
+            typedef TMap<RHIShaderRasterizerDesc, ID3D11RasterizerState*, MemCompareFunc<RHIShaderRasterizerDesc>> RasterizerStateMap;
+            typedef TMap<RHIShaderBlendDesc, ID3D11BlendState*, MemCompareFunc<RHIShaderBlendDesc>> BlendStateMap;
+            typedef TMap<RHIShaderDepthStencilDesc, ID3D11DepthStencilState*, MemCompareFunc<RHIShaderDepthStencilDesc>> DepthStencilStateMap;
+
+        private:
             ID3D11DeviceRef m_pDevice;
             ID3D11ContextRef m_pContext;
+
+            RasterizerStateMap m_RasterizerStateMap;
+            BlendStateMap m_BlendStateMap;
+            DepthStencilStateMap m_DepthStencilStateMap;
 
         public:
             virtual RHITextureBaseRef CreateTexture2D(const RHITexture2DCreateInfo& inCreateInfo)
@@ -67,9 +87,13 @@ namespace BladeEngine
                 }
             }
 
-            virtual void* Lock(RHIResourceRef& inResource, ELOCK_TYPE inType, const SIZE_T inIndex = 0)
+            virtual void* Lock(RHIResourceRef& inResource, ERHIRESOURCE_LOCK_TYPE inType, const SIZE_T inIndex = 0)
             {
-                if(inResource->GetAccessMode() )
+                if (inResource->GetAccessMode() & ECPU_READ == 0)
+                {
+                    //log
+                    return NULL;
+                }
 
                 ID3D11Resource* d3d11Resource = (ID3D11Resource*)inResource->GetPlatformSpecificPtr();
                 D3D11_MAPPED_SUBRESOURCE subResource;
@@ -121,7 +145,7 @@ namespace BladeEngine
                 }
             }
 
-            virtual RHIPixelShaderRef CreatePixelShader(const RHIShaderCreateInfo& inCreateInfo))
+            virtual RHIPixelShaderRef CreatePixelShader(const RHIShaderCreateInfo& inCreateInfo)
             {
                 BladeAssert(inCreateInfo.Defines.Length() <= MAX_SHADER_DEFINE_NUM);
                 BladeAssert(inCreateInfo.CodeOffsetWithDefines.Length() == inCreateInfo.CodeSizeWithDefines.Length());
@@ -144,7 +168,6 @@ namespace BladeEngine
                 }
             }
 
-
             virtual RHIHullShaderRef CreateHullShader(const RHIShaderCreateInfo) = 0;
 
             virtual RHIDomainShaderRef CreateDomainShader(const RHIShaderCreateInfo) = 0;
@@ -154,6 +177,62 @@ namespace BladeEngine
             virtual RHIVertexBufferRef CreateVertexBuffer(const RHIVertexBufferCreateInfo) = 0;
 
             virtual RHIIndexBufferRef CreateIndexBuffer(const RHIIndexBufferCreateInfo) = 0;
+
+            virtual RHIShaderStateRef CreateShaderState(const RHIShaderStateCreateInfo& inCreateInfo)
+            {
+                ID3D11RasterizerState* rasterizerState = NULL;
+                if( m_RasterizerStateMap.TryGetValue(inCreateInfo.RasterizerDesc, &rasterizerState) )
+                {
+                    rasterizerState = _CreateRasterizerState(inCreateInfo.RasterizerDesc);
+                    if (rasterizerState != NULL)
+                    {
+                        m_RasterizerStateMap.Insert(inCreateInfo.RasterizerDesc, rasterizerState);
+                    }
+                }
+            }
+
+            ID3D11RasterizerState* _CreateRasterizerState(const RHIShaderRasterizerDesc& inRasterizerDesc)
+            {
+                D3D11_RASTERIZER_DESC d3d11Desc;
+                d3d11Desc.FillMode = RHIDirectXEnumMapping::Get(inRasterizerDesc.FillMode);
+                d3d11Desc.CullMode = RHIDirectXEnumMapping::Get(inRasterizerDesc.CullMode);
+                d3d11Desc.FrontCounterClockwise = inRasterizerDesc.FrontCounterClockwise;
+                d3d11Desc.DepthBias = inRasterizerDesc.DepthBias;
+                d3d11Desc.DepthBiasClamp = inRasterizerDesc.DepthBiasClamp;
+                d3d11Desc.SlopeScaledDepthBias = inRasterizerDesc.SlopeScaledDepthBias;
+                d3d11Desc.DepthClipEnable = inRasterizerDesc.DepthClipEnable;
+                d3d11Desc.ScissorEnable = inRasterizerDesc.ScissorEnable;
+                d3d11Desc.MultisampleEnable = inRasterizerDesc.MultisampleEnable;
+                d3d11Desc.AntialiasedLineEnable = inRasterizerDesc.AntialiasedLineEnable;
+
+                ID3D11RasterizerState* rasterizerState = NULL;
+                HRESULT hr = m_pDevice->CreateRasterizerState(&d3d11Desc, &rasterizerState);
+                if (FAILED(hr))
+                {
+                    //log
+                    return NULL;
+                }
+
+                return rasterizerState;
+            }
+
+            ID3D11BlendState* _CreateBlendState(const RHIShaderBlendDesc& inBlendDesc)
+            {
+                D3D11_BLEND_DESC d3d11Desc;
+                d3d11Desc.AlphaToCoverageEnable = inBlendDesc.AlphaTest;
+                d3d11Desc.IndependentBlendEnable = inBlendDesc.IndependentBlendEnable;
+
+
+                ID3D11RasterizerState* rasterizerState = NULL;
+                HRESULT hr = m_pDevice->CreateRasterizerState(&d3d11Desc, &rasterizerState);
+                if (FAILED(hr))
+                {
+                    //log
+                    return NULL;
+                }
+
+                return rasterizerState;
+            }
         };
     }
 }

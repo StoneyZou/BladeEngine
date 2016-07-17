@@ -84,9 +84,6 @@
     <ClInclude Include="Source\Contains\BString.h">
       <Filter>头文件\Source\Contains</Filter>
     </ClInclude>
-    <ClInclude Include="RHIShaderBase.h">
-      <Filter>头文件\Source\RHI</Filter>
-    </ClInclude>
     <ClInclude Include="RHIDirectX11ShaderBase.h">
       <Filter>头文件\Source\DirectX11</Filter>
     </ClInclude>
@@ -99,11 +96,17 @@
     <ClInclude Include="RHIShaderBase.h">
       <Filter>头文件\Source\RHI</Filter>
     </ClInclude>
-    <ClInclude Include="RHITextureBase.h">
-      <Filter>头文件\Source\RHI</Filter>
-    </ClInclude>
     <ClInclude Include="RHIDirectX11ShaderBase.h">
       <Filter>头文件\Source\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\RHITextureBase.h">
+      <Filter>头文件\Source\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\RHIShaderBase.h">
+      <Filter>头文件\Source\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="TIterator.h">
+      <Filter>头文件\Source\Contains</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

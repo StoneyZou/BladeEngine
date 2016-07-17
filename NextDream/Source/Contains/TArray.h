@@ -1,7 +1,7 @@
 #ifndef __BLADE_CONTAINS_TARRAY_H__
 #define __BLADE_CONTAINS_TARRAY_H__
 
-#include <TypeDefine.h>
+#include <Utility.h>
 
 namespace BladeEngine
 {
@@ -9,6 +9,39 @@ namespace BladeEngine
     template<typename Type>
     class TArray : public INoncopyable
     {
+    public:
+        class Iterator
+        {
+        private:
+            TArray& m_Data;
+            SIZE_T m_Index;
+
+        private:
+            Iterator(TArray& inData, SIZE_T inIndex) : m_Data(inData), m_Index(inIndex)
+            {}
+
+        public:
+            void operator ++()
+            {
+                ++m_Index;
+            }
+
+            Type& operator-> ()
+            {
+                return m_Data[m_Index];
+            }
+
+            const Type& operator -> () const
+            {
+                return m_Data[m_Index];
+            }
+
+            Type& operator. ()
+            {
+                return m_Data[m_Index];
+            }
+        };
+
     private:
         const SIZE_T MIN_ADJUST_CAPACITY = 10;
 
@@ -26,7 +59,7 @@ namespace BladeEngine
             }
 
             m_Capacity = inNewCapacity;
-            m_pData = (Type*)SystemMalloc::GetInstance().Alloc(sizeof(Type) * inCapacity);
+            m_pData = (Type*)SystemMalloc::GetInstance().Alloc(sizeof(Type) * m_Capacity);
         }
 
         void _ExpandCapacity()
@@ -135,7 +168,7 @@ namespace BladeEngine
         const void* VoidPtr() const { return m_pData; }
 
         Type* TypePtr() { return m_pData; }
-        const Type* TypePtr() { return m_pData; }
+        const Type* TypePtr() const { return m_pData; }
 
         SIZE_T Length() const { return m_Length; }
     };

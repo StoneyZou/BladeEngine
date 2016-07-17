@@ -42,6 +42,15 @@ namespace BladeEngine
         typedef RefCountObject<RHIGeometryShader> RHIGeometryShaderRef;
         typedef RefCountObject<RHIPixelShader> RHIPixelShaderRef;
 
+        class RHIShaderState : public RHIResource
+        {
+        public:
+            RHIShaderState() : RHIResource(EONLY_GPU_READ)
+            {}
+
+
+        };
+
         struct RHIShaderCreateInfo
         {
             BString Name;

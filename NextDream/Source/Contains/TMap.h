@@ -3,6 +3,7 @@
 
 #include <Utility.h>
 #include <new>
+#include <BString.h>
 
 namespace BladeEngine
 {
@@ -14,6 +15,15 @@ namespace BladeEngine
             static int32 Compare(const Type& lh, const Type& rh)
             {
                 return (lh < rh ? 1 : (rh < lh ? -1 : 0));
+            }
+        };
+
+        template<>
+        struct DefaultCompareFunc<BString>
+        {
+            static int32 Compare(const BString& lh, const BString& rh)
+            {
+                return lh.Compare(rh);
             }
         };
     }

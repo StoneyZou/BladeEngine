@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClInclude Include="RHIDirectX11Resource.h" />
     <ClInclude Include="RHIDirectX11ShaderBase.h" />
-    <ClInclude Include="RHIShaderBase.h" />
     <ClInclude Include="Source\Contains\BString.h" />
     <ClInclude Include="Source\Contains\TArray.h" />
     <ClInclude Include="Source\Contains\TMap.h" />
@@ -40,6 +39,9 @@
     <ClInclude Include="Source\RHI\RHIContext.h" />
     <ClInclude Include="Source\RHI\RHIDevice.h" />
     <ClInclude Include="Source\RHI\RHIEnum.h" />
+    <ClInclude Include="Source\RHI\RHIShaderBase.h" />
+    <ClInclude Include="Source\RHI\RHITextureBase.h" />
+    <ClInclude Include="TIterator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

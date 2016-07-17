@@ -58,14 +58,29 @@ namespace BladeEngine
         class RHIIndexBuffer;
         typedef RefCountObject<RHIIndexBuffer> RHIIndexBufferRef;
 
-        struct RHITexture2DCreateInfo;
+        struct RHIShaderCreateInfo;
 
-        struct RHIShaderCreateInfo
-        {
-            BString Defines;
-            uint32 DataSize;
-            void* Data;
-        };
+        class RHIVertexShader;
+        typedef RefCountObject<RHIVertexShader> RHIVertexShaderRef;
+        
+        class RHIHullShader;
+        typedef RefCountObject<RHIHullShader> RHIHullShaderRef;
+
+        class RHIDomainShader;
+        typedef RefCountObject<RHIDomainShader> RHIDomainShaderRef;
+
+        class RHIGeometryShader;
+        typedef RefCountObject<RHIGeometryShader> RHIGeometryShaderRef;
+
+        class RHIPixelShader;
+        typedef RefCountObject<RHIPixelShader> RHIPixelShaderRef;
+
+        struct RHIShaderStateCreateInfo;
+
+        class RHIShaderState;
+        typedef RefCountObject<RHIShaderState> RHIShaderStateRef;
+
+        struct RHITexture2DCreateInfo;
 
         struct RHIVertexBufferCreateInfo
         {
@@ -88,7 +103,7 @@ namespace BladeEngine
         public:
            virtual RHITextureBaseRef CreateTexture2D(const RHITexture2DCreateInfo& inCreateInfo) = 0;
 
-           virtual void* Lock(RHIResourceRef& inResource, ELOCK_TYPE inType, const SIZE_T inIndex = 0) = 0;
+           virtual void* Lock(RHIResourceRef& inResource, ERHIRESOURCE_LOCK_TYPE inType, const SIZE_T inIndex = 0) = 0;
 
            virtual void Unlock(RHIResourceRef& inResource, const SIZE_T inIndex = 0) = 0;
 
@@ -108,7 +123,7 @@ namespace BladeEngine
 
            virtual RHIIndexBufferRef CreateIndexBuffer(const RHIIndexBufferCreateInfo) = 0;
 
-
+           virtual RHIShaderStateRef CreateShaderState(const RHIShaderStateCreateInfo&) = 0;
         };
     }
 }

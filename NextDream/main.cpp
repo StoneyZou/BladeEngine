@@ -3,6 +3,8 @@
 #include <TMap.h>
 #include <BString.h>
 #include <Utility.h>
+#include <RHIDevice.h>
+#include <RHIShaderBase.h>
 
 using namespace BladeEngine;
 
@@ -17,6 +19,12 @@ public:
 
 void main()
 {
+    RHI::RHIShaderCreateInfo info;
+
+    BString str("ddfsf");
+    str = "dsscsdff";
+
+    TArray<void*> t;
     TMap<BString, int32, BStringComapareFunc> test;
     test.Insert("A", 100);
     test.Insert("B", 200);

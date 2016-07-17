@@ -1,6 +1,10 @@
 #ifndef __BLADE_CORE_TYPE_DEFINE_H__
 #define __BLADE_CORE_TYPE_DEFINE_H__
 
+#ifndef NULL
+    #define NULL 0
+#endif
+
 template<class T1, class T2, bool Flag>
 class _TypeSelector
 {

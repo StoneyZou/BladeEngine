@@ -5,10 +5,6 @@
 
 namespace BladeEngine
 {
-	#ifndef NULL
-		#define NULL 0
-	#endif
-
 	void _BladeAssert_Impl(bool inCondition, const char* inMessage, const char* inFile, int inLine)
 	{
 
@@ -24,8 +20,10 @@ namespace BladeEngine
 
     class INoncopyable
     {
-    public:
+    protected:
         INoncopyable() {}
+
+    private:
         INoncopyable(const INoncopyable&);
         INoncopyable& operator = (const INoncopyable&);
     };
@@ -55,6 +53,20 @@ namespace BladeEngine
 		int32 m_iRefCount;
 	};
 
+    class IReferencable
+    {
+    private:
+        NotThreadSafeRefCount m_RefCount;
+
+    protected:
+        ~IReferencable();
+        
+    public:
+        int32 AddRef() { return m_RefCount.AddRef(); }
+        int32 Release() { return m_RefCount.Release(); }
+        int32 GetRefCount() const { return m_RefCount.GetRefCount(); }
+    };
+
 	template<typename T>
 	class RefCountObject
 	{
@@ -73,13 +85,13 @@ namespace BladeEngine
             m_pPtr->AddRef();
         }
 
-		RefCountObject(const RefCountObject& rl) : m_pPtr(rl._pPtr)
+		RefCountObject(const RefCountObject& rl) : m_pPtr(rl.m_pPtr)
 		{
 			rl.m_pPtr->AddRef();
 		}
 
         template<typename Other>
-        RefCountObject(const RefCountObject<Other>& rl) : m_pPtr(rl._pPtr)
+        RefCountObject(const RefCountObject<Other>& rl) : m_pPtr(rl.GetReferencePtr())
         {
             rl.m_pPtr->AddRef();
         }

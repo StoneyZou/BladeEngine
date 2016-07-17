@@ -27,7 +27,7 @@ namespace BladeEngine
                 return result;
             }
 
-            static D3D11_MAP Get(ELOCK_TYPE inType)
+            static D3D11_MAP Get(ERHIRESOURCE_LOCK_TYPE inType)
             {
                 return D3D11_MAP_READ;
             }
@@ -66,6 +66,40 @@ namespace BladeEngine
                 }
                 //log
             }
+
+            static D3D11_FILL_MODE Get(EMESH_FILL_MODE inMode)
+            {
+                switch (inMode)
+                {
+                case EMESH_FILL_SOLID:
+                    return D3D11_FILL_SOLID;
+                case EMESH_FILL_WIREFRAME:
+                    return D3D11_FILL_WIREFRAME;
+                default:
+                    break;
+                }
+                return D3D11_FILL_SOLID;
+                //log()
+            }
+
+            static D3D11_CULL_MODE Get(EFACE_CULL_MODE inMode)
+            {
+                switch (inMode)
+                {
+                case BladeEngine::RHI::EFACE_CULL_NONE:
+                    return D3D11_CULL_NONE;
+                case BladeEngine::RHI::EFACE_CULL_FRONT:
+                    return D3D11_CULL_FRONT;
+                case BladeEngine::RHI::EFACE_CULL_BACK:
+                    return D3D11_CULL_FRONT;
+                default:
+                    //log
+                    break;
+                }
+                return D3D11_CULL_NONE;
+            }
+
+
         };
     }
 }
