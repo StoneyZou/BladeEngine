@@ -31,6 +31,9 @@
     <Filter Include="头文件\Source\Core\Platform">
       <UniqueIdentifier>{b82d1889-e6ad-4a79-93af-8b11662c2070}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Source\Math">
+      <UniqueIdentifier>{a2f6f8cb-0e27-4e1f-8987-7e58ac1e26ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\DirectX11\RHIDirectX11Device.h">
@@ -93,9 +96,6 @@
     <ClInclude Include="Source\Contains\TMap.h">
       <Filter>头文件\Source\Contains</Filter>
     </ClInclude>
-    <ClInclude Include="RHIShaderBase.h">
-      <Filter>头文件\Source\RHI</Filter>
-    </ClInclude>
     <ClInclude Include="RHIDirectX11ShaderBase.h">
       <Filter>头文件\Source\DirectX11</Filter>
     </ClInclude>
@@ -107,6 +107,9 @@
     </ClInclude>
     <ClInclude Include="TIterator.h">
       <Filter>头文件\Source\Contains</Filter>
+    </ClInclude>
+    <ClInclude Include="BMath.h">
+      <Filter>头文件\Source\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

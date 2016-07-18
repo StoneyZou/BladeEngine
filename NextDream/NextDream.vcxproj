@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BMath.h" />
     <ClInclude Include="RHIDirectX11Resource.h" />
     <ClInclude Include="RHIDirectX11ShaderBase.h" />
     <ClInclude Include="Source\Contains\BString.h" />

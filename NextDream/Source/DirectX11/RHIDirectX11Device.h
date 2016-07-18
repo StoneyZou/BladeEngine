@@ -221,6 +221,8 @@ namespace BladeEngine
                 D3D11_BLEND_DESC d3d11Desc;
                 d3d11Desc.AlphaToCoverageEnable = inBlendDesc.AlphaTest;
                 d3d11Desc.IndependentBlendEnable = inBlendDesc.IndependentBlendEnable;
+                
+                SIZE_T numRT = 
 
 
                 ID3D11RasterizerState* rasterizerState = NULL;

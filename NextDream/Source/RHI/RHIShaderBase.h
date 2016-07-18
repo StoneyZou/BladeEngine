@@ -13,6 +13,8 @@ namespace BladeEngine
 {
     namespace RHI
     {
+        #define MAX_RENDER_TARGET 8
+
         class RHIShaderResourceTable : public INoncopyable, public IReferencable
         {
         private:
@@ -169,7 +171,7 @@ namespace BladeEngine
         {
             bool AlphaTest;
             bool IndependentBlendEnable;
-            RHIRenderTargetBlendDesc RenderTarget[8];
+            RHIRenderTargetBlendDesc RenderTarget[MAX_RENDER_TARGET];
         };
 
         struct RHIShaderDepthStencilDesc
