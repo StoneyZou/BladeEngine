@@ -11,7 +11,9 @@ namespace BladeEngine
 {
     namespace RHI
     {
-        #define MAX_SHADER_DEFINE_NUM 32
+        #define MAX_NUM_RENDER_TARGET 8
+
+        class IRHIDevice;
 
         class RHIResource : public INoncopyable
         {
@@ -29,9 +31,6 @@ namespace BladeEngine
             virtual ~RHIResource() {}
 
         public:
-            virtual void* GetPlatformSpecificPtr() = 0;
-            const void* GetPlatformSpecificPtr() const { return GetPlatformSpecificPtr(); };
-
             ECPU_GPU_ACCESS_MODE GetAccessMode() const { return m_AccessMode; }
 
         public:
@@ -45,6 +44,23 @@ namespace BladeEngine
             int32 GetRefCount() const { return m_RefCount.GetRefCount(); }
         };
         TArray<RHIResource*> RHIResource::s_DeferedDeleteResources;
+
+        class IResourceLockable
+        {
+            friend IRHIDevice;
+        protected:
+            virtual void* Lock(IRHIDevice* inParam, ERHIRESOURCE_LOCK_TYPE inType, const SIZE_T inIndex) = 0;
+            virtual void Unlock(IRHIDevice* inParam, const SIZE_T inIndex) = 0;
+        };
+        typedef RefCountObject<IResourceLockable> IResourceLockableRef;
+
+        class IResourceCopyable
+        {
+            friend IRHIDevice;
+        protected:
+            virtual RHIResource* Copy(void* inParam, ECPU_GPU_ACCESS_MODE inMode) = 0;
+        };
+        typedef RefCountObject<IResourceCopyable> IResourceCopyableRef;
 
         class RHIResource;
         typedef RefCountObject<RHIResource> RHIResourceRef;
@@ -103,11 +119,26 @@ namespace BladeEngine
         public:
            virtual RHITextureBaseRef CreateTexture2D(const RHITexture2DCreateInfo& inCreateInfo) = 0;
 
-           virtual void* Lock(RHIResourceRef& inResource, ERHIRESOURCE_LOCK_TYPE inType, const SIZE_T inIndex = 0) = 0;
+           void* Lock(IResourceLockableRef& inResource, ERHIRESOURCE_LOCK_TYPE inType, const SIZE_T inIndex = 0)
+           {
+               if (((RHIResourceRef)inResource)->GetAccessMode() & ECPU_READ == 0)
+               {
+                   //log
+                   return NULL;
+               }
 
-           virtual void Unlock(RHIResourceRef& inResource, const SIZE_T inIndex = 0) = 0;
+               return inResource->Lock(this, inType, inIndex);
+           }
 
-           virtual void Copy(RHIResourceRef& inDest, RHIResourceRef& inSrc) = 0;
+           void Unlock(IResourceLockableRef& inResource, const SIZE_T inIndex = 0)
+           {
+               return inResource->Unlock(this, inIndex);
+           }
+
+           RHIResourceRef Copy(IResourceCopyableRef& inResource, ECPU_GPU_ACCESS_MODE inMode)
+           {
+               return inResource->Copy(this, inMode);
+           }
 
            virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo) = 0;
 

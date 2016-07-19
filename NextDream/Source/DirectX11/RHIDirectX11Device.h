@@ -7,11 +7,15 @@
 #include <RHITextureBase.h>
 #include <RHIShaderBase.h>
 #include <TMap.h>
+#include <BMath.h>
+#include <RHIDirectX11ShaderBase.h>
 
 namespace BladeEngine
 {
     namespace RHI
     {
+        #define MAX_NUM_D3D11_RENDER_TARGET 8
+
         typedef RefCountObject<ID3D11Device> ID3D11DeviceRef;
         typedef RefCountObject<ID3D11DeviceContext> ID3D11ContextRef;
 
@@ -87,85 +91,24 @@ namespace BladeEngine
                 }
             }
 
-            virtual void* Lock(RHIResourceRef& inResource, ERHIRESOURCE_LOCK_TYPE inType, const SIZE_T inIndex = 0)
+            virtual RHIVertexShaderRef CreateVextexShader(const RHIVertexShaderCreateInfo& inCreateInfo)
             {
-                if (inResource->GetAccessMode() & ECPU_READ == 0)
-                {
-                    //log
-                    return NULL;
-                }
+                BladeAssert(inCreateInfo.Defines.Length() <= MAX_SHADER_DEFINE_NUM);
+                BladeAssert(inCreateInfo.CodeOffsetWithDefines.Length() == inCreateInfo.CodeSizeWithDefines.Length());
 
-                ID3D11Resource* d3d11Resource = (ID3D11Resource*)inResource->GetPlatformSpecificPtr();
-                D3D11_MAPPED_SUBRESOURCE subResource;
-
-                HRESULT hr = m_pContext->Map(d3d11Resource, inIndex, RHIDirectXEnumMapping::Get(inType), D3D11_MAP_FLAG_DO_NOT_WAIT, &subResource);
+                ID3D11VertexShader* pD3D11VertexShader = NULL;
+                HRESULT hr = m_pDevice->CreateVertexShader((const char*)inCreateInfo.Data , inCreateInfo.DataSize, NULL, &pD3D11VertexShader);
                 if (FAILED(hr))
                 {
                     //Logger::Log()
                     return NULL;
                 }
 
-                return subResource.pData;
-            }
-
-            virtual void Unlock(RHIResourceRef& inResource, const SIZE_T inIndex = 0)
-            {
-                ID3D11Resource* d3d11Resource = (ID3D11Resource*)inResource->GetPlatformSpecificPtr();
-                m_pContext->Unmap(d3d11Resource, inIndex);
-            }
-
-            virtual void Copy(RHIResourceRef& inDest, RHIResourceRef& inSrc)
-            {
-                ID3D11Resource* d3d11ResourceSrc = (ID3D11Resource*)inSrc->GetPlatformSpecificPtr();
-                ID3D11Resource* d3d11ResourceDest = (ID3D11Resource*)inDest->GetPlatformSpecificPtr();
-
-                m_pContext->CopyResource(d3d11ResourceDest, d3d11ResourceSrc);
-            }
-
-            virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo& inCreateInfo)
-            {
-                BladeAssert(inCreateInfo.Defines.Length() <= MAX_SHADER_DEFINE_NUM);
-                BladeAssert(inCreateInfo.CodeOffsetWithDefines.Length() == inCreateInfo.CodeSizeWithDefines.Length());
-
-                ID3D11VertexShader* pD3D11VertexShader = NULL;
-                HRESULT hr = S_OK;
-
-                for (int i = 0; i < inCreateInfo.CodeOffsetWithDefines.Length(); ++i)
-                {
-                    inCreateInfo.Data;
-                    SIZE_T codeOffest = inCreateInfo.CodeOffsetWithDefines[i];
-                    SIZE_T codeSize = inCreateInfo.CodeSizeWithDefines[i];
-
-                    hr = m_pDevice->CreateVertexShader(((const char*)inCreateInfo.Data + codeOffest) , codeSize, NULL, &pD3D11VertexShader);
-                    if (FAILED(hr))
-                    {
-                        //Logger::Log()
-                        return NULL;
-                    }
-                }
+                //return  pD3D11VertexShader;
             }
 
             virtual RHIPixelShaderRef CreatePixelShader(const RHIShaderCreateInfo& inCreateInfo)
             {
-                BladeAssert(inCreateInfo.Defines.Length() <= MAX_SHADER_DEFINE_NUM);
-                BladeAssert(inCreateInfo.CodeOffsetWithDefines.Length() == inCreateInfo.CodeSizeWithDefines.Length());
-
-                ID3D11PixelShader* pD3D11PixelShader = NULL;
-                HRESULT hr = S_OK;
-
-                for (int i = 0; i < inCreateInfo.CodeOffsetWithDefines.Length(); ++i)
-                {
-                    inCreateInfo.Data;
-                    SIZE_T codeOffest = inCreateInfo.CodeOffsetWithDefines[i];
-                    SIZE_T codeSize = inCreateInfo.CodeSizeWithDefines[i];
-
-                    hr = m_pDevice->CreatePixelShader(((const char*)inCreateInfo.Data + codeOffest), codeSize, NULL, &pD3D11PixelShader);
-                    if (FAILED(hr))
-                    {
-                        //Logger::Log()
-                        return NULL;
-                    }
-                }
             }
 
             virtual RHIHullShaderRef CreateHullShader(const RHIShaderCreateInfo) = 0;
@@ -189,6 +132,34 @@ namespace BladeEngine
                         m_RasterizerStateMap.Insert(inCreateInfo.RasterizerDesc, rasterizerState);
                     }
                 }
+
+                ID3D11BlendState* blendState = NULL;
+                if (m_BlendStateMap.TryGetValue(inCreateInfo.BlendDesc, &blendState))
+                {
+                    blendState = _CreateBlendState(inCreateInfo.BlendDesc);
+                    if (blendState != NULL)
+                    {
+                        m_BlendStateMap.Insert(inCreateInfo.BlendDesc, blendState);
+                    }
+                }
+
+                ID3D11DepthStencilState* depthStencilState = NULL;
+                if (m_DepthStencilStateMap.TryGetValue(inCreateInfo.DepthStencilDesc, &depthStencilState))
+                {
+                    depthStencilState = _CreateDepthStencilState(inCreateInfo.DepthStencilDesc);
+                    if (depthStencilState != NULL)
+                    {
+                        m_DepthStencilStateMap.Insert(inCreateInfo.DepthStencilDesc, depthStencilState);
+                    }
+                }
+
+                RHIDirectX11ShaderState* shaderState = new RHIDirectX11ShaderState(
+                    rasterizerState,
+                    blendState,
+                    depthStencilState,
+                    inCreateInfo);
+
+                return RHIShaderStateRef(shaderState);
             }
 
             ID3D11RasterizerState* _CreateRasterizerState(const RHIShaderRasterizerDesc& inRasterizerDesc)
@@ -222,18 +193,60 @@ namespace BladeEngine
                 d3d11Desc.AlphaToCoverageEnable = inBlendDesc.AlphaTest;
                 d3d11Desc.IndependentBlendEnable = inBlendDesc.IndependentBlendEnable;
                 
-                SIZE_T numRT = 
+                SIZE_T numRT = Math::Min(MAX_NUM_RENDER_TARGET, MAX_NUM_D3D11_RENDER_TARGET);
+                for( int i = 0; i < numRT; ++ i)
+                {
+                    d3d11Desc.RenderTarget[i].BlendEnable = inBlendDesc.RenderTarget[i].BlendEnable;
+                    d3d11Desc.RenderTarget[i].RenderTargetWriteMask = inBlendDesc.RenderTarget[i].RenderTargetWriteMask;
+
+                    d3d11Desc.RenderTarget[i].BlendOp = RHIDirectXEnumMapping::Get(inBlendDesc.RenderTarget[i].BlendOp);
+                    d3d11Desc.RenderTarget[i].SrcBlend = RHIDirectXEnumMapping::Get(inBlendDesc.RenderTarget[i].SrcBlend);
+                    d3d11Desc.RenderTarget[i].DestBlend = RHIDirectXEnumMapping::Get(inBlendDesc.RenderTarget[i].DestBlend);
+
+                    d3d11Desc.RenderTarget[i].BlendOpAlpha = RHIDirectXEnumMapping::Get(inBlendDesc.RenderTarget[i].BlendOpAlpha);
+                    d3d11Desc.RenderTarget[i].SrcBlendAlpha = RHIDirectXEnumMapping::Get(inBlendDesc.RenderTarget[i].SrcBlendAlpha);
+                    d3d11Desc.RenderTarget[i].DestBlendAlpha = RHIDirectXEnumMapping::Get(inBlendDesc.RenderTarget[i].DestBlendAlpha);
+                }
 
 
-                ID3D11RasterizerState* rasterizerState = NULL;
-                HRESULT hr = m_pDevice->CreateRasterizerState(&d3d11Desc, &rasterizerState);
+                ID3D11BlendState* blendState = NULL;
+                HRESULT hr = m_pDevice->CreateBlendState(&d3d11Desc, &blendState);
                 if (FAILED(hr))
                 {
                     //log
                     return NULL;
                 }
 
-                return rasterizerState;
+                return blendState;
+            }
+
+            ID3D11DepthStencilState* _CreateDepthStencilState(const RHIShaderDepthStencilDesc& inDepthStencilDesc)
+            {
+                D3D11_DEPTH_STENCIL_DESC d3d11Desc;
+                d3d11Desc.DepthEnable = inDepthStencilDesc.DepthEnable;
+                d3d11Desc.DepthWriteMask = inDepthStencilDesc.DepthEnable ? D3D11_DEPTH_WRITE_MASK_ALL : D3D11_DEPTH_WRITE_MASK_ZERO;
+                d3d11Desc.DepthFunc = RHIDirectXEnumMapping::Get(inDepthStencilDesc.DepthFunc);
+                d3d11Desc.StencilEnable = inDepthStencilDesc.StencilEnable;
+                d3d11Desc.StencilReadMask = inDepthStencilDesc.StencilReadMask;
+                d3d11Desc.StencilWriteMask = inDepthStencilDesc.StencilWriteMask;
+                d3d11Desc.FrontFace.StencilFailOp = RHIDirectXEnumMapping::Get(inDepthStencilDesc.FrontFaceSFailFunc);
+                d3d11Desc.FrontFace.StencilDepthFailOp = RHIDirectXEnumMapping::Get(inDepthStencilDesc.FrontFaceSPassDFailFunc);
+                d3d11Desc.FrontFace.StencilPassOp = RHIDirectXEnumMapping::Get(inDepthStencilDesc.FrontFaceSPassDPassFunc);
+                d3d11Desc.FrontFace.StencilFunc = RHIDirectXEnumMapping::Get(inDepthStencilDesc.FrontFaceStencilFunc);
+                d3d11Desc.BackFace.StencilFailOp = RHIDirectXEnumMapping::Get(inDepthStencilDesc.BackFaceSFailFunc);
+                d3d11Desc.BackFace.StencilDepthFailOp = RHIDirectXEnumMapping::Get(inDepthStencilDesc.BackFaceSPassDFailFunc);
+                d3d11Desc.BackFace.StencilPassOp = RHIDirectXEnumMapping::Get(inDepthStencilDesc.BackFaceSPassDPassFunc);
+                d3d11Desc.BackFace.StencilFunc = RHIDirectXEnumMapping::Get(inDepthStencilDesc.BackFaceStencilFunc);
+
+                ID3D11DepthStencilState* depthStencilState = NULL;
+                HRESULT hr = m_pDevice->CreateDepthStencilState(&d3d11Desc, &depthStencilState);
+                if (FAILED(hr))
+                {
+                    //log
+                    return NULL;
+                }
+
+                return depthStencilState;
             }
         };
     }

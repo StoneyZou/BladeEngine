@@ -24,7 +24,7 @@ namespace BladeEngine
             uint32 Height;
         };
 
-        class RHITextureBase : public RHIResource
+        class RHITextureBase : public RHIResource, public IResourceCopyable, public IResourceLockable
         {
         private:
             ERHI_PIXEL_FORMAT m_PixelFormat;
@@ -40,9 +40,6 @@ namespace BladeEngine
         public:
             ERHI_PIXEL_FORMAT GetFormat() const { return m_PixelFormat; }
             ECPU_GPU_ACCESS_MODE GetAccessMode() const { return m_AccessMode; }
-
-            void* Lock();
-            void Unlock();
         };
 
         class RHITexture2D : public RHITextureBase

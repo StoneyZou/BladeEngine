@@ -3,6 +3,9 @@
 
 #include "Utility.h"
 #include "RHIEnum.h"
+#include <RHIContext.h>
+#include <RHIDevice.h>
+#include <RHIShaderBase.h>
 
 namespace BladeEngine
 {
@@ -12,16 +15,31 @@ namespace BladeEngine
         {
         private:
             RHICommandBase m_Root;
+            RHICommandBase* m_LastCommand;
 
         public:
+            RHICommandList() : m_LastCommand(&m_Root)
+            {}
 
+        public:
+            void AddCmdSetShaderState(RHIShaderStateRef& inShaderState)
+            {
+                RHICmdSetShaderState* cmd = (RHICmdSetShaderState*)SystemMalloc::GetInstance().Alloc(sizeof(RHICmdSetShaderState));
+                BladeConstruct(cmd, inShaderState, m_LastCommand);
+            }
+
+            void AddCmdSetVertexShader(RHIShaderStateRef& inShaderState)
+            {
+                RHICmdSetVertexShader* cmd = (RHICmdSetVertexShader*)SystemMalloc::GetInstance().Alloc(sizeof(RHICmdSetVertexShader));
+                BladeConstruct(cmd, inShaderState, m_LastCommand);
+            }
         };
 
         class RHICommandBase : public INoncopyable
         {
-        friend class RHICommandList;
+            friend class RHICommandList;
         private:
-            typedef void(*ExecuteFunc)(bool inImmediate, RHICommandBase* inCmd);
+            typedef void(*ExecuteFunc)(IRHIContextBase* inContext, RHICommandBase* inCmd);
         private:
             ExecuteFunc m_pExecuteFunc;
             RHICommandBase* m_pNext;
@@ -30,7 +48,7 @@ namespace BladeEngine
             RHICommandBase() : m_pExecuteFunc(NULL), m_pNext(NULL)
             {}
 
-        public:
+        protected:
 			RHICommandBase(ExecuteFunc inExecuteFunc, RHICommandBase* inParent) :
 				m_pExecuteFunc(inExecuteFunc)
 			{
@@ -40,32 +58,54 @@ namespace BladeEngine
 				inParent->m_pNext = this;
 			}
 
-			void Execute(bool inImmediate, RHICommandBase* inCmd)
+			void Execute(IRHIContextBase* inContext, RHICommandBase* inCmd)
 			{
 				BladeAssert(m_pExecuteFunc != NULL);
-				m_pExecuteFunc(inImmediate, inCmd);
-			}
-
-			RHICommandBase* GetNextCommandPtr()
-			{
-				return m_pNext;
+				m_pExecuteFunc(inContext, inCmd);
 			}
 		};
 
-		class RHISetShaderStateCmd : public RHICommandBase
+		class RHICmdSetShaderState : public RHICommandBase
 		{
-		public:
-			RHISetShaderStateCmd(RHICommandBase* inParent) : RHICommandBase()
-			{
+        private:
+            RHIShaderStateRef m_ShaderState;
 
+		public:
+            RHICmdSetShaderState(RHIShaderStateRef& inShaderState, RHICommandBase* inParent) :
+                RHICommandBase(Execute, inParent),
+                m_ShaderState(inShaderState)
+			{
+                BladeAssert(!m_ShaderState.IsNull());
 			}
 
 		private:
-			static void Execute(bool inImmediate, RHICommandBase* inCmd)
+			static void Execute(IRHIContextBase* inContext, RHICommandBase* inCmd)
 			{
-				RHISetShaderStateCmd* tCmd = (RHISetShaderStateCmd*)inCmd;
+                RHICmdSetShaderState* cmd = (RHICmdSetShaderState*)inCmd;
+                inContext->SetShaderState(cmd->m_ShaderState.GetReferencePtr());
 			}
 		};
+
+        class RHICmdSetVertexShader : public RHICommandBase
+        {
+        private:
+            RHIVertexShaderRef m_VertexShader;
+
+        public:
+            RHICmdSetVertexShader(RHIVertexShaderRef& inVertexShader, RHICommandBase* inParent) :
+                RHICommandBase(Execute, inParent),
+                m_VertexShader(inVertexShader)
+            {
+                BladeAssert(!m_VertexShader.IsNull());
+            }
+
+        private:
+            static void Execute(IRHIContextBase* inContext, RHICommandBase* inCmd)
+            {
+                RHICmdSetVertexShader* cmd = (RHICmdSetVertexShader*)inCmd;
+                inContext->SetVertexShader(cmd->m_VertexShader.GetReferencePtr());
+            }
+        };
 	}
 }
 

@@ -82,6 +82,9 @@ typedef _GenericPlatformTypes::PTRINT       PTRINT;
 typedef _GenericPlatformTypes::SIZE_T       SIZE_T;
 typedef _GenericPlatformTypes::SSIZE_T      SSIZE_T;
 
+typedef _GenericPlatformTypes::TYPE_OF_NULL                 TYPE_OF_NULL;
+typedef _GenericPlatformTypes::TYPE_OF_NULLPTR              TYPE_OF_NULLPTR;
+
 #if _MSC_VER >= 1900
 	#define _static_check_type_size(Type, Size)	\
 		class _sizeof_type_##Type##_is_not_##Size##_bit	\

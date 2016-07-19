@@ -81,23 +81,11 @@
     <ClInclude Include="Source\RHI\RHIDevice.h">
       <Filter>头文件\Source\RHI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\DirectX11\RHIDirectX11Context.h">
-      <Filter>头文件\Source\DirectX11</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Contains\BString.h">
       <Filter>头文件\Source\Contains</Filter>
     </ClInclude>
-    <ClInclude Include="RHIDirectX11ShaderBase.h">
-      <Filter>头文件\Source\DirectX11</Filter>
-    </ClInclude>
-    <ClInclude Include="RHIDirectX11Resource.h">
-      <Filter>头文件\Source\DirectX11</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Contains\TMap.h">
       <Filter>头文件\Source\Contains</Filter>
-    </ClInclude>
-    <ClInclude Include="RHIDirectX11ShaderBase.h">
-      <Filter>头文件\Source\DirectX11</Filter>
     </ClInclude>
     <ClInclude Include="Source\RHI\RHITextureBase.h">
       <Filter>头文件\Source\RHI</Filter>
@@ -108,8 +96,17 @@
     <ClInclude Include="TIterator.h">
       <Filter>头文件\Source\Contains</Filter>
     </ClInclude>
-    <ClInclude Include="BMath.h">
+    <ClInclude Include="Source\DirectX11\RHIDirectX11Context.h">
+      <Filter>头文件\Source\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\BMath.h">
       <Filter>头文件\Source\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DirectX11\RHIDirectX11ShaderBase.h">
+      <Filter>头文件\Source\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="RHIDirectX11TextureBase.h">
+      <Filter>头文件\Source\DirectX11</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

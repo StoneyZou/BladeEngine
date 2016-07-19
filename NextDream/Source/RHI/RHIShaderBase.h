@@ -13,8 +13,6 @@ namespace BladeEngine
 {
     namespace RHI
     {
-        #define MAX_RENDER_TARGET 8
-
         class RHIShaderResourceTable : public INoncopyable, public IReferencable
         {
         private:
@@ -158,42 +156,40 @@ namespace BladeEngine
             bool BlendEnable;
             uint8 RenderTargetWriteMask;
 
-            ECOLOR_BLEND_FACTOR SrcBlend;
-            ECOLOR_BLEND_FACTOR DestBlend;
-            ECOLOR_BLEND_FUNC BlendOp;
+            EBLEND_ARG SrcBlend;
+            EBLEND_ARG DestBlend;
+            EBLEND_FUNC BlendOp;
 
-            ECOLOR_BLEND_FACTOR SrcBlendAlpha;
-            ECOLOR_BLEND_FACTOR DestBlendAlpha;
-            ECOLOR_BLEND_FUNC BlendOpAlpha;
+            EBLEND_ARG SrcBlendAlpha;
+            EBLEND_ARG DestBlendAlpha;
+            EBLEND_FUNC BlendOpAlpha;
         };
 
         struct RHIShaderBlendDesc
         {
             bool AlphaTest;
             bool IndependentBlendEnable;
-            RHIRenderTargetBlendDesc RenderTarget[MAX_RENDER_TARGET];
+            RHIRenderTargetBlendDesc RenderTarget[MAX_NUM_RENDER_TARGET];
         };
 
         struct RHIShaderDepthStencilDesc
         {
             bool DepthEnable;
-            uint8 DepthWriteMask;
-
             bool StencilEnable;
             uint8 StencilReadMask;
             uint8 StencilWriteMask;
 
+            EDEPTH_STENCIL_COMPARISON_FUNC DepthFunc;
+
             EDEPTH_STENCIL_WRITE_FUNC FrontFaceSFailFunc;
             EDEPTH_STENCIL_WRITE_FUNC FrontFaceSPassDFailFunc;
             EDEPTH_STENCIL_WRITE_FUNC FrontFaceSPassDPassFunc;
-            EDEPTH_STENCIL_COMPARISON_FUNC FrontFaceDepthFunc;
             EDEPTH_STENCIL_COMPARISON_FUNC FrontFaceStencilFunc;
 
-            EDEPTH_STENCIL_WRITE_FUNC BackFaceStencilFailFunc;
-            EDEPTH_STENCIL_WRITE_FUNC BackFaceStencilDepthFailFunc;
-            EDEPTH_STENCIL_WRITE_FUNC BackFaceStencilPassFunc;
-            EDEPTH_STENCIL_COMPARISON_FUNC FrontFaceDepthFunc;
-            EDEPTH_STENCIL_COMPARISON_FUNC FrontFaceStencilFunc;
+            EDEPTH_STENCIL_WRITE_FUNC BackFaceSFailFunc;
+            EDEPTH_STENCIL_WRITE_FUNC BackFaceSPassDFailFunc;
+            EDEPTH_STENCIL_WRITE_FUNC BackFaceSPassDPassFunc;
+            EDEPTH_STENCIL_COMPARISON_FUNC BackFaceStencilFunc;
         };
 
         struct RHIShaderStateCreateInfo
@@ -232,7 +228,6 @@ namespace BladeEngine
                 return MemUtil::Memcmp(&m_CreateInfo, &rh.m_CreateInfo, sizeof(m_CreateInfo));
             }
         };
-
         typedef RefCountObject<RHIShaderState> RHIShaderStateRef;
 
         class RHIShaderBase : public RHIResource
@@ -248,18 +243,41 @@ namespace BladeEngine
         class RHIVertexShader : public RHIShaderBase 
         {
         public:
-            RHIVertexShader(
-                const RHIVertexShaderCreateInfo& inCreateInfo) : RHIShaderBase(inCreateInfo), m_InputTable(inCreateInfo.InputTable)
+            RHIVertexShader(const RHIVertexShaderCreateInfo& inCreateInfo) : RHIShaderBase(inCreateInfo), 
+                m_InputTable(inCreateInfo.InputTable)
             {}
 
         private:
             RHIShaderInputTableRef m_InputTable;
         };
 
-        class RHIHullShader : public RHIShaderBase {};
-        class RHIDomainShader : public RHIShaderBase {};
-        class RHIGeometryShader : public RHIShaderBase {};
-        class RHIPixelShader : public RHIShaderBase {};
+        class RHIHullShader : public RHIShaderBase 
+        {
+        public:
+            RHIHullShader(const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inCreateInfo)
+            {}
+        };
+
+        class RHIDomainShader : public RHIShaderBase
+        {
+        public:
+            RHIDomainShader(const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inCreateInfo)
+            {}
+        };
+
+        class RHIGeometryShader : public RHIShaderBase
+        {
+        public:
+            RHIGeometryShader(const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inCreateInfo)
+            {}
+        };
+
+        class RHIPixelShader : public RHIShaderBase
+        {
+        public:
+            RHIPixelShader(const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inCreateInfo)
+            {}
+        };
 
     }
 }

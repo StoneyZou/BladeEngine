@@ -10,7 +10,21 @@ namespace BladeEngine
         class IRHIContextBase
         {
         public:
-            virtual bool SetVertexShader(const RHIVertexShaderRef& inRHIShader) = 0;
+            virtual bool SetVertexShader(RHIVertexShader* inRHIShader) = 0;
+
+            virtual bool SetPixelShader(RHIPixelShader* inRHIShader) = 0;
+
+            virtual bool SetGeometryShader(RHIGeometryShader* inRHIShader) = 0;
+
+            virtual bool SetHullShader(RHIHullShader* inRHIShader) = 0;
+
+            virtual bool SetDomainShader(RHIDomainShader* inRHIShader) = 0;
+
+            virtual bool SetShaderState(RHIShaderState* inRHIShader) = 0;
+
+            virtual bool SetTexture(RHITextureBase* inTex) = 0;
+
+            //virtual bool SetUniformBuffer(RHIShaderState* inRHIShader) = 0;
         };
 
         class RHIImmediateContext : public IRHIContextBase
@@ -21,6 +35,7 @@ namespace BladeEngine
 
         class RHIDeferredContext : public IRHIContextBase
         {
+        public:
 
         };
     }

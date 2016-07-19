@@ -3,12 +3,13 @@
 
 #include <RHIEnum.h>
 
+#include <dxgi.h>
+#include <d3d11.h>
+
 namespace BladeEngine
 {
     namespace RHI
-    {
-        #include <dxgi.h>
-        
+    {   
         class RHIDirectXEnumMapping
         {
         public:
@@ -99,7 +100,121 @@ namespace BladeEngine
                 return D3D11_CULL_NONE;
             }
 
+            static D3D11_BLEND Get(EBLEND_ARG inArg)
+            {
+                switch (inArg)
+                {
+                case BladeEngine::RHI::EBLEND_ARG_ZERO:
+                    return D3D11_BLEND_ZERO;
+                case BladeEngine::RHI::EBLEND_ARG_ONE:
+                    return D3D11_BLEND_ONE;
+                case BladeEngine::RHI::EBLEND_ARG_SRC_COLOR:
+                    return D3D11_BLEND_SRC_COLOR;
+                case BladeEngine::RHI::EBLEND_ARG_INV_SRC_COLOR:
+                    return D3D11_BLEND_INV_SRC_COLOR : ;
+                case BladeEngine::RHI::EBLEND_ARG_SRC_ALPHA:
+                    return D3D11_BLEND_SRC_ALPHA;
+                case BladeEngine::RHI::EBLEND_ARG_INV_SRC_ALPHA:
+                    return D3D11_BLEND_INV_SRC_ALPHA : ;
+                case BladeEngine::RHI::EBLEND_ARG_DEST_ALPHA:
+                    return D3D11_BLEND_DEST_ALPHA;
+                case BladeEngine::RHI::EBLEND_ARG_INV_DEST_ALPHA:
+                    return D3D11_BLEND_INV_DEST_ALPHA;
+                case BladeEngine::RHI::EBLEND_ARG_DEST_COLOR:
+                    return D3D11_BLEND_DEST_COLOR;
+                case BladeEngine::RHI::EBLEND_ARG_INV_DEST_COLOR:
+                    return D3D11_BLEND_INV_DEST_COLOR;
+                case BladeEngine::RHI::EBLEND_ARG_SRC_ALPHA_SAT:
+                    return D3D11_BLEND_SRC_ALPHA_SAT;
+                case BladeEngine::RHI::EBLEND_ARG_BLEND_FACTOR:
+                    return D3D11_BLEND_BLEND_FACTOR;
+                case BladeEngine::RHI::EBLEND_ARG_INV_BLEND_FACTOR:
+                    return D3D11_BLEND_INV_BLEND_FACTOR : ;
+                case BladeEngine::RHI::EBLEND_ARG_SRC1_COLOR:
+                    return D3D11_BLEND_SRC1_COLOR;
+                case BladeEngine::RHI::EBLEND_ARG_INV_SRC1_COLOR:
+                    return D3D11_BLEND_INV_SRC1_COLOR;
+                case BladeEngine::RHI::EBLEND_ARG_SRC1_ALPHA:
+                    return D3D11_BLEND_SRC1_ALPHA;
+                case BladeEngine::RHI::EBLEND_ARG_INV_SRC1_ALPHA:
+                    return D3D11_BLEND_INV_SRC1_ALPHA;
+                default:
+                    //log
+                    break;
+                }
+            }
 
+            static D3D11_BLEND_OP Get(EBLEND_FUNC inFunc)
+            {
+                switch (inFunc)
+                {
+                case BladeEngine::RHI::EBLEND_FUNC_ADD:
+                    return D3D11_BLEND_OP_ADD;
+                case BladeEngine::RHI::EBLEND_FUNC_SUBTRACT:
+                    return D3D11_BLEND_OP_SUBTRACT;
+                case BladeEngine::RHI::EBLEND_FUNC_REV_SUBTRACT:
+                    return D3D11_BLEND_OP_REV_SUBTRACT;
+                case BladeEngine::RHI::EBLEND_FUNC_MIN:
+                    return D3D11_BLEND_OP_MIN;
+                case BladeEngine::RHI::EBLEND_FUNC_MAX:
+                    return D3D11_BLEND_OP_MAX;;
+                default:
+                    //log
+                    break;
+                }
+            }
+
+            static D3D11_COMPARISON_FUNC Get(EDEPTH_STENCIL_COMPARISON_FUNC inFunc)
+            {
+                switch (inFunc)
+                {
+                case BladeEngine::RHI::EDEPTH_STENCIL_COMPARISON_NEVER:
+                    return D3D11_COMPARISON_NEVER;
+                case BladeEngine::RHI::EDEPTH_STENCIL_COMPARISON_LESS:
+                    return D3D11_COMPARISON_LESS;
+                case BladeEngine::RHI::EDEPTH_STENCIL_COMPARISON_EQUAL:
+                    return D3D11_COMPARISON_EQUAL;
+                case BladeEngine::RHI::EDEPTH_STENCIL_COMPARISON_LESS_EQUAL:
+                    return D3D11_COMPARISON_LESS_EQUAL;
+                case BladeEngine::RHI::EDEPTH_STENCIL_COMPARISON_GREATER:
+                    return D3D11_COMPARISON_GREATER;
+                case BladeEngine::RHI::EDEPTH_STENCIL_COMPARISON_NOT_EQUAL:
+                    return D3D11_COMPARISON_NOT_EQUAL;
+                case BladeEngine::RHI::EDEPTH_STENCIL_COMPARISON_GREATER_EQUAL:
+                    return D3D11_COMPARISON_GREATER_EQUAL;
+                case BladeEngine::RHI::EDEPTH_STENCIL_COMPARISON_ALWAYS:
+                    return D3D11_COMPARISON_ALWAYS;
+                default:
+                    //log
+                    break;
+                }
+            }
+
+            static D3D11_STENCIL_OP Get(EDEPTH_STENCIL_WRITE_FUNC inFunc)
+            {
+                switch (inFunc)
+                {
+                case BladeEngine::RHI::EDEPTH_STENCIL_WRITE_KEEP:
+                    return D3D11_STENCIL_OP_KEEP;
+                case BladeEngine::RHI::EDEPTH_STENCIL_WRITE_ZERO:
+                    return D3D11_STENCIL_OP_ZERO;
+                case BladeEngine::RHI::EDEPTH_STENCIL_WRITE_REPLACE:
+                    return D3D11_STENCIL_OP_REPLACE;
+                case BladeEngine::RHI::EDEPTH_STENCIL_WRITE_INCR_SAT:
+                    return D3D11_STENCIL_OP_INCR_SAT;
+                case BladeEngine::RHI::EDEPTH_STENCIL_WRITE_DECR_SAT:
+                    return D3D11_STENCIL_OP_DECR_SAT;
+                case BladeEngine::RHI::EDEPTH_STENCIL_WRITE_INVERT:
+                    return D3D11_STENCIL_OP_INVERT;
+                case BladeEngine::RHI::EDEPTH_STENCIL_WRITE_INCR:
+                    return D3D11_STENCIL_OP_INCR;
+                case BladeEngine::RHI::EDEPTH_STENCIL_WRITE_DECR:
+                    return D3D11_STENCIL_OP_DECR;
+                default:
+                    //log
+                    break;
+                }
+            }
         };
     }
 }

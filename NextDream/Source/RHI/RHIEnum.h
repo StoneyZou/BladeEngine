@@ -94,46 +94,46 @@ namespace BladeEngine
             EFACE_CULL_BACK,
         };
 
-        enum ECOLOR_BLEND_FACTOR
+        enum EBLEND_ARG
         {
-            ECOLOR_BLEND_ZERO = 1,
-            ECOLOR_BLEND_ONE = 2,
-            ECOLOR_BLEND_SRC_COLOR = 3,
-            ECOLOR_BLEND_INV_SRC_COLOR = 4,
-            ECOLOR_BLEND_SRC_ALPHA = 5,
-            ECOLOR_BLEND_INV_SRC_ALPHA = 6,
-            ECOLOR_BLEND_DEST_ALPHA = 7,
-            ECOLOR_BLEND_INV_DEST_ALPHA = 8,
-            ECOLOR_BLEND_DEST_COLOR = 9,
-            ECOLOR_BLEND_INV_DEST_COLOR = 10,
-            ECOLOR_BLEND_SRC_ALPHA_SAT = 11,
-            ECOLOR_BLEND_BLEND_FACTOR = 14,
-            ECOLOR_BLEND_INV_BLEND_FACTOR = 15,
-            ECOLOR_BLEND_SRC1_COLOR = 16,
-            ECOLOR_BLEND_INV_SRC1_COLOR = 17,
-            ECOLOR_BLEND_SRC1_ALPHA = 18,
-            ECOLOR_BLEND_INV_SRC1_ALPHA = 19
+            EBLEND_ARG_ZERO = 1,
+            EBLEND_ARG_ONE = 2,
+            EBLEND_ARG_SRC_COLOR = 3,
+            EBLEND_ARG_INV_SRC_COLOR = 4,
+            EBLEND_ARG_SRC_ALPHA = 5,
+            EBLEND_ARG_INV_SRC_ALPHA = 6,
+            EBLEND_ARG_DEST_ALPHA = 7,
+            EBLEND_ARG_INV_DEST_ALPHA = 8,
+            EBLEND_ARG_DEST_COLOR = 9,
+            EBLEND_ARG_INV_DEST_COLOR = 10,
+            EBLEND_ARG_SRC_ALPHA_SAT = 11,
+            EBLEND_ARG_BLEND_FACTOR = 14,
+            EBLEND_ARG_INV_BLEND_FACTOR = 15,
+            EBLEND_ARG_SRC1_COLOR = 16,
+            EBLEND_ARG_INV_SRC1_COLOR = 17,
+            EBLEND_ARG_SRC1_ALPHA = 18,
+            EBLEND_ARG_INV_SRC1_ALPHA = 19
         };
 
-        enum ECOLOR_BLEND_FUNC
+        enum EBLEND_FUNC
         {
-            ECOLOR_BLEND_ADD = 1,
-            ECOLOR_BLEND_SUBTRACT = 2,
-            ECOLOR_BLEND_REV_SUBTRACT = 3,
-            ECOLOR_BLEND_MIN = 4,
-            ECOLOR_BLEND_MAX = 5
+            EBLEND_FUNC_ADD = 1,
+            EBLEND_FUNC_SUBTRACT = 2,
+            EBLEND_FUNC_REV_SUBTRACT = 3,
+            EBLEND_FUNC_MIN = 4,
+            EBLEND_FUNC_MAX = 5
         };
 
         enum EDEPTH_STENCIL_COMPARISON_FUNC
         {
-            EDEPTH_COMPARISON_NEVER = 1,
-            EDEPTH_COMPARISON_LESS = 2,
-            EDEPTH_COMPARISON_EQUAL = 3,
-            EDEPTH_COMPARISON_LESS_EQUAL = 4,
-            EDEPTH_COMPARISON_GREATER = 5,
-            EDEPTH_COMPARISON_NOT_EQUAL = 6,
-            EDEPTH_COMPARISON_GREATER_EQUAL = 7,
-            EDEPTH_COMPARISON_ALWAYS = 8
+            EDEPTH_STENCIL_COMPARISON_NEVER = 1,
+            EDEPTH_STENCIL_COMPARISON_LESS = 2,
+            EDEPTH_STENCIL_COMPARISON_EQUAL = 3,
+            EDEPTH_STENCIL_COMPARISON_LESS_EQUAL = 4,
+            EDEPTH_STENCIL_COMPARISON_GREATER = 5,
+            EDEPTH_STENCIL_COMPARISON_NOT_EQUAL = 6,
+            EDEPTH_STENCIL_COMPARISON_GREATER_EQUAL = 7,
+            EDEPTH_STENCIL_COMPARISON_ALWAYS = 8
         };
 
         enum EDEPTH_STENCIL_WRITE_FUNC
