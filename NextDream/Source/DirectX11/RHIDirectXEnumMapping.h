@@ -28,7 +28,7 @@ namespace BladeEngine
                 return result;
             }
 
-            static D3D11_MAP Get(ERHIRESOURCE_LOCK_TYPE inType)
+            static D3D11_MAP Get(ERES_LOCK_TYPE inType)
             {
                 return D3D11_MAP_READ;
             }

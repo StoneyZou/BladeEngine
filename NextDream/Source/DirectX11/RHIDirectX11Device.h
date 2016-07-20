@@ -52,12 +52,16 @@ namespace BladeEngine
                 tTextureDesc.Width = inCreateInfo.Width;
                 tTextureDesc.Height = inCreateInfo.Height;
                 tTextureDesc.Usage = RHIDirectXEnumMapping::Get(inCreateInfo.AccessMode);
-                tTextureDesc.CPUAccessFlags = inCreateInfo.Writable ? D3D11_CPU_ACCESS_WRITE : 0;
+                tTextureDesc.CPUAccessFlags =
+                    (inCreateInfo.AccessMode & ECPU_READ ? D3D11_CPU_ACCESS_READ : 0) |
+                    (inCreateInfo.AccessMode & ECPU_WRITE ? D3D11_CPU_ACCESS_WRITE : 0);
                 tTextureDesc.SampleDesc.Count = 1;
                 tTextureDesc.SampleDesc.Quality = 0;
                 tTextureDesc.ArraySize = 1;
                 tTextureDesc.MipLevels = 0;
-                tTextureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | (inCreateInfo.AsRenderTarget ? D3D11_BIND_RENDER_TARGET : 0);
+                tTextureDesc.BindFlags =
+                    (inCreateInfo.AccessMode & EGPU_READ ? D3D11_BIND_SHADER_RESOURCE : 0) |
+                    (inCreateInfo.AccessMode & EGPU_WRITE ? D3D11_BIND_RENDER_TARGET : 0);
                 tTextureDesc.MiscFlags = 0;
                 tTextureDesc.Format = RHIDirectXEnumMapping::Get(inCreateInfo.Format);
                 
@@ -74,21 +78,41 @@ namespace BladeEngine
                     //Logger::Log()
                     return NULL;
                 }
-                
-                D3D11_SHADER_RESOURCE_VIEW_DESC tShaderResViewDesc;
-                tShaderResViewDesc.Format = tTextureDesc.Format;
-                tShaderResViewDesc.ViewDimension = D3D_SRV_DIMENSION_TEXTURE2D;
-                tShaderResViewDesc.Texture2D.MipLevels = 0;
-                tShaderResViewDesc.Texture2D.MostDetailedMip = 0;
-                
-                ID3D11ShaderResourceView* pD3D11ShaderResourceView = NULL;
-                hr = m_pDevice->CreateShaderResourceView(pD3D11Texture2D, &tShaderResViewDesc, &pD3D11ShaderResourceView);
 
-                if (FAILED(hr))
+                ID3D11ShaderResourceView* pD3D11ShaderResourceView = NULL;
+                if (inCreateInfo.AccessMode & EGPU_READ != 0)
                 {
-                    //Logger::Log()
-                    return NULL;
+                    D3D11_SHADER_RESOURCE_VIEW_DESC desc;
+                    desc.Format = tTextureDesc.Format;
+                    desc.ViewDimension = D3D_SRV_DIMENSION_TEXTURE2D;
+                    desc.Texture2D.MipLevels = 0;
+                    desc.Texture2D.MostDetailedMip = 0;
+
+                    hr = m_pDevice->CreateShaderResourceView(pD3D11Texture2D, &desc, &pD3D11ShaderResourceView);
+                    if (FAILED(hr))
+                    {
+                        //Logger::Log()
+                        return NULL;
+                    }
                 }
+
+                ID3D11RenderTargetView* pD3D11RenderTargetView = NULL;
+                if (inCreateInfo.AccessMode & EGPU_WRITE != 0)
+                {
+                    D3D11_RENDER_TARGET_VIEW_DESC desc;
+                    desc.Format = tTextureDesc.Format;
+                    desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+                    desc.Texture2D.MipSlice = 0;
+
+                    hr = m_pDevice->CreateRenderTargetView(pD3D11Texture2D, &desc, &pD3D11RenderTargetView);
+                    if (FAILED(hr))
+                    {
+                        //Logger::Log()
+                        return NULL;
+                    }
+                }
+
+
             }
 
             virtual RHIVertexShaderRef CreateVextexShader(const RHIVertexShaderCreateInfo& inCreateInfo)
@@ -153,7 +177,7 @@ namespace BladeEngine
                     }
                 }
 
-                RHIDirectX11ShaderState* shaderState = new RHIDirectX11ShaderState(
+                DirectX11ShaderState* shaderState = new DirectX11ShaderState(
                     rasterizerState,
                     blendState,
                     depthStencilState,

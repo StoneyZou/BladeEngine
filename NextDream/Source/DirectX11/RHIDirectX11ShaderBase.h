@@ -9,7 +9,7 @@ namespace BladeEngine
 {
     namespace RHI
     {
-        class RHIDirectX11ShaderState : public RHIShaderState
+        class DirectX11ShaderState : public RHIShaderState
         {
         private:
             ID3D11RasterizerState*      m_RasterizerState;
@@ -17,7 +17,7 @@ namespace BladeEngine
             ID3D11DepthStencilState*    m_DepthStencilState;
 
         public:
-            RHIDirectX11ShaderState(ID3D11RasterizerState* inRasterizerState, ID3D11BlendState* inBlendState,
+            DirectX11ShaderState(ID3D11RasterizerState* inRasterizerState, ID3D11BlendState* inBlendState,
                 ID3D11DepthStencilState* inDepthStencilState, const RHIShaderStateCreateInfo& inCreateInfo) 
                 : RHIShaderState(inCreateInfo),
                 m_RasterizerState(inRasterizerState),
@@ -29,7 +29,7 @@ namespace BladeEngine
                 m_DepthStencilState->AddRef();
             }
 
-            ~RHIDirectX11ShaderState()
+            ~DirectX11ShaderState()
             {
                 uint64 rasterizerStateRefCount = m_RasterizerState->Release();
                 BladeAssert(rasterizerStateRefCount == 0);
@@ -57,13 +57,13 @@ namespace BladeEngine
             }
         };
 
-        class RHIDirectX11VertexShader : public RHIVertexShader
+        class DirectX11VertexShader : public RHIVertexShader
         {
         private:
             ID3D11VertexShader* m_VertexShader;
 
         public:
-            RHIDirectX11VertexShader(ID3D11VertexShader* inShader, const RHIVertexShaderCreateInfo& inCreateInfo) : 
+            DirectX11VertexShader(ID3D11VertexShader* inShader, const RHIVertexShaderCreateInfo& inCreateInfo) : 
                 RHIVertexShader(inCreateInfo),
                 m_VertexShader(inShader)
             {
@@ -76,20 +76,20 @@ namespace BladeEngine
             }
         };
 
-        class RHIDirectX11HullShader : public RHIHullShader 
+        class DirectX11HullShader : public RHIHullShader 
         {
         private:
             ID3D11HullShader* m_HullShader;
 
         public:
-            RHIDirectX11HullShader(ID3D11HullShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
+            DirectX11HullShader(ID3D11HullShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
                 RHIHullShader(inCreateInfo),
                 m_HullShader(inShader)
             {
                 m_HullShader->AddRef();
             }
 
-            ~RHIDirectX11HullShader()
+            ~DirectX11HullShader()
             {
                 uint64 refCount = m_HullShader->Release();
                 BladeAssert(refCount == 0);
@@ -101,20 +101,20 @@ namespace BladeEngine
             }
         };
 
-        class RHIDirectX11DomainShader : public RHIDomainShader
+        class DirectX11DomainShader : public RHIDomainShader
         {
         private:
             ID3D11DomainShader* m_DomainShader;
 
         public:
-            RHIDirectX11DomainShader(ID3D11DomainShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
+            DirectX11DomainShader(ID3D11DomainShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
                 RHIDomainShader(inCreateInfo),
                 m_DomainShader(inShader)
             {
                 m_DomainShader->AddRef();
             }
 
-            ~RHIDirectX11DomainShader()
+            ~DirectX11DomainShader()
             {
                 uint64 refCount = m_DomainShader->Release();
                 BladeAssert(refCount == 0);
@@ -126,20 +126,20 @@ namespace BladeEngine
             }
         };
 
-        class RHIDirectX11GeometryShader : public RHIGeometryShader
+        class DirectX11GeometryShader : public RHIGeometryShader
         {
         private:
             ID3D11GeometryShader* m_GeometryShader;
 
         public:
-            RHIDirectX11GeometryShader(ID3D11GeometryShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
+            DirectX11GeometryShader(ID3D11GeometryShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
                 RHIGeometryShader(inCreateInfo),
                 m_GeometryShader(inShader)
             {
                 m_GeometryShader->AddRef();
             }
 
-            ~RHIDirectX11GeometryShader()
+            ~DirectX11GeometryShader()
             {
                 uint64 refCount = m_GeometryShader->Release();
                 BladeAssert(refCount == 0);
@@ -151,20 +151,20 @@ namespace BladeEngine
             }
         };
 
-        class RHIDirectX11PixelShader : public RHIPixelShader
+        class DirectX11PixelShader : public RHIPixelShader
         {
         private:
             ID3D11PixelShader* m_PixelShader;
 
         public:
-            RHIDirectX11PixelShader(ID3D11PixelShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
+            DirectX11PixelShader(ID3D11PixelShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
                 RHIPixelShader(inCreateInfo),
                 m_PixelShader(inShader)
             {
                 m_PixelShader->AddRef();
             }
 
-            ~RHIDirectX11PixelShader()
+            ~DirectX11PixelShader()
             {
                 uint64 refCount = m_PixelShader->Release();
                 BladeAssert(refCount == 0);

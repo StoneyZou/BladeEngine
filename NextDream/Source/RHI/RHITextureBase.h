@@ -14,6 +14,8 @@ namespace BladeEngine
         {
             ERHI_PIXEL_FORMAT Format;
             ECPU_GPU_ACCESS_MODE AccessMode;
+            uint32 SampleQulity;
+            uint32 SampleCount;
             uint32 DataSize;
             void* Data;
         };
@@ -26,25 +28,26 @@ namespace BladeEngine
 
         class RHITextureBase : public RHIResource, public IResourceCopyable, public IResourceLockable
         {
-        private:
+        protected:
             ERHI_PIXEL_FORMAT m_PixelFormat;
-            ECPU_GPU_ACCESS_MODE m_AccessMode;
-
-            void* m_LockingData;
+            uint32 m_SampleQulity;
+            uint32 m_SampleCount;
 
         public:
             RHITextureBase(const RHITextureCreateInfo& inCreateInfo) :
-                RHIResource(inCreateInfo.AccessMode), m_PixelFormat(inCreateInfo.Format), m_LockingData(NULL)
+                RHIResource(inCreateInfo.AccessMode), 
+                m_PixelFormat(inCreateInfo.Format),
+                m_SampleQulity(inCreateInfo.SampleQulity),
+                m_SampleCount(inCreateInfo.SampleCount)
             {}
 
         public:
             ERHI_PIXEL_FORMAT GetFormat() const { return m_PixelFormat; }
-            ECPU_GPU_ACCESS_MODE GetAccessMode() const { return m_AccessMode; }
         };
 
         class RHITexture2D : public RHITextureBase
         {
-        private:
+        protected:
             uint32 m_Width;
             uint32 m_Height;
 

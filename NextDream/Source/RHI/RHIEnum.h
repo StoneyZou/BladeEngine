@@ -56,7 +56,7 @@ namespace BladeEngine
             ESHADER_SEMANTIC_TEXCOORD,
         };
 
-        enum EBASE_ACCESS_MODE
+        enum ECPU_GPU_ACCESS_SUB_MODE
         {
             ECPU_READ = 0x01,
             ECPU_WRITE = 0x02,
@@ -73,12 +73,19 @@ namespace BladeEngine
             EGPU_READ_GPU_WRITE = EGPU_READ | EGPU_WRITE,
         };
 
-        enum ERHIRESOURCE_LOCK_TYPE
+        enum ERES_LOCK_SUB_TYPE
         {
-            ERHIRESOURCE_LOCK_READ,
-            ERHIRESOURCE_LOCK_WRITE,
-            ERHIRESOURCE_LOCK_READ_WRITE,
-            ERHIRESOURCE_LOCK_WRITE_DISCARD,
+            ERES_LOCK_READ = 0x01,
+            ERES_LOCK_WRITE = 0x02,
+            ERES_LOCK_DISCARD = 0x04,
+        };
+
+        enum ERES_LOCK_TYPE
+        {
+            ERES_LOCK_ONLY_READ = ERES_LOCK_READ,
+            ERES_LOCK_ONLY_WRITE = ERES_LOCK_WRITE,
+            ERES_LOCK_READ_WRITE = ERES_LOCK_READ & ERES_LOCK_WRITE,
+            ERES_LOCK_WRITE_DISCARD = ERES_LOCK_WRITE & ERES_LOCK_DISCARD,
         };
 
         enum EMESH_FILL_MODE
