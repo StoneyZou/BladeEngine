@@ -39,7 +39,7 @@ namespace BladeEngine
         {
             friend class RHICommandList;
         private:
-            typedef void(*ExecuteFunc)(IRHIContextBase* inContext, RHICommandBase* inCmd);
+            typedef void(*ExecuteFunc)(RHIContextBase* inContext, RHICommandBase* inCmd);
         private:
             ExecuteFunc m_pExecuteFunc;
             RHICommandBase* m_pNext;
@@ -58,7 +58,7 @@ namespace BladeEngine
 				inParent->m_pNext = this;
 			}
 
-			void Execute(IRHIContextBase* inContext, RHICommandBase* inCmd)
+			void Execute(RHIContextBase* inContext, RHICommandBase* inCmd)
 			{
 				BladeAssert(m_pExecuteFunc != NULL);
 				m_pExecuteFunc(inContext, inCmd);
@@ -79,10 +79,10 @@ namespace BladeEngine
 			}
 
 		private:
-			static void Execute(IRHIContextBase* inContext, RHICommandBase* inCmd)
+			static void Execute(RHIContextBase* inContext, RHICommandBase* inCmd)
 			{
                 RHICmdSetShaderState* cmd = (RHICmdSetShaderState*)inCmd;
-                inContext->SetShaderState(cmd->m_ShaderState.GetReferencePtr());
+                inContext->SetShaderState(cmd->m_ShaderState);
 			}
 		};
 
@@ -100,10 +100,10 @@ namespace BladeEngine
             }
 
         private:
-            static void Execute(IRHIContextBase* inContext, RHICommandBase* inCmd)
+            static void Execute(RHIContextBase* inContext, RHICommandBase* inCmd)
             {
                 RHICmdSetVertexShader* cmd = (RHICmdSetVertexShader*)inCmd;
-                inContext->SetVertexShader(cmd->m_VertexShader.GetReferencePtr());
+                inContext->SetVertexShader(cmd->m_VertexShader);
             }
         };
 	}

@@ -2,7 +2,7 @@
 #define __BLADE_CORE_GUID_H__
 
 #include <TypeDefine.h>
-#include <MemMisc.h>
+#include <MemUtil.h>
 
 namespace BladeEngine
 {

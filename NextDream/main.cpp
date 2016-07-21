@@ -6,12 +6,10 @@
 #include <RHIDevice.h>
 #include <RHIShaderBase.h>
 
-using namespace BladeEngine;
-
 struct BStringComapareFunc
 {
 public:
-    static int32 Compare(const BString& lh, const BString& rh)
+    static BladeEngine::int32 Compare(const BladeEngine::BString& lh, const BladeEngine::BString& rh)
     {
         return lh.Compare(rh);
     }
@@ -19,13 +17,13 @@ public:
 
 void main()
 {
-    RHI::RHIShaderCreateInfo info;
+    BladeEngine::RHI::RHIShaderCreateInfo info;
 
-    BString str("ddfsf");
+    BladeEngine::BString str("ddfsf");
     str = "dsscsdff";
 
-    TArray<void*> t;
-    TMap<BString, int32, BStringComapareFunc> test;
+    BladeEngine::TArray<void*> t;
+    BladeEngine::TMap<BladeEngine::BString, BladeEngine::int32, BStringComapareFunc> test;
     test.Insert("A", 100);
     test.Insert("B", 200);
     test.Insert("C", 300);

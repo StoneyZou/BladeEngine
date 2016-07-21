@@ -9,21 +9,6 @@ namespace BladeEngine
     {
         class RHIContextBase;
 
-        class IResourceLockable
-        {
-            friend RHIContextBase;
-        protected:
-            virtual void* Lock(RHIContextBase* inParam, ERES_LOCK_TYPE inType, const SIZE_T inIndex) = 0;
-            virtual void Unlock(RHIContextBase* inParam, const SIZE_T inIndex) = 0;
-        };
-
-        class IResourceCopyable
-        {
-            friend RHIContextBase;
-        protected:
-            virtual RHIResource* Copy(void* inParam, ECPU_GPU_ACCESS_MODE inMode) = 0;
-        };
-
         class IRHIContextBaseImpl
         {
         public:
@@ -44,6 +29,8 @@ namespace BladeEngine
 
             virtual void SetTexture(RHITextureBase* inTex) = 0;
 
+            virtual void Flush();
+
             //virtual bool SetUniformBuffer(RHIShaderState* inRHIShader) = 0;
         };
 
@@ -52,6 +39,9 @@ namespace BladeEngine
         private:
             bool m_IsDeferred;
             IRHIContextBaseImpl* m_Impl;
+            
+        private:
+            TArray<RHIResourceRef> m_ResourcesInContext;
 
         protected:
             RHIContextBase(IRHIContextBaseImpl* inImpl, bool inIsDeffered) : m_Impl(inImpl), m_IsDeferred(inIsDeffered)
@@ -65,23 +55,57 @@ namespace BladeEngine
             bool IsDeferred() const { return m_IsDeferred; }
 
         public:
-            void SetVertexShader(RHIVertexShader* inRHIShader) { m_Impl->SetVertexShader(inRHIShader); }
+            void Flush()
+            {
+                m_ResourcesInContext.Clear();
 
-            void SetPixelShader(RHIPixelShader* inRHIShader) { m_Impl->SetPixelShader(inRHIShader); }
+            }
+            
+            void SetVertexShader(RHIVertexShaderRef& inRHIShader) 
+            { 
+                m_ResourcesInContext.Add(inRHIShader);  
+                m_Impl->SetVertexShader(inRHIShader.GetReferencePtr()); 
+            }
 
-            void SetGeometryShader(RHIGeometryShader* inRHIShader) { m_Impl->SetGeometryShader(inRHIShader); }
+            void SetPixelShader(RHIPixelShaderRef& inRHIShader) 
+            {
+                m_ResourcesInContext.Add(inRHIShader);  
+                m_Impl->SetPixelShader(inRHIShader.GetReferencePtr());
+            }
 
-            void SetHullShader(RHIHullShader* inRHIShader) { m_Impl->SetHullShader(inRHIShader); }
+            void SetGeometryShader(RHIGeometryShaderRef& inRHIShader) 
+            {
+                m_ResourcesInContext.Add(inRHIShader);  
+                m_Impl->SetGeometryShader(inRHIShader.GetReferencePtr()); 
+            }
 
-            void SetDomainShader(RHIDomainShader* inRHIShader) { m_Impl->SetDomainShader(inRHIShader); }
+            void SetHullShader(RHIHullShaderRef& inRHIShader) 
+            {
+                m_ResourcesInContext.Add(inRHIShader);  
+                m_Impl->SetHullShader(inRHIShader.GetReferencePtr()); 
+            }
 
-            void SetShaderState(RHIShaderState* inRHIShaderState) { m_Impl->SetShaderState(inRHIShaderState); }
+            void SetDomainShader(RHIDomainShaderRef& inRHIShader) 
+            {
+                m_ResourcesInContext.Add(inRHIShader);  
+                m_Impl->SetDomainShader(inRHIShader.GetReferencePtr()); 
+            }
 
-            void SetTexture(RHITextureBase* inTex) { m_Impl->SetTexture(inTex); }
+            void SetShaderState(RHIShaderStateRef& inRHIShaderState) 
+            {
+                m_ResourcesInContext.Add(inRHIShaderState);
+                m_Impl->SetShaderState(inRHIShaderState.GetReferencePtr()); 
+            }
+
+            void SetTexture(RHITextureBaseRef inTex) 
+            {
+                m_ResourcesInContext.Add(inTex);
+                m_Impl->SetTexture(inTex.GetReferencePtr());
+            }
 
             void* Lock(IResourceLockableRef& inResource, ERES_LOCK_TYPE inType, const SIZE_T inIndex = 0)
             {
-                if (((RHIResourceRef)inResource)->GetAccessMode() & ECPU_READ == 0)
+                if ((((RHIResourceRef)inResource)->GetAccessMode() & ECPU_READ) == 0)
                 {
                     //log
                     return NULL;

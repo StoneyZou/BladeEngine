@@ -40,7 +40,7 @@ namespace BladeEngine
         }
 
         template<typename Type, typename P1, typename P2, typename P3, typename P4>
-        BladeConstruct(Type* ptr, P1 p1, P2 p2, P3 p3, P4 p4, )
+        BladeConstruct(Type* ptr, P1 p1, P2 p2, P3 p3, P4 p4)
         {
             new((void*)ptr)Type(p1, p2, p3, p4);
         }
@@ -187,7 +187,7 @@ namespace BladeEngine
             return RefCountObject<Other>(static_cast<Other>(m_pPtr));
         }
 
-        template<typename Base>
+        template<typename Other>
         operator RefCountObject<Other>() const
         {
             return RefCountObject<Other>(static_cast<Other>(m_pPtr));

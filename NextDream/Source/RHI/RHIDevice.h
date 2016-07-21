@@ -14,18 +14,22 @@ namespace BladeEngine
         #define MAX_NUM_RENDER_TARGET 8
 
         class IRHIDevice;
+        class RHIContextBase;
 
         class RHIResource : public INoncopyable
         {
-        public:
-            static TArray<RHIResource*> s_DeferedDeleteResources;
-
         private:
+            bool m_IsRecycle;
             ECPU_GPU_ACCESS_MODE m_AccessMode;
             NotThreadSafeRefCount m_RefCount;
 
+        protected:
+            IRHIDevice* m_Device;
+
         public:
-            RHIResource(ECPU_GPU_ACCESS_MODE inAccessMode) : m_AccessMode(inAccessMode)
+            RHIResource(IRHIDevice* inDevice, ECPU_GPU_ACCESS_MODE inAccessMode) 
+                : m_AccessMode(inAccessMode), 
+                m_Device(inDevice)
             {}
 
             virtual ~RHIResource() {}
@@ -34,16 +38,26 @@ namespace BladeEngine
             ECPU_GPU_ACCESS_MODE GetAccessMode() const { return m_AccessMode; }
 
         public:
-            int32 AddRef() { return m_RefCount.AddRef(); }
-            int32 Release() 
-            { 
-                if (m_RefCount.Release() == 0) {
-                    s_DeferedDeleteResources.Add(this);
-                }
-            }
+            int32 AddRef() const { return m_RefCount.AddRef(); }
+            int32 Release() const { delete this; };
             int32 GetRefCount() const { return m_RefCount.GetRefCount(); }
+            int32 IsUnique() const { return m_RefCount.GetRefCount() == 1; }
         };
-        TArray<RHIResource*> RHIResource::s_DeferedDeleteResources;
+
+        class IResourceLockable
+        {
+            friend RHIContextBase;
+        protected:
+            virtual void* Lock(RHIContextBase* inContext, ERES_LOCK_TYPE inType, const SIZE_T inIndex) = 0;
+            virtual void Unlock(RHIContextBase* inContext, const SIZE_T inIndex) = 0;
+        };
+
+        class IResourceCopyable
+        {
+            friend RHIContextBase;
+        protected:
+            virtual RHIResource* Copy(RHIContextBase* inContext, ECPU_GPU_ACCESS_MODE inMode) = 0;
+        };
 
         class IResourceLockable;
         typedef RefCountObject<IResourceLockable> IResourceLockableRef;
@@ -85,6 +99,12 @@ namespace BladeEngine
         class RHIShaderState;
         typedef RefCountObject<RHIShaderState> RHIShaderStateRef;
 
+        class RHIUniformBuffer;
+        typedef RefCountObject<RHIUniformBuffer> RHIUniformBufferRef;
+
+        class RHISampler;
+        typedef RefCountObject<RHIUniformBuffer> RHISamplerRef;
+
         struct RHITexture2DCreateInfo;
 
         struct RHIVertexBufferCreateInfo
@@ -103,8 +123,17 @@ namespace BladeEngine
             void* Data;
         };
 
+        struct RHIUniformCreateInfo
+        {
+            uint32 DataSize;
+            void* Data;
+        };
+
         class IRHIDevice
         {
+        protected:
+            TArray<RHIResource*> m_DeleteResourceList;
+
         public:
            virtual RHITextureBaseRef CreateTexture2D(const RHITexture2DCreateInfo& inCreateInfo) = 0;
 
@@ -123,6 +152,10 @@ namespace BladeEngine
            virtual RHIIndexBufferRef CreateIndexBuffer(const RHIIndexBufferCreateInfo) = 0;
 
            virtual RHIShaderStateRef CreateShaderState(const RHIShaderStateCreateInfo&) = 0;
+
+           virtual RHIUniformBufferRef CreateUniformBuffer(const RHIUniformCreateInfo&) = 0;
+
+           virtual RHISamplerRef CreateSampler(const RHIUniformCreateInfo&) = 0;
         };
     }
 }

@@ -34,11 +34,11 @@
     <Filter Include="头文件\Source\Math">
       <UniqueIdentifier>{a2f6f8cb-0e27-4e1f-8987-7e58ac1e26ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Source\DirectX11\private">
+      <UniqueIdentifier>{7eb4afcc-53c9-4b39-a790-bf59e207b0eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\DirectX11\RHIDirectX11Device.h">
-      <Filter>头文件\Source\DirectX11</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\Utility.h">
       <Filter>头文件\Source\Core</Filter>
     </ClInclude>
@@ -96,22 +96,37 @@
     <ClInclude Include="TIterator.h">
       <Filter>头文件\Source\Contains</Filter>
     </ClInclude>
-    <ClInclude Include="Source\DirectX11\RHIDirectX11Context.h">
-      <Filter>头文件\Source\DirectX11</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Math\BMath.h">
       <Filter>头文件\Source\Math</Filter>
     </ClInclude>
     <ClInclude Include="Source\DirectX11\RHIDirectX11ShaderBase.h">
       <Filter>头文件\Source\DirectX11</Filter>
     </ClInclude>
-    <ClInclude Include="RHIDirectX11TextureBase.h">
+    <ClInclude Include="Source\DirectX11\RHIDirectX11TextureBase.h">
       <Filter>头文件\Source\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\RHIUniformBuffer.h">
+      <Filter>头文件\Source\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DirectX11\DirectX11Device.h">
+      <Filter>头文件\Source\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DirectX11\DirectX11UniformBuffer.h">
+      <Filter>头文件\Source\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DirectX11\DirectX11Context.h">
+      <Filter>头文件\Source\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\BColor.h">
+      <Filter>头文件\Source\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>头文件\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DirectX11\private\DirectX11Device.cpp">
+      <Filter>头文件\Source\DirectX11\private</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

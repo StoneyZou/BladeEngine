@@ -2,11 +2,26 @@
 #define __BLADE_RHI_TEXTURE_BASE_H__
 
 #include <RHIDevice.h>
+#include <RHIContext.h>
 
 namespace BladeEngine
 {
     namespace RHI
     {
+        struct RHISamplerCreateInfo
+        {
+            ETEXTURE_FILTER_MODE Filter;
+            ETEXTURE_ADDRESS_MODE AddressU;
+            ETEXTURE_ADDRESS_MODE AddressV;
+            ETEXTURE_ADDRESS_MODE AddressW;
+            float MipLODBias;
+            UINT MaxAnisotropy;
+            D3D11_COMPARISON_FUNC ComparisonFunc;
+            float BorderColor[4];
+            float MinLOD;
+            float MaxLOD;
+        };
+
         /**
         * @Desc Structure contains all infomations to create a texture
         */
@@ -34,8 +49,8 @@ namespace BladeEngine
             uint32 m_SampleCount;
 
         public:
-            RHITextureBase(const RHITextureCreateInfo& inCreateInfo) :
-                RHIResource(inCreateInfo.AccessMode), 
+            RHITextureBase(IRHIDevice* inDevice, const RHITextureCreateInfo& inCreateInfo) :
+                RHIResource(inDevice, inCreateInfo.AccessMode),
                 m_PixelFormat(inCreateInfo.Format),
                 m_SampleQulity(inCreateInfo.SampleQulity),
                 m_SampleCount(inCreateInfo.SampleCount)
@@ -52,8 +67,8 @@ namespace BladeEngine
             uint32 m_Height;
 
         public:
-            RHITexture2D(const RHITexture2DCreateInfo& inCreateInfo) :
-                RHITextureBase(inCreateInfo), m_Width(inCreateInfo.Width), m_Height(inCreateInfo.Height)
+            RHITexture2D(IRHIDevice* inDevice, const RHITexture2DCreateInfo& inCreateInfo) :
+                RHITextureBase(inDevice, inCreateInfo), m_Width(inCreateInfo.Width), m_Height(inCreateInfo.Height)
             {}
         };
     }

@@ -35,17 +35,17 @@ namespace BladeEngine
 
             static D3D11_USAGE Get(ECPU_GPU_ACCESS_MODE inMode)
             {
-                if(inMode & EGPU_READ != 0)
+                if((inMode & EGPU_READ) != 0)
                 {
-                    if(inMode & EGPU_WRITE != 0)
+                    if((inMode & EGPU_WRITE) != 0)
                     {
                         return D3D11_USAGE_DEFAULT;
                     }
-                    else if(inMode & ECPU_WRITE != 0)
+                    else if((inMode & ECPU_WRITE) != 0)
                     {
                         return D3D11_USAGE_DYNAMIC;
                     }
-                    else if (inMode & ECPU_WRITE == 0 && inMode & EGPU_WRITE == 0)
+                    else if ((inMode & ECPU_WRITE) == 0 && (inMode & EGPU_WRITE) == 0)
                     {
                         return D3D11_USAGE_IMMUTABLE;
                     }
@@ -54,9 +54,9 @@ namespace BladeEngine
                         //log
                     }
                 }
-                else if(inMode & ECPU_READ != 0)
+                else if ((inMode & ECPU_READ) != 0)
                 {
-                    if (inMode & ECPU_WRITE != 0)
+                    if ((inMode & ECPU_WRITE) != 0)
                     {
                         return D3D11_USAGE_STAGING;
                     }
@@ -111,11 +111,11 @@ namespace BladeEngine
                 case BladeEngine::RHI::EBLEND_ARG_SRC_COLOR:
                     return D3D11_BLEND_SRC_COLOR;
                 case BladeEngine::RHI::EBLEND_ARG_INV_SRC_COLOR:
-                    return D3D11_BLEND_INV_SRC_COLOR : ;
+                    return D3D11_BLEND_INV_SRC_COLOR;
                 case BladeEngine::RHI::EBLEND_ARG_SRC_ALPHA:
                     return D3D11_BLEND_SRC_ALPHA;
                 case BladeEngine::RHI::EBLEND_ARG_INV_SRC_ALPHA:
-                    return D3D11_BLEND_INV_SRC_ALPHA : ;
+                    return D3D11_BLEND_INV_SRC_ALPHA;
                 case BladeEngine::RHI::EBLEND_ARG_DEST_ALPHA:
                     return D3D11_BLEND_DEST_ALPHA;
                 case BladeEngine::RHI::EBLEND_ARG_INV_DEST_ALPHA:
@@ -129,7 +129,7 @@ namespace BladeEngine
                 case BladeEngine::RHI::EBLEND_ARG_BLEND_FACTOR:
                     return D3D11_BLEND_BLEND_FACTOR;
                 case BladeEngine::RHI::EBLEND_ARG_INV_BLEND_FACTOR:
-                    return D3D11_BLEND_INV_BLEND_FACTOR : ;
+                    return D3D11_BLEND_INV_BLEND_FACTOR;
                 case BladeEngine::RHI::EBLEND_ARG_SRC1_COLOR:
                     return D3D11_BLEND_SRC1_COLOR;
                 case BladeEngine::RHI::EBLEND_ARG_INV_SRC1_COLOR:

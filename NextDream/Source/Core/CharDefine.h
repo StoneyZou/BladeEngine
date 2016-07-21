@@ -6,16 +6,6 @@
 
 namespace BladeEngine
 {
-
-	typedef char			ANSICHAR;
-	typedef wchar_t			WIDECHAR;
-
-#ifdef _UNICODE
-	typedef WIDECHAR TCHAR;
-#else
-	typedef ANSICHAR TCHAR;
-#endif
-
 	/*-----------------------------------------------------------------------------
 	Character type functions.
 	-----------------------------------------------------------------------------*/
