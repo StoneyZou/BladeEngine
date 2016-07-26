@@ -10,15 +10,15 @@ namespace BladeEngine
 {
     namespace RHI
     {   
-        class RHIDirectXEnumMapping
+        class DirectXEnumMapping
         {
         public:
-            static DXGI_FORMAT Get(ERHI_PIXEL_FORMAT inFormat)
+            static DXGI_FORMAT Get(EDATA_FORMAT inFormat)
             {
                 DXGI_FORMAT result = DXGI_FORMAT_UNKNOWN;
                 switch (inFormat)
                 {
-                case BladeEngine::RHI::ERHI_PIXEL_FORMAT_R8G8B8A8:
+                case BladeEngine::RHI::EDATA_FORMAT_R8G8B8A8_UINT:
                     result = DXGI_FORMAT_R8G8B8A8_UINT;
                     break;
                 default:
@@ -164,25 +164,25 @@ namespace BladeEngine
                 }
             }
 
-            static D3D11_COMPARISON_FUNC Get(EDEPTH_STENCIL_COMPARISON_FUNC inFunc)
+            static D3D11_COMPARISON_FUNC Get(ECOMPARISON_FUNC inFunc)
             {
                 switch (inFunc)
                 {
-                case BladeEngine::RHI::EDEPTH_STENCIL_COMPARISON_NEVER:
+                case BladeEngine::RHI::ECOMPARISON_NEVER:
                     return D3D11_COMPARISON_NEVER;
-                case BladeEngine::RHI::EDEPTH_STENCIL_COMPARISON_LESS:
+                case BladeEngine::RHI::ECOMPARISON_LESS:
                     return D3D11_COMPARISON_LESS;
-                case BladeEngine::RHI::EDEPTH_STENCIL_COMPARISON_EQUAL:
+                case BladeEngine::RHI::ECOMPARISON_EQUAL:
                     return D3D11_COMPARISON_EQUAL;
-                case BladeEngine::RHI::EDEPTH_STENCIL_COMPARISON_LESS_EQUAL:
+                case BladeEngine::RHI::ECOMPARISON_LESS_EQUAL:
                     return D3D11_COMPARISON_LESS_EQUAL;
-                case BladeEngine::RHI::EDEPTH_STENCIL_COMPARISON_GREATER:
+                case BladeEngine::RHI::ECOMPARISON_GREATER:
                     return D3D11_COMPARISON_GREATER;
-                case BladeEngine::RHI::EDEPTH_STENCIL_COMPARISON_NOT_EQUAL:
+                case BladeEngine::RHI::ECOMPARISON_NOT_EQUAL:
                     return D3D11_COMPARISON_NOT_EQUAL;
-                case BladeEngine::RHI::EDEPTH_STENCIL_COMPARISON_GREATER_EQUAL:
+                case BladeEngine::RHI::ECOMPARISON_GREATER_EQUAL:
                     return D3D11_COMPARISON_GREATER_EQUAL;
-                case BladeEngine::RHI::EDEPTH_STENCIL_COMPARISON_ALWAYS:
+                case BladeEngine::RHI::ECOMPARISON_ALWAYS:
                     return D3D11_COMPARISON_ALWAYS;
                 default:
                     //log
@@ -212,6 +212,57 @@ namespace BladeEngine
                     return D3D11_STENCIL_OP_DECR;
                 default:
                     //log
+                    break;
+                }
+            }
+
+            static D3D11_TEXTURE_ADDRESS_MODE Get(ETEXTURE_ADDRESS_MODE inMode)
+            {
+                switch (inMode)
+                {
+                case BladeEngine::RHI::ETEXTURE_ADDRESS_WRAP:
+                    return D3D11_TEXTURE_ADDRESS_WRAP;
+                case BladeEngine::RHI::ETEXTURE_ADDRESS_CLAMP:
+                    return D3D11_TEXTURE_ADDRESS_CLAMP;
+                default:
+                    break;
+                }
+            }
+
+            static D3D11_FILTER Get(ETEXTURE_FILTER_MODE inMode)
+            {
+                switch (inMode)
+                {
+                case BladeEngine::RHI::ETEXTURE_FILTER_MIN_MAG_MIP_POINT:
+                    return D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
+                case BladeEngine::RHI::ETEXTURE_FILTER_MIN_LINEAR_MAG_MIP_POINT:
+                    return D3D11_FILTER_COMPARISON_MIN_LINEAR_MAG_MIP_POINT;
+                case BladeEngine::RHI::ETEXTURE_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT:
+                    return D3D11_FILTER_COMPARISON_MIN_POINT_MAG_LINEAR_MIP_POINT;
+                case BladeEngine::RHI::ETEXTURE_FILTER_MIN_MAG_POINT_MIP_LINEAR:
+                    return D3D11_FILTER_MAXIMUM_MIN_MAG_POINT_MIP_LINEAR;
+                case BladeEngine::RHI::ETEXTURE_FILTER_MIN_MAG_LINEAR_MIP_POINT:
+                    return D3D11_FILTER_MAXIMUM_MIN_MAG_LINEAR_MIP_POINT;
+                case BladeEngine::RHI::ETEXTURE_FILTER_MIN_POINT_MAG_MIP_LINEAR:
+                    return D3D11_FILTER_COMPARISON_MIN_POINT_MAG_MIP_LINEAR;
+                case BladeEngine::RHI::ETEXTURE_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR:
+                    return D3D11_FILTER_MAXIMUM_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
+                case BladeEngine::RHI::ETEXTURE_FILTER_MIN_MAG_MIP_LINEAR:
+                    return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+                default:
+                    break;
+                }
+            }
+
+            static D3D11_INPUT_CLASSIFICATION Get(EINPUT_CLASSIFICATION inType)
+            {
+                switch (inType)
+                {
+                case BladeEngine::RHI::EINPUT_PER_VERTEX_DATA:
+                    return D3D11_INPUT_PER_VERTEX_DATA;
+                case BladeEngine::RHI::EINPUT_PER_INSTANCE_DATA:
+                    return D3D11_INPUT_PER_INSTANCE_DATA;
+                default:
                     break;
                 }
             }

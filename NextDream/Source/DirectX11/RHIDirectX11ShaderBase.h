@@ -60,20 +60,27 @@ namespace BladeEngine
         class DirectX11VertexShader : public RHIVertexShader
         {
         private:
+            byte* m_Data;
+            SIZE_T m_DataSize;
+
             ID3D11VertexShader* m_VertexShader;
 
         public:
-            DirectX11VertexShader(ID3D11VertexShader* inShader, const RHIVertexShaderCreateInfo& inCreateInfo) : 
+            DirectX11VertexShader(ID3D11VertexShader* inShader, const RHIShaderCreateInfo& inCreateInfo) : 
                 RHIVertexShader(inCreateInfo),
                 m_VertexShader(inShader)
             {
+                m_DataSize = inCreateInfo.DataSize;
+                m_Data = (byte*)SystemMalloc::GetInstance().Alloc(m_DataSize);
+                MemUtil::Memcopy(m_Data, m_DataSize, inCreateInfo.Data, inCreateInfo.DataSize);
+
                 m_VertexShader->AddRef();
             }
 
-            ID3D11VertexShader* GetShader()
-            {
-                return m_VertexShader;
-            }
+            ID3D11VertexShader* GetShader() { return m_VertexShader; }
+
+            const byte* GetData() const { return m_Data; }
+            SIZE_T GetDataSize() const { return m_DataSize; }
         };
 
         class DirectX11HullShader : public RHIHullShader 

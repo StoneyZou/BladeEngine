@@ -8,15 +8,15 @@ namespace BladeEngine
 {
     namespace RHI
     {
-        struct RHISamplerCreateInfo
+        struct RHITexuteSamplerInfo
         {
             ETEXTURE_FILTER_MODE Filter;
             ETEXTURE_ADDRESS_MODE AddressU;
             ETEXTURE_ADDRESS_MODE AddressV;
             ETEXTURE_ADDRESS_MODE AddressW;
             float MipLODBias;
-            UINT MaxAnisotropy;
-            D3D11_COMPARISON_FUNC ComparisonFunc;
+            uint32 MaxAnisotropy;
+            ECOMPARISON_FUNC ComparisonFunc;
             float BorderColor[4];
             float MinLOD;
             float MaxLOD;
@@ -27,24 +27,23 @@ namespace BladeEngine
         */
         struct RHITextureCreateInfo
         {
+            RHITexuteSamplerInfo Sampler;
+
+            uint32 Width;
+            uint32 Height;
             ERHI_PIXEL_FORMAT Format;
             ECPU_GPU_ACCESS_MODE AccessMode;
             uint32 SampleQulity;
             uint32 SampleCount;
+
             uint32 DataSize;
             void* Data;
         };
 
-        struct RHITexture2DCreateInfo : public RHITextureCreateInfo
-        {
-            uint32 Width;
-            uint32 Height;
-        };
-
-        class RHITextureBase : public RHIResource, public IResourceCopyable, public IResourceLockable
+        class RHITextureBase : public RHIResource, public IResourceLockable
         {
         protected:
-            ERHI_PIXEL_FORMAT m_PixelFormat;
+            EDATA_FORMAT m_PixelFormat;
             uint32 m_SampleQulity;
             uint32 m_SampleCount;
 
@@ -55,9 +54,6 @@ namespace BladeEngine
                 m_SampleQulity(inCreateInfo.SampleQulity),
                 m_SampleCount(inCreateInfo.SampleCount)
             {}
-
-        public:
-            ERHI_PIXEL_FORMAT GetFormat() const { return m_PixelFormat; }
         };
 
         class RHITexture2D : public RHITextureBase
@@ -67,7 +63,7 @@ namespace BladeEngine
             uint32 m_Height;
 
         public:
-            RHITexture2D(IRHIDevice* inDevice, const RHITexture2DCreateInfo& inCreateInfo) :
+            RHITexture2D(IRHIDevice* inDevice, const RHITextureCreateInfo& inCreateInfo) :
                 RHITextureBase(inDevice, inCreateInfo), m_Width(inCreateInfo.Width), m_Height(inCreateInfo.Height)
             {}
         };

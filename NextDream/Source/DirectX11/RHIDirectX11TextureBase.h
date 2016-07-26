@@ -5,13 +5,20 @@
 #include <RHITextureBase.h>
 #include <RHIContext.h>
 #include <DirectX11Context.h>
-#include <RHIDirectXEnumMapping.h>
+#include <DirectXEnumMapping.h>
+#include <DirectX11Device.h>
 
 namespace BladeEngine
 {
     namespace RHI
     {
-        class RHIDirectX11Texture2D : public RHITexture2D
+        struct IDirectX11TextureInterface
+        {
+            virtual ID3D11RenderTargetView* GetRenderTargetView() = 0;
+            virtual ID3D11ShaderResourceView* GetShaderResourceView() = 0;
+        };
+
+        class RHIDirectX11Texture2D : public RHITexture2D, public IDirectX11TextureInterface
         {
         private:
             ID3D11Texture2D* m_Texture;
@@ -23,9 +30,13 @@ namespace BladeEngine
             ID3D11Texture2D* m_LockingTexture;
 
         public:
-            RHIDirectX11Texture2D(ID3D11Texture2D* inTexture2D, ID3D11RenderTargetView* inRenderTarget,
-                ID3D11ShaderResourceView* inShaderResource, const RHITexture2DCreateInfo& inCreateInfo)
-                : RHITexture2D(inCreateInfo),
+            RHIDirectX11Texture2D(
+                DirectX11Device* inDevice, 
+                ID3D11Texture2D* inTexture2D, 
+                ID3D11ShaderResourceView* inShaderResource, ID3D11SamplerState* inSamplerState,
+                ID3D11RenderTargetView* inRenderTarget, 
+                const RHITextureCreateInfo& inCreateInfo)
+                : RHITexture2D(inDevice, inCreateInfo),
                 m_Texture(inTexture2D),
                 m_RenderTarget(inRenderTarget),
                 m_ShaderResource(inShaderResource)
@@ -103,7 +114,7 @@ namespace BladeEngine
                     desc.MipLevels = 0;
                     desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
                     desc.MiscFlags = 0;
-                    desc.Format = RHIDirectXEnumMapping::Get(m_PixelFormat);
+                    desc.Format = DirectXEnumMapping::Get(m_PixelFormat);
 
                     HRESULT hr = device->CreateTexture2D(&desc, NULL, &m_ShadowTexture);
                     if (FAILED(hr))
@@ -125,20 +136,8 @@ namespace BladeEngine
             }
 
         public:
-            ID3D11Texture2D* GetTexture()
-            {
-                return m_Texture;
-            }
-
-            ID3D11RenderTargetView* GetRenderTarget()
-            {
-                return m_RenderTarget;
-            }
-
-            ID3D11ShaderResourceView* GetShaderResource()
-            {
-                return m_ShaderResource;
-            }
+            ID3D11RenderTargetView* GetRenderTargetView() { return m_RenderTarget; }
+            ID3D11ShaderResourceView* GetShaderResourceView() { return m_ShaderResource; }
         };
 
     }

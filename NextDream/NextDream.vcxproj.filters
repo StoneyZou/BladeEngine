@@ -42,9 +42,6 @@
     <ClInclude Include="Source\Core\Utility.h">
       <Filter>头文件\Source\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\DirectX11\RHIDirectXEnumMapping.h">
-      <Filter>头文件\Source\DirectX11</Filter>
-    </ClInclude>
     <ClInclude Include="Source\RHI\RHIEnum.h">
       <Filter>头文件\Source\RHI</Filter>
     </ClInclude>
@@ -105,13 +102,7 @@
     <ClInclude Include="Source\DirectX11\RHIDirectX11TextureBase.h">
       <Filter>头文件\Source\DirectX11</Filter>
     </ClInclude>
-    <ClInclude Include="Source\RHI\RHIUniformBuffer.h">
-      <Filter>头文件\Source\RHI</Filter>
-    </ClInclude>
     <ClInclude Include="Source\DirectX11\DirectX11Device.h">
-      <Filter>头文件\Source\DirectX11</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\DirectX11\DirectX11UniformBuffer.h">
       <Filter>头文件\Source\DirectX11</Filter>
     </ClInclude>
     <ClInclude Include="Source\DirectX11\DirectX11Context.h">
@@ -119,6 +110,15 @@
     </ClInclude>
     <ClInclude Include="Source\Math\BColor.h">
       <Filter>头文件\Source\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DirectX11\DirectXEnumMapping.h">
+      <Filter>头文件\Source\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\RHIBufferBase.h">
+      <Filter>头文件\Source\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DirectX11\DirectX11BufferBase.h">
+      <Filter>头文件\Source\DirectX11</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

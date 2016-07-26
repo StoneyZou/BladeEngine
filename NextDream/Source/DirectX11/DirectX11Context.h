@@ -13,6 +13,8 @@ namespace BladeEngine
         {
         private:
             static const SIZE_T SHADER_RESOURCE_CACHE_NUM = 8;
+            static const FLOAT BlendColor[4];
+            static const UINT8 SamplerMask = 0;
 
         private:
             struct ContextStateCahce
@@ -27,6 +29,9 @@ namespace BladeEngine
                 ID3D11BlendState* BlendState;
                 ID3D11DepthStencilState* DepthStencilState;
 
+                ID3D11DepthStencilView* DepthStencilView;
+                ID3D11RenderTargetView* RenderTargetViews[8];
+
                 ID3D11Buffer* UniformBuffers[SHADER_RESOURCE_CACHE_NUM];
                 ID3D11ShaderResourceView* Textures[SHADER_RESOURCE_CACHE_NUM];
                 ID3D11SamplerState* Samplers[SHADER_RESOURCE_CACHE_NUM];
@@ -34,7 +39,7 @@ namespace BladeEngine
 
         protected:
             ID3D11DeviceContext* m_Context;
-            ContextStateCahce* m_StateCahce;
+            ContextStateCahce m_StateCahce;
 
         public:
             DirectX11ContextBaseImpl(ID3D11DeviceContext* mContext)
@@ -102,28 +107,69 @@ namespace BladeEngine
             {
                 DirectX11ShaderState* state = (DirectX11ShaderState*)inRHIShaderState;
                 
-                if (m_StateCahce->RasterizerState != state->GetRasterizerState())
+                if (m_StateCahce.RasterizerState != state->GetRasterizerState())
                 {
                     m_Context->RSSetState(state->GetRasterizerState());
-                    m_StateCahce->RasterizerState = state->GetRasterizerState();
+                    m_StateCahce.RasterizerState = state->GetRasterizerState();
                 }
 
-                if (m_StateCahce->BlendState != state->GetBlendState())
+                if (m_StateCahce.BlendState != state->GetBlendState())
                 {
-                    m_Context->OMSetBlendState(state->GetBlendState());
-                    m_StateCahce->BlendState = state->GetBlendState();
+                    m_Context->OMSetBlendState(state->GetBlendState(), BlendColor, SamplerMask);
+                    m_StateCahce.BlendState = state->GetBlendState();
                 }
 
-                if (m_StateCahce->DepthStencilState != state->GetDepthStencilState())
+                if (m_StateCahce.DepthStencilState != state->GetDepthStencilState())
                 {
                     m_Context->OMSetDepthStencilState(state->GetDepthStencilState(), 0);
-                    m_StateCahce->DepthStencilState = state->GetDepthStencilState();
+                    m_StateCahce.DepthStencilState = state->GetDepthStencilState();
                 }
             }
 
-            virtual void SetTexture( RHITextureBase* inTex)
+            virtual void SetTexture(RHITextureBase* inTexture, ESHADER_TYPE inType, SIZE_T inSlot)
             {
-                
+                BladeAssert(inSlot >= 0);
+
+                ID3D11ShaderResourceView* shaderResourceView = ((IDirectX11TextureInterface*)inTexture)->GetShaderResourceView();
+                if(inSlot >= 0 && inSlot < SHADER_RESOURCE_CACHE_NUM)
+                {
+                    if (m_StateCahce.Textures[inSlot] == shaderResourceView)
+                    {
+                        return;
+                    }
+                }
+
+                switch (inType)
+                {
+                case BladeEngine::RHI::ESHADER_VERTEX:
+                    m_Context->VSSetShaderResources(inSlot, 1, &shaderResourceView);
+                    break;
+                case BladeEngine::RHI::ESHADER_HULL:
+                    m_Context->HSSetShaderResources(inSlot, 1, &shaderResourceView);
+                    break;
+                case BladeEngine::RHI::ESHADER_DOMAIN:
+                    m_Context->DSSetShaderResources(inSlot, 1, &shaderResourceView);
+                    break;
+                case BladeEngine::RHI::ESHADER_GEOMETRY:
+                    m_Context->GSSetShaderResources(inSlot, 1, &shaderResourceView);
+                    break;
+                case BladeEngine::RHI::ESHADER_PIXEL:
+                    m_Context->PSSetShaderResources(inSlot, 1, &shaderResourceView);
+                    break;
+                default:
+                    break;
+                }
+            }
+
+            virtual void SetRenderTarget(RHITextureBase* inTexture)
+            {
+                ID3D11RenderTargetView* renderTargetViewView = ((IDirectX11TextureInterface*)inTexture)->GetRenderTargetView();
+                m_Context->OMSetRenderTargets(1, &renderTargetViewView, m_StateCahce.DepthStencilView);
+            }
+
+            virtual void Clear()
+            {
+            
             }
 
         public:
@@ -156,6 +202,8 @@ namespace BladeEngine
                 return device;
             }
         };
+
+        const FLOAT DirectX11ContextBaseImpl::BlendColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
         class DirectX11ImmediateContextImpl : public DirectX11ContextBaseImpl
         {
