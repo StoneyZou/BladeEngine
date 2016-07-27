@@ -15,7 +15,7 @@ namespace BladeEngine
     {
         class RHIShaderResourceTable : public RHIResource
         {
-        private:
+        public:
             struct AttributionDesc
             {
                 SIZE_T UnifromIndex;
@@ -105,10 +105,36 @@ namespace BladeEngine
                 desc.Count = inCount;
                 desc.Type = inType;
 
-                SIZE_T index = m_ResourceDescArr.Length();
+                m_ResourceDescMap.Insert(inResourceName, m_ResourceDescArr.Length());
                 m_ResourceDescArr.Add(desc);
+            }
 
-                m_ResourceDescMap.Insert(inResourceName, index);
+            bool GetResourceBindDesc(const BString& inResName, ResourceBindDesc* outDesc) const
+            {
+                int32 resDescIndex;
+                if(!m_ResourceDescMap.TryGetValue(inResName, &resDescIndex))
+                {
+                    return false;
+                }
+
+                if(outDesc != NULL)
+                {
+                    *outDesc = m_ResourceDescArr[resDescIndex];
+                }
+            }
+
+            bool GetAttributionDesc(const BString& inAttrName, AttributionDesc* outDesc) const
+            {
+                int32 attrDescIndex;
+                if (!m_AttributionDescMap.TryGetValue(inAttrName, &attrDescIndex))
+                {
+                    return false;
+                }
+
+                if (outDesc != NULL)
+                {
+                    *outDesc = m_AttributionDescArr[attrDescIndex];
+                }
             }
         };
 

@@ -45,6 +45,53 @@ namespace BladeEngine
             ValueType Value;
         };
 
+    public:
+        class Iterator
+        {
+        private:
+            friend class TMap;
+
+        private:
+            _RBTree_Node* m_PrevNode;
+            _RBTree_Node* m_CurNode
+
+        private:
+            Iterator(_RBTree_Node* inPrevNode, _RBTree_Node* inCurNode) : m_PrevNode(m_PrevNode), m_CurNode(m_CurNode)
+            {
+            }
+
+        public:
+            void operator ++() const
+            {
+                if(m_PrevNode == NULL || m_PrevNode == m_CurNode->ParentNode)
+                {
+                    do
+                    {
+                        if (m_CurNode->LeftNode != NULL && m_PrevNode == m_CurNode->Parent)
+                        {
+                            m_PrevNode = m_CurNode;
+                            m_CurNode = m_CurNode->LeftNode;
+                        }
+                        else if (m_CurNode->RightNode != NULL)
+                        {
+                            m_PrevNode = m_CurNode;
+                            m_CurNode = m_CurNode->RightNode;
+                        }
+                        else
+                        {
+                            m_PrevNode = m_CurNode;
+                            m_CurNode = m_CurNode->Parent;
+                        }
+                    } while (m_PrevNode == m_CurNode->Parent);
+                }
+            }
+
+            ValueType& GetValue() { return m_CurNode->Value; }
+            const ValueType& GetValue() const { return m_CurNode->Value; }
+
+            const KeyType& GetKey() { return m_CurNode->Key; }
+        };
+
     private:
         _RBTree_Node* m_Root;
 
@@ -572,7 +619,7 @@ namespace BladeEngine
         TMap() : m_Root(NULL)
         {}
 
-        bool TryGetValue(const KeyType& inKey, ValueType* outValue)
+        bool TryGetValue(const KeyType& inKey, ValueType* outValue) const
         {
             _RBTree_Node* node = _RBTreeSreachNode(inKey, &m_Root);
             if (node == NULL)
@@ -595,6 +642,17 @@ namespace BladeEngine
         void Erase(const KeyType& inKey)
         {
             _RBTreeErase(inKey, &m_Root);
+        }
+
+    public:
+        Iterator find(const KeyType& inKey)
+        {
+            _RBTree_Node* node = _RBTreeSreachNode(inKey, m_Root);
+            if (node == m_Root || node->ParentNode->LeftNode == node)
+            {
+                return Iterator(node->ParentNode, node);
+            }
+            return Iterator(node->ParentNode, node);
         }
     };
 
