@@ -38,17 +38,19 @@ namespace BladeEngine
                 ESHADER_RESOURCE_TYPE Type;
             };
 
+            typedef TMap<BString, int32> BStringToIntMap;
+
         private:
             SIZE_T m_TotalSize;
             byte* m_TotalData;
 
             TArray<UniformBufferDesc> m_UniformBufferArray;
 
-            TArray<AttributionDesc> m_AttributionDescArr;
-            TMap<BString, int32> m_AttributionDescMap;
+            TArray<AttributionDesc>  m_AttributionDescArr;
+            BStringToIntMap m_AttributionDescMap;
 
             TArray<ResourceBindDesc> m_ResourceDescArr;
-            TMap<BString, int32> m_ResourceDescMap;
+            BStringToIntMap m_ResourceDescMap;
 
         public:
             SIZE_T AddUniformBufferDesc(const BString& inBufferName, SIZE_T inSlot, SIZE_T inPackSize)
@@ -66,7 +68,7 @@ namespace BladeEngine
                 BladeAssert(m_TotalData == NULL);
 
                 m_TotalSize = 0;
-                for(int i = 0; i < m_UniformBufferArray.Length(); ++i)
+                for(SIZE_T i = 0; i < m_UniformBufferArray.Length(); ++i)
                 {
                     m_TotalSize += m_UniformBufferArray[i].PackSize;
                 }
@@ -111,29 +113,29 @@ namespace BladeEngine
 
             bool GetResourceBindDesc(const BString& inResName, ResourceBindDesc* outDesc) const
             {
-                int32 resDescIndex;
-                if(!m_ResourceDescMap.TryGetValue(inResName, &resDescIndex))
+                BStringToIntMap::Iterator ite = m_ResourceDescMap.Find(inResName);
+                if (ite == m_ResourceDescMap.End())
                 {
                     return false;
                 }
 
                 if(outDesc != NULL)
                 {
-                    *outDesc = m_ResourceDescArr[resDescIndex];
+                    *outDesc = m_ResourceDescArr[ite.Value()];
                 }
             }
 
             bool GetAttributionDesc(const BString& inAttrName, AttributionDesc* outDesc) const
             {
-                int32 attrDescIndex;
-                if (!m_AttributionDescMap.TryGetValue(inAttrName, &attrDescIndex))
+                BStringToIntMap::Iterator ite = m_AttributionDescMap.Find(inAttrName);
+                if (ite == m_AttributionDescMap.End())
                 {
                     return false;
                 }
 
                 if (outDesc != NULL)
                 {
-                    *outDesc = m_AttributionDescArr[attrDescIndex];
+                    *outDesc = m_AttributionDescArr[ite.Value()];
                 }
             }
         };
@@ -144,7 +146,7 @@ namespace BladeEngine
             RHIShaderStateCreateInfo m_CreateInfo;
             
         public:
-            RHIShaderState(const RHIShaderStateCreateInfo& inCreateInfo) : RHIResource(EONLY_GPU_READ),
+            RHIShaderState(IRHIDevice* inDevice, const RHIShaderStateCreateInfo& inCreateInfo) : RHIResource(inDevice, EONLY_GPU_READ),
                 m_CreateInfo(inCreateInfo)
             {}
 
@@ -171,7 +173,7 @@ namespace BladeEngine
         class RHIShaderBase : public RHIResource
         {
         public:
-            RHIShaderBase(const RHIShaderCreateInfo& inCreareInifo) : RHIResource(EONLY_GPU_READ), m_ResourceTable(inCreareInifo.ResourceTable)
+            RHIShaderBase(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreareInifo) : RHIResource(inDevice, EONLY_GPU_READ), m_ResourceTable(inCreareInifo.ResourceTable)
             {}
 
             const RHIShaderResourceTableRef& GetResourceTable() const { return m_ResourceTable; }
@@ -197,7 +199,7 @@ namespace BladeEngine
             InputTable m_InputTable;
 
         public:
-            RHIVertexShader(const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inCreateInfo)
+            RHIVertexShader(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inDevice, inCreateInfo)
             {}
 
             void AddInputBindDesc(const BString& inResourceName, ESHADER_SEMANTIC_TYPE inSemantic, uint32 inSlot, SIZE_T inIndex)
@@ -216,28 +218,28 @@ namespace BladeEngine
         class RHIHullShader : public RHIShaderBase 
         {
         public:
-            RHIHullShader(const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inCreateInfo)
+            RHIHullShader(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inDevice, inCreateInfo)
             {}
         };
 
         class RHIDomainShader : public RHIShaderBase
         {
         public:
-            RHIDomainShader(const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inCreateInfo)
+            RHIDomainShader(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inDevice, inCreateInfo)
             {}
         };
 
         class RHIGeometryShader : public RHIShaderBase
         {
         public:
-            RHIGeometryShader(const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inCreateInfo)
+            RHIGeometryShader(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inDevice, inCreateInfo)
             {}
         };
 
         class RHIPixelShader : public RHIShaderBase
         {
         public:
-            RHIPixelShader(const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inCreateInfo)
+            RHIPixelShader(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inDevice, inCreateInfo)
             {}
         };
 

@@ -45,7 +45,6 @@
     <ClInclude Include="Source\RHI\RHIShaderBase.h" />
     <ClInclude Include="Source\RHI\RHITextureBase.h" />
     <ClInclude Include="Source\RHI\RHIBufferBase.h" />
-    <ClInclude Include="TIterator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

@@ -1,7 +1,7 @@
 #ifndef __BLADE_RHI_DIRECTX11_SHADER_BASE_H__
 #define __BLADE_RHI_DIRECTX11_SHADER_BASE_H__
 
-#include <d3d11.h>
+#include <DirectX11Device.h>
 #include <MemUtil.h>
 #include <RHIShaderBase.h>
 
@@ -17,9 +17,9 @@ namespace BladeEngine
             ID3D11DepthStencilState*    m_DepthStencilState;
 
         public:
-            DirectX11ShaderState(ID3D11RasterizerState* inRasterizerState, ID3D11BlendState* inBlendState,
+            DirectX11ShaderState(DirectX11Device* inDevice, ID3D11RasterizerState* inRasterizerState, ID3D11BlendState* inBlendState,
                 ID3D11DepthStencilState* inDepthStencilState, const RHIShaderStateCreateInfo& inCreateInfo) 
-                : RHIShaderState(inCreateInfo),
+                : RHIShaderState(inDevice, inCreateInfo),
                 m_RasterizerState(inRasterizerState),
                 m_BlendState(inBlendState),
                 m_DepthStencilState(inDepthStencilState)
@@ -66,8 +66,8 @@ namespace BladeEngine
             ID3D11VertexShader* m_VertexShader;
 
         public:
-            DirectX11VertexShader(ID3D11VertexShader* inShader, const RHIShaderCreateInfo& inCreateInfo) : 
-                RHIVertexShader(inCreateInfo),
+            DirectX11VertexShader(DirectX11Device* inDevice, ID3D11VertexShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
+                RHIVertexShader(inDevice, inCreateInfo),
                 m_VertexShader(inShader)
             {
                 m_DataSize = inCreateInfo.DataSize;
@@ -89,8 +89,8 @@ namespace BladeEngine
             ID3D11HullShader* m_HullShader;
 
         public:
-            DirectX11HullShader(ID3D11HullShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
-                RHIHullShader(inCreateInfo),
+            DirectX11HullShader(DirectX11Device* inDevice, ID3D11HullShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
+                RHIHullShader(inDevice, inCreateInfo),
                 m_HullShader(inShader)
             {
                 m_HullShader->AddRef();
@@ -114,8 +114,8 @@ namespace BladeEngine
             ID3D11DomainShader* m_DomainShader;
 
         public:
-            DirectX11DomainShader(ID3D11DomainShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
-                RHIDomainShader(inCreateInfo),
+            DirectX11DomainShader(DirectX11Device* inDevice, ID3D11DomainShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
+                RHIDomainShader(inDevice, inCreateInfo),
                 m_DomainShader(inShader)
             {
                 m_DomainShader->AddRef();
@@ -139,8 +139,8 @@ namespace BladeEngine
             ID3D11GeometryShader* m_GeometryShader;
 
         public:
-            DirectX11GeometryShader(ID3D11GeometryShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
-                RHIGeometryShader(inCreateInfo),
+            DirectX11GeometryShader(DirectX11Device* inDevice, ID3D11GeometryShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
+                RHIGeometryShader(inDevice, inCreateInfo),
                 m_GeometryShader(inShader)
             {
                 m_GeometryShader->AddRef();
@@ -164,8 +164,8 @@ namespace BladeEngine
             ID3D11PixelShader* m_PixelShader;
 
         public:
-            DirectX11PixelShader(ID3D11PixelShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
-                RHIPixelShader(inCreateInfo),
+            DirectX11PixelShader(DirectX11Device* inDevice, ID3D11PixelShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
+                RHIPixelShader(inDevice, inCreateInfo),
                 m_PixelShader(inShader)
             {
                 m_PixelShader->AddRef();

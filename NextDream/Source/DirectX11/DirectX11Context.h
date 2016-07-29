@@ -4,6 +4,7 @@
 #include <d3d11.h>
 #include <RHIContext.h>
 #include <RHIDirectX11ShaderBase.h>
+#include <RHIDirectX11TextureBase.h>
 
 namespace BladeEngine
 {
@@ -56,50 +57,50 @@ namespace BladeEngine
             virtual void SetVertexShader(RHIVertexShader* inRHIShader) 
             {
                 DirectX11VertexShader* shader = (DirectX11VertexShader*)inRHIShader;
-                if (m_StateCahce->VS != shader->GetShader())
+                if (m_StateCahce.VS != shader->GetShader())
                 {
                     m_Context->VSSetShader(shader->GetShader(), NULL, 0);
-                    m_StateCahce->VS = shader->GetShader();
+                    m_StateCahce.VS = shader->GetShader();
                 }
             }
 
             virtual void SetGeometryShader(RHIGeometryShader* inRHIShader)
             {
                 DirectX11GeometryShader* shader = (DirectX11GeometryShader*)inRHIShader;
-                if (m_StateCahce->GS != shader->GetShader())
+                if (m_StateCahce.GS != shader->GetShader())
                 {
                     m_Context->GSSetShader(shader->GetShader(), NULL, 0);
-                    m_StateCahce->GS = shader->GetShader();
+                    m_StateCahce.GS = shader->GetShader();
                 }
             }
 
             virtual void SetHullShader(RHIHullShader* inRHIShader)
             {
                 DirectX11HullShader* shader = (DirectX11HullShader*)inRHIShader;
-                if (m_StateCahce->HS != shader->GetShader())
+                if (m_StateCahce.HS != shader->GetShader())
                 {
                     m_Context->HSSetShader(shader->GetShader(), NULL, 0);
-                    m_StateCahce->HS = shader->GetShader();
+                    m_StateCahce.HS = shader->GetShader();
                 }
             }
 
             virtual void SetDomainShader(RHIDomainShader* inRHIShader)
             {
                 DirectX11DomainShader* shader = (DirectX11DomainShader*)inRHIShader;
-                if (m_StateCahce->DS != shader->GetShader())
+                if (m_StateCahce.DS != shader->GetShader())
                 {
                     m_Context->DSSetShader(shader->GetShader(), NULL, 0);
-                    m_StateCahce->DS = shader->GetShader();
+                    m_StateCahce.DS = shader->GetShader();
                 }
             }
 
             virtual void SetPixelShader(RHIPixelShader* inRHIShader)
             {
                 DirectX11PixelShader* shader = (DirectX11PixelShader*)inRHIShader;
-                if (m_StateCahce->PS != shader->GetShader())
+                if (m_StateCahce.PS != shader->GetShader())
                 {
                     m_Context->PSSetShader(shader->GetShader(), NULL, 0);
-                    m_StateCahce->PS = shader->GetShader();
+                    m_StateCahce.PS = shader->GetShader();
                 }
             }
 
@@ -138,6 +139,7 @@ namespace BladeEngine
                         return;
                     }
                 }
+                m_StateCahce.Textures[inSlot] = shaderResourceView;
 
                 switch (inType)
                 {
@@ -167,9 +169,12 @@ namespace BladeEngine
                 m_Context->OMSetRenderTargets(1, &renderTargetViewView, m_StateCahce.DepthStencilView);
             }
 
-            virtual void Clear()
+            virtual void Clear(const BColor& inColor)
             {
-            
+                if (renderTargetViewView != NULL)
+                {
+                    m_Context->ClearRenderTargetView(inColor._data);
+                }
             }
 
         public:

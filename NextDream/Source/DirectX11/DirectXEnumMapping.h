@@ -1,10 +1,7 @@
-#ifndef __BALDE_RHI_RHI_DIRECTX_ENUM_MAP_H__
+#ifndef __BLADE_RHI_RHI_DIRECTX_ENUM_MAP_H__
 #define __BLADE_RHI_RHI_DIRECTX_ENUM_MAP_H__
 
 #include <RHIEnum.h>
-
-#include <dxgi.h>
-#include <d3d11.h>
 
 namespace BladeEngine
 {

@@ -110,7 +110,7 @@ namespace BladeEngine
         typedef RefCountObject<RHIShaderState> RHIShaderStateRef;
 
         class RHIShaderResourceTable;
-        typedef RefCountObject<RHIShaderResourceTable> RHIShaderStateRef;
+        typedef RefCountObject<RHIShaderResourceTable> RHIShaderResourceTableRef;
 
         struct RHIVertexBufferCreateInfo
         {
@@ -215,6 +215,38 @@ namespace BladeEngine
             RHIShaderBlendDesc          BlendDesc;
             RHIShaderDepthStencilDesc   DepthStencilDesc;
         };
+        
+        struct RHITexuteSamplerInfo
+        {
+            ETEXTURE_FILTER_MODE Filter;
+            ETEXTURE_ADDRESS_MODE AddressU;
+            ETEXTURE_ADDRESS_MODE AddressV;
+            ETEXTURE_ADDRESS_MODE AddressW;
+            float MipLODBias;
+            uint32 MaxAnisotropy;
+            ECOMPARISON_FUNC ComparisonFunc;
+            float BorderColor[4];
+            float MinLOD;
+            float MaxLOD;
+        };
+
+        /**
+        * @Desc Structure contains all infomations to create a texture
+        */
+        struct RHITextureCreateInfo
+        {
+            RHITexuteSamplerInfo Sampler;
+
+            uint32 Width;
+            uint32 Height;
+            EDATA_FORMAT Format;
+            ECPU_GPU_ACCESS_MODE AccessMode;
+            uint32 SampleQulity;
+            uint32 SampleCount;
+
+            uint32 DataSize;
+            void* Data;
+        };
 
         class IRHIDevice
         {
@@ -223,8 +255,6 @@ namespace BladeEngine
 
         public:
            virtual RHITextureBaseRef CreateTexture2D(const RHITextureCreateInfo& inCreateInfo) = 0;
-
-           virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo) = 0;
 
            virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo) = 0;
 

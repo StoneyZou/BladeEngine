@@ -90,9 +90,6 @@
     <ClInclude Include="Source\RHI\RHIShaderBase.h">
       <Filter>头文件\Source\RHI</Filter>
     </ClInclude>
-    <ClInclude Include="TIterator.h">
-      <Filter>头文件\Source\Contains</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Math\BMath.h">
       <Filter>头文件\Source\Math</Filter>
     </ClInclude>

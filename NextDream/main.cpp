@@ -1,10 +1,7 @@
-#include <RHIEnum.h>
-#include <TArray.h>
+
 #include <TMap.h>
 #include <BString.h>
-#include <Utility.h>
-#include <RHIDevice.h>
-#include <RHIShaderBase.h>
+#include <TArray.h>
 
 struct BStringComapareFunc
 {
@@ -17,13 +14,12 @@ public:
 
 void main()
 {
-    BladeEngine::RHI::RHIShaderCreateInfo info;
-
     BladeEngine::BString str("ddfsf");
     str = "dsscsdff";
 
     BladeEngine::TArray<void*> t;
-    BladeEngine::TMap<BladeEngine::BString, BladeEngine::int32, BStringComapareFunc> test;
+    BladeEngine::TMap<BladeEngine::BString, BladeEngine::int32> test;
+
     test.Insert("A", 100);
     test.Insert("B", 200);
     test.Insert("C", 300);
@@ -43,4 +39,10 @@ void main()
     test.Erase("G");
     test.Erase("H");
     test.Erase("I");
+
+    BladeEngine::TMap<BladeEngine::BString, BladeEngine::int32>::Iterator ite = test.Find("R");
+    if(ite != test.End())
+    {
+        return;
+    }
 }

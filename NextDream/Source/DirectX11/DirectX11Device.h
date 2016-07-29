@@ -1,15 +1,10 @@
 #ifndef __BLADE_RHI_RHI_DIRECTX_11_DEVICE_H__
 #define __BLADE_RHI_RHI_DIRECTX_11_DEVICE_H__
 
-#include "RHIDevice.h"
-#include "DirectXEnumMapping.h"
 #include <d3d11.h>
-#include <RHITextureBase.h>
-#include <RHIShaderBase.h>
+#include "RHIDevice.h"
 #include <TMap.h>
 #include <BMath.h>
-#include <RHIDirectX11ShaderBase.h>
-#include <RHIDirectX11TextureBase.h>
 
 namespace BladeEngine
 {
@@ -41,7 +36,7 @@ namespace BladeEngine
 
         #define D3D11PtrGuard(ptr) ComPtrGuard ptr##Guard(ptr)
 
-        class DirectXUniformBuffer;
+        class DirectX11UniformBuffer;
 
         class DirectX11Device : public IRHIDevice
         {
@@ -75,13 +70,11 @@ namespace BladeEngine
             TArray<D3D11_INPUT_ELEMENT_DESC> m_TempInputElementDescs;
 
         public:
-            virtual RHITextureBaseRef CreateTexture2D(const RHITextureCreateInfo& inCreateInfo);
+            virtual RHITextureBaseRef CreateTexture2D(const RHITextureCreateInfo& inCreateInfo) = 0;
 
-            virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo& inCreateInfo);
+            virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo& inCreateInfo) = 0;
 
-            virtual RHIPixelShaderRef CreatePixelShader(const RHIShaderCreateInfo& inCreateInfo)
-            {
-            }
+            virtual RHIPixelShaderRef CreatePixelShader(const RHIShaderCreateInfo& inCreateInfo) = 0;
 
             virtual RHIHullShaderRef CreateHullShader(const RHIShaderCreateInfo) = 0;
 

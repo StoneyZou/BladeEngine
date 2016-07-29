@@ -42,22 +42,22 @@ namespace BladeEngine
                 m_ShaderResource(inShaderResource)
             {
                 BladeAssert(inTexture2D != NULL);
-                BladeAssert(GetAccessMode() & EGPU_WRITE != 0 && m_RenderTarget != NULL);
-                BladeAssert(GetAccessMode() & EGPU_READ != 0 && m_ShaderResource != NULL);
+                BladeAssert((GetAccessMode() & EGPU_WRITE) != 0 && m_RenderTarget != NULL);
+                BladeAssert((GetAccessMode() & EGPU_READ) != 0 && m_ShaderResource != NULL);
 
                 m_Texture->AddRef();
-                if (GetAccessMode() & EGPU_WRITE != 0)
+                if ((GetAccessMode() & EGPU_WRITE) != 0)
                     m_RenderTarget->AddRef();
-                if (GetAccessMode() & EGPU_READ != 0)
+                if ((GetAccessMode() & EGPU_READ) != 0)
                     m_ShaderResource->AddRef();
             }
 
             ~RHIDirectX11Texture2D()
             {
                 m_Texture->Release();
-                if (GetAccessMode() & EGPU_WRITE != 0)
+                if ((GetAccessMode() & EGPU_WRITE) != 0)
                     m_RenderTarget->Release();
-                if (GetAccessMode() & EGPU_READ != 0)
+                if ((GetAccessMode() & EGPU_READ) != 0)
                     m_ShaderResource->Release();
             }
 
@@ -67,8 +67,8 @@ namespace BladeEngine
                 DirectX11ContextBaseImpl* contextImpl = static_cast<DirectX11ContextBaseImpl*>(inContext->GetImpl());
 
                 bool cantLock =
-                    ((GetAccessMode() & ECPU_READ == 0) && (inType & ERES_LOCK_READ != 0)) ||
-                    ((GetAccessMode() & ECPU_WRITE == 0) && (inType & ERES_LOCK_WRITE != 0));
+                    (((GetAccessMode() & ECPU_READ) == 0) && ((inType & ERES_LOCK_READ) != 0)) ||
+                    (((GetAccessMode() & ECPU_WRITE) == 0) && ((inType & ERES_LOCK_WRITE) != 0));
 
                 D3D11_MAP mapType = D3D11_MAP_READ_WRITE;
                 mapType = (inType == ERES_LOCK_ONLY_READ ? D3D11_MAP_READ : mapType);
@@ -77,13 +77,13 @@ namespace BladeEngine
                 mapType = (inType == ERES_LOCK_WRITE_DISCARD ? D3D11_MAP_WRITE_DISCARD : mapType);
 
 #if _DEBUG
-                if((GetAccessMode() & ECPU_WRITE != 0) && inType == ERES_LOCK_ONLY_WRITE)
+                if(((GetAccessMode() & ECPU_WRITE) != 0) && inType == ERES_LOCK_ONLY_WRITE)
                 {
                     //log can create texture use EONLY_GPU_READ
                 }
 #endif
 
-                if (mapType == D3D11_MAP_WRITE_DISCARD && GetAccessMode() & ECPU_WRITE == 0)
+                if (mapType == D3D11_MAP_WRITE_DISCARD && (GetAccessMode() & ECPU_WRITE) == 0)
                 {
                     //log
                     return NULL;

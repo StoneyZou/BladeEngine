@@ -1,6 +1,7 @@
 #include <DirectX11Device.h>
 #include <DirectX11BufferBase.h>
 #include <RHIDirectX11ShaderBase.h>
+#include <DirectXEnumMapping.h>
 
 namespace BladeEngine
 {
@@ -45,7 +46,7 @@ namespace BladeEngine
             ID3D11ShaderResourceView* pD3D11ShaderResourceView = NULL;
             ID3D11SamplerState* pSamplerState = NULL;
 
-            if (inCreateInfo.AccessMode & EGPU_READ != 0)
+            if ((inCreateInfo.AccessMode & EGPU_READ) != 0)
             {
                 D3D11_SHADER_RESOURCE_VIEW_DESC desc;
                 desc.Format = textureDesc.Format;
@@ -91,7 +92,7 @@ namespace BladeEngine
             }
 
             ID3D11RenderTargetView* pD3D11RenderTargetView = NULL;
-            if (inCreateInfo.AccessMode & EGPU_WRITE != 0)
+            if ((inCreateInfo.AccessMode & EGPU_WRITE) != 0)
             {
                 D3D11_RENDER_TARGET_VIEW_DESC desc;
                 desc.Format = textureDesc.Format;
@@ -130,7 +131,7 @@ namespace BladeEngine
                 return NULL;
             }
 
-            DirectX11VertexShader* vertexShader = new DirectX11VertexShader(pD3D11VertexShader, inCreateInfo);
+            DirectX11VertexShader* vertexShader = new DirectX11VertexShader(this, pD3D11VertexShader, inCreateInfo);
             return RHIVertexShaderRef(vertexShader);
         }
 
@@ -190,7 +191,7 @@ namespace BladeEngine
             blendStateDesc.AlphaToCoverageEnable = inCreateInfo.BlendDesc.AlphaTest;
             blendStateDesc.IndependentBlendEnable = inCreateInfo.BlendDesc.IndependentBlendEnable;
             SIZE_T numRT = Math::Min(MAX_NUM_RENDER_TARGET, MAX_NUM_D3D11_RENDER_TARGET);
-            for (int i = 0; i < numRT; ++i)
+            for (SIZE_T i = 0; i < numRT; ++i)
             {
                 blendStateDesc.RenderTarget[i].BlendEnable = inCreateInfo.BlendDesc.RenderTarget[i].BlendEnable;
                 blendStateDesc.RenderTarget[i].RenderTargetWriteMask = inCreateInfo.BlendDesc.RenderTarget[i].RenderTargetWriteMask;
@@ -248,9 +249,10 @@ namespace BladeEngine
                 depthStencilState->AddRef();
                 m_DepthStencilStateMap.Insert(depthStencilStateDesc, depthStencilState);
             }
-            D3D11PtrGuard(blendState);
+            D3D11PtrGuard(depthStencilState);
 
             DirectX11ShaderState* shaderState = new DirectX11ShaderState(
+                this,
                 rasterizerState,
                 blendState,
                 depthStencilState,
@@ -261,10 +263,10 @@ namespace BladeEngine
 
         RHIUniformBufferRef DirectX11Device::CreateUniformBuffer(const RHIUniformCreateInfo& inCreateInfo)
         {
-            SIZE_T packDataSize = (inCreateInfo.DataSize >> 4 + 1) << 4;
+            SIZE_T packDataSize = ((inCreateInfo.DataSize >> 4) + 1) << 4;
 
             DirectX11UniformBuffer* uniformBuffer = NULL;
-            for (int32 i = 0; i < m_UniformBufferList.Length; ++i)
+            for (SIZE_T i = 0; i < m_UniformBufferList.Length(); ++i)
             {
                 if (m_UniformBufferList[i]->GetPackSize() > packDataSize && m_UniformBufferList[i]->IsUnique())
                 {
@@ -319,8 +321,8 @@ namespace BladeEngine
                 inCreateInfo);
 
             // keep a reference
-            int32 insertIndex = m_UniformBufferList.Length - 1;
-            for(int32 i = 0; i < m_UniformBufferList.Length; ++ i)
+            SIZE_T insertIndex = m_UniformBufferList.Length() - 1;
+            for(SIZE_T i = 0; i < m_UniformBufferList.Length(); ++ i)
             {
                 if(m_UniformBufferList[i]->GetPackSize() > packDataSize)
                 {
@@ -334,7 +336,7 @@ namespace BladeEngine
             return RHIUniformBufferRef(uniformBuffer);
         }
 
-        RHIInputLayoutRef DirectX11Device::CreateRHIInputLayout(const RHIInputLayoutCreateInfo& inCreateInfo)
+        RHIInputLayoutRef DirectX11Device::CreateInputLayout(const RHIInputLayoutCreateInfo& inCreateInfo)
         {
             DirectX11VertexBuffer* buffer = (DirectX11VertexBuffer*)inCreateInfo.BindBuffer;
             DirectX11VertexShader* shader = (DirectX11VertexShader*)inCreateInfo.BindShader;

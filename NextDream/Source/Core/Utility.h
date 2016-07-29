@@ -13,71 +13,90 @@ namespace BladeEngine
 	#define BladeAssert(condition) _BladeAssert_Impl(condition, "Condition of assertion couldn't be satisfied!", __FILE__,  __LINE__);
 	//#define BladeAssert(condition, message) _BladeAssert_Impl(condition, message, __FILE__,  __LINE__);
 
-    struct BladeConstruct
+    struct _BladeConstruct
     {
         template<typename Type>
-        BladeConstruct(Type* ptr)
+        _BladeConstruct(Type* ptr)
         {
             new((void*)ptr)Type();
         }
 
         template<typename Type, typename P1>
-        BladeConstruct(Type* ptr, P1 p1)
+        _BladeConstruct(Type* ptr, P1 p1)
         {
             new((void*)ptr)Type(p1);
         }
 
         template<typename Type, typename P1, typename P2>
-        BladeConstruct(Type* ptr, P1 p1, P2 p2)
+        _BladeConstruct(Type* ptr, P1 p1, P2 p2)
         {
             new((void*)ptr)Type(p1);
         }
 
         template<typename Type, typename P1, typename P2, typename P3>
-        BladeConstruct(Type* ptr, P1 p1, P2 p2, P3 p3)
+        _BladeConstruct(Type* ptr, P1 p1, P2 p2, P3 p3)
         {
             new((void*)ptr)Type(p1, p2, p3);
         }
 
         template<typename Type, typename P1, typename P2, typename P3, typename P4>
-        BladeConstruct(Type* ptr, P1 p1, P2 p2, P3 p3, P4 p4)
+        _BladeConstruct(Type* ptr, P1 p1, P2 p2, P3 p3, P4 p4)
         {
             new((void*)ptr)Type(p1, p2, p3, p4);
         }
 
         template<typename Type, typename P1, typename P2, typename P3, typename P4, typename P5>
-        BladeConstruct(Type* ptr, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5)
+        _BladeConstruct(Type* ptr, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5)
         {
             new((void*)ptr)Type(p1, p2, p3, p4, p5);
         }
 
         template<typename Type, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
-        BladeConstruct(Type* ptr, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6)
+        _BladeConstruct(Type* ptr, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6)
         {
             new((void*)ptr)Type(p1, p2, p3, p4, p5, p6);
         }
 
         template<typename Type, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7>
-        BladeConstruct(Type* ptr, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7)
+        _BladeConstruct(Type* ptr, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7)
         {
             new((void*)ptr)Type(p1, p2, p3, p4, p5, p6, p7);
         }
 
         template<typename Type, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8>
-        BladeConstruct(Type* ptr, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8)
+        _BladeConstruct(Type* ptr, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8)
         {
             new((void*)ptr)Type(p1, p2, p3, p4, p5, p6, p7, p8);
         }
 
         template<typename Type, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename P9>
-        BladeConstruct(Type* ptr, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8, P9 p9)
+        _BladeConstruct(Type* ptr, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8, P9 p9)
         {
             new((void*)ptr)Type(p1, p2, p3, p4, p5, p6, p7, p8, p9);
         }
     };
 
-    #define BladeCopyConstruct(ptr, value, type) new((void*)ptr)type(value);
-    #define BladeDestruct(ptr, type) ((type*)ptr)->~type();
+    struct _BladeCopyConstruct
+    {
+        template<typename Type>
+        _BladeCopyConstruct(Type* ptr, const Type& value)
+        {
+            new((void*)ptr)type(value);
+        }
+    };
+
+    struct _BladeDestruct
+    {
+        template<typename Type>
+        _BladeDestruct(Type* ptr)
+        {
+            ptr->~Type();
+        }
+    };
+
+    #define BladeCopyConstruct(ptr, value, type) _BladeCopyConstruct ptr##_BladeCopyConstruct(static_cast<type*>(ptr), value);
+    #define BladeDestruct(ptr, type) _BladeDestruct ptr##_BladeDestruct(static_cast<type*>(ptr));
+    #define BladeConstruct(ptr, type) _BladeConstruct ptr##_BladeConstruct (static_cast<type*>(ptr));
 
     class INoncopyable
     {
