@@ -248,6 +248,11 @@ namespace BladeEngine
 
                 return depthStencilState;
             }
+
+            void* _LockResource(ID3D11Resource* inResource)
+            {
+                m_pDevice->CreateDeferredContext()
+            }
         };
     }
 }
