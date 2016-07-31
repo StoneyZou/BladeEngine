@@ -13,9 +13,9 @@ namespace BladeEngine
 {
     namespace RHI
     {
-        class RHIShaderResourceTable : public INoncopyable, public IReferencable
+        class RHIShaderResourceTable : public RHIResource
         {
-        private:
+        public:
             struct AttributionDesc
             {
                 SIZE_T UnifromIndex;
@@ -27,8 +27,8 @@ namespace BladeEngine
             struct UniformBufferDesc
             {
                 SIZE_T Slot;
-                SIZE_T Size;
-                void* DefaultData;
+                SIZE_T PackSize;
+                SIZE_T Offset;
             };
 
             struct ResourceBindDesc
@@ -38,38 +38,66 @@ namespace BladeEngine
                 ESHADER_RESOURCE_TYPE Type;
             };
 
-        private:
-            TArray<UniformBufferDesc> m_UniformBuffer;
+            typedef TMap<BString, int32> BStringToIntMap;
 
-            TArray<AttributionDesc> m_AttributionDescArr;
-            TMap<BString, int32> m_AttributionDescMap;
+        private:
+            SIZE_T m_TotalSize;
+            byte* m_TotalData;
+
+            TArray<UniformBufferDesc> m_UniformBufferArray;
+
+            TArray<AttributionDesc>  m_AttributionDescArr;
+            BStringToIntMap m_AttributionDescMap;
 
             TArray<ResourceBindDesc> m_ResourceDescArr;
-            TMap<BString, int32> m_ResourceDescMap;
+            BStringToIntMap m_ResourceDescMap;
 
         public:
-            SIZE_T AddUniformBufferDesc(const BString& inBufferName, SIZE_T inSlot, SIZE_T inSize)
+            SIZE_T AddUniformBufferDesc(const BString& inBufferName, SIZE_T inSlot, SIZE_T inPackSize)
             {
                 UniformBufferDesc desc;
                 desc.Slot = inSlot;
-                desc.Size = inSize;
-                desc.DefaultData = SystemMalloc::GetInstance().Alloc(inSize);
+                desc.PackSize = inPackSize;
 
-                m_UniformBuffer.Add(desc);
+                m_UniformBufferArray.Add(desc);
+            }
+
+            void BuildUniformBuffers()
+            {
+                BladeAssert(m_TotalSize == 0);
+                BladeAssert(m_TotalData == NULL);
+
+                m_TotalSize = 0;
+                for(SIZE_T i = 0; i < m_UniformBufferArray.Length(); ++i)
+                {
+                    m_TotalSize += m_UniformBufferArray[i].PackSize;
+                }
+                
+                m_TotalData = (byte*)SystemMalloc::GetInstance().Alloc(m_TotalSize);
+                MemUtil::Memset(m_TotalData, 0, m_TotalSize);
             }
 
             void AddAttributionDesc(const BString& inAttrName, SIZE_T inUniformIndex, SIZE_T inOffset, SIZE_T inSize, ESHADER_ATTRIB_TYPE inType, void* inDefault)
             {
+                BladeAssert(inUniformIndex >= 0 && inUniformIndex < m_UniformBufferArray.Length());
+
                 AttributionDesc desc;
                 desc.UnifromIndex = inUniformIndex;
                 desc.Offset = inOffset;
                 desc.Size = inSize;
                 desc.Type = inType;
 
-                SIZE_T index = m_AttributionDescArr.Length();
+                m_AttributionDescMap.Insert(inAttrName, m_AttributionDescArr.Length());
                 m_AttributionDescArr.Add(desc);
 
-                m_AttributionDescMap.Insert(inAttrName, index);
+                const UniformBufferDesc& uniformBufferDesc = m_UniformBufferArray[inUniformIndex];
+                BladeAssert(inSize >= 0 && inSize< (m_TotalSize - uniformBufferDesc.Offset - desc.Offset));
+
+                MemUtil::Memcopy(
+                    m_TotalData + uniformBufferDesc.Offset + desc.Offset,
+                    inSize,
+                    inDefault,
+                    inSize);
             }
 
             void AddResourceBindDesc(const BString& inResourceName, SIZE_T inSlot, SIZE_T inCount, ESHADER_RESOURCE_TYPE inType)
@@ -79,124 +107,37 @@ namespace BladeEngine
                 desc.Count = inCount;
                 desc.Type = inType;
 
-                SIZE_T index = m_ResourceDescArr.Length();
+                m_ResourceDescMap.Insert(inResourceName, m_ResourceDescArr.Length());
                 m_ResourceDescArr.Add(desc);
-
-                m_ResourceDescMap.Insert(inResourceName, index);
-            }
-        };
-
-        class RHIShaderInputTable : public INoncopyable, public IReferencable
-        {
-        private:
-            struct InputElementDesc
-            {
-                SIZE_T Index;
-                SIZE_T Rigster;
-                ESHADER_SEMANTIC_TYPE Semantic;
-            };
-
-            void AddResourceBindDesc(const BString& inResourceName, ESHADER_SEMANTIC_TYPE inSemantic, SIZE_T inRigster, SIZE_T inIndex)
-            {
-                InputElementDesc desc;
-                desc.Semantic = inSemantic;
-                desc.Rigster = inRigster;
-                desc.Index = inIndex;
-
-                m_InputElementDescArr.Add(desc);
             }
 
-        private:
-            TArray<InputElementDesc> m_InputElementDescArr;
-        };
+            bool GetResourceBindDesc(const BString& inResName, ResourceBindDesc* outDesc) const
+            {
+                BStringToIntMap::Iterator ite = m_ResourceDescMap.Find(inResName);
+                if (ite == m_ResourceDescMap.End())
+                {
+                    return false;
+                }
 
+                if(outDesc != NULL)
+                {
+                    *outDesc = m_ResourceDescArr[ite.Value()];
+                }
+            }
 
-        class RHIShaderResourceTable;
-        typedef RefCountObject<RHIShaderResourceTable> RHIShaderResourceTableRef;
+            bool GetAttributionDesc(const BString& inAttrName, AttributionDesc* outDesc) const
+            {
+                BStringToIntMap::Iterator ite = m_AttributionDescMap.Find(inAttrName);
+                if (ite == m_AttributionDescMap.End())
+                {
+                    return false;
+                }
 
-        class RHIShaderInputTable;
-        typedef RefCountObject<RHIShaderInputTable> RHIShaderInputTableRef;
-
-        struct RHIShaderCreateInfo
-        {
-            BString Name;
-            RHIShaderResourceTableRef ResourceTable;
-            uint32 DataSize;
-            void* Data;
-        };
-
-        struct RHIVertexShaderCreateInfo : public RHIShaderCreateInfo
-        {
-            RHIShaderInputTableRef InputTable;
-        };
-
-        struct RHIShaderRasterizerDesc
-        {
-            RHIShaderRasterizerDesc() : 
-                FillMode(EMESH_FILL_SOLID),
-                CullMode(EFACE_CULL_BACK),
-                FrontCounterClockwise(false),
-                DepthBias(0)
-            {}
-
-            EMESH_FILL_MODE FillMode;
-            EFACE_CULL_MODE CullMode;
-            bool FrontCounterClockwise;
-            uint32 DepthBias;
-            float DepthBiasClamp;
-            float SlopeScaledDepthBias;
-            bool DepthClipEnable;
-            bool ScissorEnable;
-            bool MultisampleEnable;
-            bool AntialiasedLineEnable;
-        };
-
-        struct RHIRenderTargetBlendDesc
-        {
-            bool BlendEnable;
-            uint8 RenderTargetWriteMask;
-
-            EBLEND_ARG SrcBlend;
-            EBLEND_ARG DestBlend;
-            EBLEND_FUNC BlendOp;
-
-            EBLEND_ARG SrcBlendAlpha;
-            EBLEND_ARG DestBlendAlpha;
-            EBLEND_FUNC BlendOpAlpha;
-        };
-
-        struct RHIShaderBlendDesc
-        {
-            bool AlphaTest;
-            bool IndependentBlendEnable;
-            RHIRenderTargetBlendDesc RenderTarget[MAX_NUM_RENDER_TARGET];
-        };
-
-        struct RHIShaderDepthStencilDesc
-        {
-            bool DepthEnable;
-            bool StencilEnable;
-            uint8 StencilReadMask;
-            uint8 StencilWriteMask;
-
-            EDEPTH_STENCIL_COMPARISON_FUNC DepthFunc;
-
-            EDEPTH_STENCIL_WRITE_FUNC FrontFaceSFailFunc;
-            EDEPTH_STENCIL_WRITE_FUNC FrontFaceSPassDFailFunc;
-            EDEPTH_STENCIL_WRITE_FUNC FrontFaceSPassDPassFunc;
-            EDEPTH_STENCIL_COMPARISON_FUNC FrontFaceStencilFunc;
-
-            EDEPTH_STENCIL_WRITE_FUNC BackFaceSFailFunc;
-            EDEPTH_STENCIL_WRITE_FUNC BackFaceSPassDFailFunc;
-            EDEPTH_STENCIL_WRITE_FUNC BackFaceSPassDPassFunc;
-            EDEPTH_STENCIL_COMPARISON_FUNC BackFaceStencilFunc;
-        };
-
-        struct RHIShaderStateCreateInfo
-        {
-            RHIShaderRasterizerDesc     RasterizerDesc;
-            RHIShaderBlendDesc          BlendDesc;
-            RHIShaderDepthStencilDesc   DepthStencilDesc;
+                if (outDesc != NULL)
+                {
+                    *outDesc = m_AttributionDescArr[ite.Value()];
+                }
+            }
         };
 
         class RHIShaderState : public RHIResource
@@ -205,7 +146,7 @@ namespace BladeEngine
             RHIShaderStateCreateInfo m_CreateInfo;
             
         public:
-            RHIShaderState(const RHIShaderStateCreateInfo& inCreateInfo) : RHIResource(EONLY_GPU_READ),
+            RHIShaderState(IRHIDevice* inDevice, const RHIShaderStateCreateInfo& inCreateInfo) : RHIResource(inDevice, EONLY_GPU_READ),
                 m_CreateInfo(inCreateInfo)
             {}
 
@@ -228,13 +169,14 @@ namespace BladeEngine
                 return MemUtil::Memcmp(&m_CreateInfo, &rh.m_CreateInfo, sizeof(m_CreateInfo));
             }
         };
-        typedef RefCountObject<RHIShaderState> RHIShaderStateRef;
 
         class RHIShaderBase : public RHIResource
         {
         public:
-            RHIShaderBase(const RHIShaderCreateInfo& inCreareInifo) : RHIResource(EONLY_GPU_READ), m_ResourceTable(inCreareInifo.ResourceTable)
+            RHIShaderBase(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreareInifo) : RHIResource(inDevice, EONLY_GPU_READ), m_ResourceTable(inCreareInifo.ResourceTable)
             {}
+
+            const RHIShaderResourceTableRef& GetResourceTable() const { return m_ResourceTable; }
 
         private:
             RHIShaderResourceTableRef m_ResourceTable;
@@ -243,39 +185,61 @@ namespace BladeEngine
         class RHIVertexShader : public RHIShaderBase 
         {
         public:
-            RHIVertexShader(const RHIVertexShaderCreateInfo& inCreateInfo) : RHIShaderBase(inCreateInfo), 
-                m_InputTable(inCreateInfo.InputTable)
-            {}
+            struct InputElementDesc
+            {
+                uint32 Index;
+                uint32 Slot;
+                ESHADER_SEMANTIC_TYPE Semantic;
+            };
+
+        public:
+            typedef TArray<InputElementDesc> InputTable;
 
         private:
-            RHIShaderInputTableRef m_InputTable;
+            InputTable m_InputTable;
+
+        public:
+            RHIVertexShader(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inDevice, inCreateInfo)
+            {}
+
+            void AddInputBindDesc(const BString& inResourceName, ESHADER_SEMANTIC_TYPE inSemantic, uint32 inSlot, SIZE_T inIndex)
+            {
+                InputElementDesc desc;
+                desc.Semantic = inSemantic;
+                desc.Slot = inSlot;
+                desc.Index = inIndex;
+
+                m_InputTable.Add(desc);
+            }
+
+            const InputTable& GetInputTable() const { return m_InputTable; }
         };
 
         class RHIHullShader : public RHIShaderBase 
         {
         public:
-            RHIHullShader(const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inCreateInfo)
+            RHIHullShader(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inDevice, inCreateInfo)
             {}
         };
 
         class RHIDomainShader : public RHIShaderBase
         {
         public:
-            RHIDomainShader(const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inCreateInfo)
+            RHIDomainShader(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inDevice, inCreateInfo)
             {}
         };
 
         class RHIGeometryShader : public RHIShaderBase
         {
         public:
-            RHIGeometryShader(const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inCreateInfo)
+            RHIGeometryShader(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inDevice, inCreateInfo)
             {}
         };
 
         class RHIPixelShader : public RHIShaderBase
         {
         public:
-            RHIPixelShader(const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inCreateInfo)
+            RHIPixelShader(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inDevice, inCreateInfo)
             {}
         };
 

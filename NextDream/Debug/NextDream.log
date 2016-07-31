@@ -1,3 +1,25 @@
 ﻿  main.cpp
-  NextDream.vcxproj -> C:\Users\rockzou\Documents\Visual Studio 2015\Projects\NextDream\Debug\BladeEngine.exe
-  NextDream.vcxproj -> C:\Users\rockzou\Documents\Visual Studio 2015\Projects\NextDream\Debug\BladeEngine.pdb (Full PDB)
+  DirectX11Device.cpp
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(115): error C2660: “BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>::Find”: 函数不接受 2 个参数
+e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(67): error C2065: “DirectX11ContextBaseImpl”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(67): error C2065: “contextImpl”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(67): error C2061: 语法错误: 标识符“DirectX11ContextBaseImpl”
+e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(95): error C2065: “contextImpl”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(95): error C2227: “->LockGpuResource”的左边必须指向类/结构/联合/泛型类型
+  e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(95): note: 类型是“unknown-type”
+e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(100): error C2065: “contextImpl”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(100): error C2227: “->GetDevice”的左边必须指向类/结构/联合/泛型类型
+  e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(100): note: 类型是“unknown-type”
+e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(126): error C2065: “contextImpl”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(126): error C2227: “->CopyGpuResource”的左边必须指向类/结构/联合/泛型类型
+  e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(126): note: 类型是“unknown-type”
+e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(129): error C2065: “contextImpl”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(129): error C2227: “->LockGpuResource”的左边必须指向类/结构/联合/泛型类型
+  e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(129): note: 类型是“unknown-type”
+e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(134): error C2065: “DirectX11ContextBaseImpl”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(134): error C2065: “contextImpl”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(134): error C2061: 语法错误: 标识符“DirectX11ContextBaseImpl”
+e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(135): error C2065: “contextImpl”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(135): error C2227: “->UnlockGpuResource”的左边必须指向类/结构/联合/泛型类型
+  e:\bladeengine\nextdream\source\directx11\rhidirectx11texturebase.h(135): note: 类型是“unknown-type”
+  正在生成代码...

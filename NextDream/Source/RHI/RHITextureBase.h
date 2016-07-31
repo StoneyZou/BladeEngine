@@ -2,55 +2,37 @@
 #define __BLADE_RHI_TEXTURE_BASE_H__
 
 #include <RHIDevice.h>
+#include <RHIContext.h>
 
 namespace BladeEngine
 {
     namespace RHI
     {
-        /**
-        * @Desc Structure contains all infomations to create a texture
-        */
-        struct RHITextureCreateInfo
+        class RHITextureBase : public RHIResource, public IResourceLockable
         {
-            ERHI_PIXEL_FORMAT Format;
-            ECPU_GPU_ACCESS_MODE AccessMode;
-            uint32 DataSize;
-            void* Data;
-        };
-
-        struct RHITexture2DCreateInfo : public RHITextureCreateInfo
-        {
-            uint32 Width;
-            uint32 Height;
-        };
-
-        class RHITextureBase : public RHIResource, public IResourceCopyable, public IResourceLockable
-        {
-        private:
-            ERHI_PIXEL_FORMAT m_PixelFormat;
-            ECPU_GPU_ACCESS_MODE m_AccessMode;
-
-            void* m_LockingData;
+        protected:
+            EDATA_FORMAT m_PixelFormat;
+            uint32 m_SampleQulity;
+            uint32 m_SampleCount;
 
         public:
-            RHITextureBase(const RHITextureCreateInfo& inCreateInfo) :
-                RHIResource(inCreateInfo.AccessMode), m_PixelFormat(inCreateInfo.Format), m_LockingData(NULL)
+            RHITextureBase(IRHIDevice* inDevice, const RHITextureCreateInfo& inCreateInfo) :
+                RHIResource(inDevice, inCreateInfo.AccessMode),
+                m_PixelFormat(inCreateInfo.Format),
+                m_SampleQulity(inCreateInfo.SampleQulity),
+                m_SampleCount(inCreateInfo.SampleCount)
             {}
-
-        public:
-            ERHI_PIXEL_FORMAT GetFormat() const { return m_PixelFormat; }
-            ECPU_GPU_ACCESS_MODE GetAccessMode() const { return m_AccessMode; }
         };
 
         class RHITexture2D : public RHITextureBase
         {
-        private:
+        protected:
             uint32 m_Width;
             uint32 m_Height;
 
         public:
-            RHITexture2D(const RHITexture2DCreateInfo& inCreateInfo) :
-                RHITextureBase(inCreateInfo), m_Width(inCreateInfo.Width), m_Height(inCreateInfo.Height)
+            RHITexture2D(IRHIDevice* inDevice, const RHITextureCreateInfo& inCreateInfo) :
+                RHITextureBase(inDevice, inCreateInfo), m_Width(inCreateInfo.Width), m_Height(inCreateInfo.Height)
             {}
         };
     }

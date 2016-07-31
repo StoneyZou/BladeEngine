@@ -1,8 +1,8 @@
 #ifndef __BLADE_CONTAINS_TMAP_H__
 #define __BLADE_CONTAINS_TMAP_H__
 
-#include <Utility.h>
 #include <new>
+#include <Utility.h>
 #include <BString.h>
 
 namespace BladeEngine
@@ -43,6 +43,87 @@ namespace BladeEngine
             _RBTree_Node* RightNode;
             KeyType Key;
             ValueType Value;
+        };
+
+    public:
+        class Iterator
+        {
+        private:
+            friend class TMap;
+
+        private:
+            _RBTree_Node* m_PrevNode;
+            _RBTree_Node* m_CurNode;
+
+        private:
+            Iterator(_RBTree_Node* inPrevNode, _RBTree_Node* inCurNode) : m_PrevNode(inPrevNode), m_CurNode(inCurNode)
+            {}
+
+        public:
+            Iterator(const Iterator& rh) : m_PrevNode(rh.m_PrevNode), m_CurNode(rh.m_CurNode)
+            {}
+
+        private:
+            bool IsEnd() const { return m_CurNode = NULL; }
+            bool IsBegin() const { return m_PrevNode == NULL; }
+
+        public:
+            void operator ++() const
+            {
+                if (IsEnd())
+                {
+                    //log
+                    return;
+                }
+
+                if(m_PrevNode == NULL || m_PrevNode == m_CurNode->ParentNode)
+                {
+                    do
+                    {
+                        if (m_CurNode->LeftNode != NULL && m_PrevNode == m_CurNode->Parent)
+                        {
+                            m_PrevNode = m_CurNode;
+                            m_CurNode = m_CurNode->LeftNode;
+                        }
+                        else if (m_CurNode->RightNode != NULL)
+                        {
+                            m_PrevNode = m_CurNode;
+                            m_CurNode = m_CurNode->RightNode;
+                        }
+                        else
+                        {
+                            m_PrevNode = m_CurNode;
+                            m_CurNode = m_CurNode->Parent;
+                        }
+                    } while (m_PrevNode == m_CurNode->Parent);
+                }
+            }
+
+            bool operator == (const Iterator& rh) const 
+            {
+                return m_CurNode == rh.m_CurNode;
+            }
+
+            bool operator != (const Iterator& rh) const
+            {
+                return m_CurNode != rh.m_CurNode;
+            }
+
+            Iterator& operator = (const Iterator& rh)
+            {
+                if (this == &rh)
+                    return;
+
+                m_PrevNode = rh.m_PrevNode;
+                m_CurNode = rh.m_CurNode;
+
+                return *this;
+            }
+
+            ValueType& Value() { return m_CurNode->Value; }
+            const ValueType& Value() const { return m_CurNode->Value; }
+
+            const KeyType& Key() { return m_CurNode->Key; }
         };
 
     private:
@@ -572,7 +653,7 @@ namespace BladeEngine
         TMap() : m_Root(NULL)
         {}
 
-        bool TryGetValue(const KeyType& inKey, ValueType* outValue)
+        bool TryGetValue(const KeyType& inKey, ValueType* outValue) const
         {
             _RBTree_Node* node = _RBTreeSreachNode(inKey, &m_Root);
             if (node == NULL)
@@ -595,6 +676,47 @@ namespace BladeEngine
         void Erase(const KeyType& inKey)
         {
             _RBTreeErase(inKey, &m_Root);
+        }
+
+    public:
+        Iterator Begin()
+        {
+            return Iterator(NULL, m_Root);
+        }
+
+        Iterator End()
+        {
+            return Iterator(NULL, NULL);
+        }
+
+        const Iterator Begin() const
+        {
+            return Iterator(NULL, m_Root);
+        }
+
+        const Iterator End() const
+        {
+            return Iterator(NULL, NULL);
+        }
+
+        Iterator Find(const KeyType& inKey)
+        {
+            _RBTree_Node* node = _RBTreeSreachNode(inKey, m_Root);
+            if (node == m_Root || node->ParentNode->LeftNode == node)
+            {
+                return Iterator(node->ParentNode, node);
+            }
+            return Iterator(node, node);
+        }
+
+        const Iterator Find(const KeyType& inKey) const
+        {
+            _RBTree_Node* node = _RBTreeSreachNode(inKey, m_Root);
+            if (node == m_Root || node->ParentNode->LeftNode == node)
+            {
+                return Iterator(node->ParentNode, node);
+            }
+            return Iterator(node, node);
         }
     };
 

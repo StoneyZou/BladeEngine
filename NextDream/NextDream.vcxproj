@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RHIDirectX11TextureBase.h" />
     <ClInclude Include="Source\Contains\BString.h" />
     <ClInclude Include="Source\Contains\TArray.h" />
     <ClInclude Include="Source\Contains\TMap.h" />
@@ -31,10 +30,13 @@
     <ClInclude Include="Source\Core\Platforms\StringUtil.h" />
     <ClInclude Include="Source\Core\TypeDefine.h" />
     <ClInclude Include="Source\Core\Utility.h" />
-    <ClInclude Include="Source\DirectX11\RHIDirectX11Context.h" />
-    <ClInclude Include="Source\DirectX11\RHIDirectX11Device.h" />
+    <ClInclude Include="Source\DirectX11\DirectX11Context.h" />
+    <ClInclude Include="Source\DirectX11\DirectX11Device.h" />
     <ClInclude Include="Source\DirectX11\RHIDirectX11ShaderBase.h" />
-    <ClInclude Include="Source\DirectX11\RHIDirectXEnumMapping.h" />
+    <ClInclude Include="Source\DirectX11\RHIDirectX11TextureBase.h" />
+    <ClInclude Include="Source\DirectX11\DirectX11BufferBase.h" />
+    <ClInclude Include="Source\DirectX11\DirectXEnumMapping.h" />
+    <ClInclude Include="Source\Math\BColor.h" />
     <ClInclude Include="Source\Math\BMath.h" />
     <ClInclude Include="Source\RHI\RHI.h" />
     <ClInclude Include="Source\RHI\RHIContext.h" />
@@ -42,10 +44,11 @@
     <ClInclude Include="Source\RHI\RHIEnum.h" />
     <ClInclude Include="Source\RHI\RHIShaderBase.h" />
     <ClInclude Include="Source\RHI\RHITextureBase.h" />
-    <ClInclude Include="TIterator.h" />
+    <ClInclude Include="Source\RHI\RHIBufferBase.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Source\DirectX11\private\DirectX11Device.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C8A5591A-0BD7-4617-820A-E1844B8D9DDC}</ProjectGuid>

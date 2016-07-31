@@ -9,14 +9,14 @@ namespace BladeEngine
     template<typename Type>
     class TArray : public INoncopyable
     {
-    public:
+    private:
         class Iterator
         {
-        private:
+        public:
             TArray& m_Data;
             SIZE_T m_Index;
 
-        private:
+        public:
             Iterator(TArray& inData, SIZE_T inIndex) : m_Data(inData), m_Index(inIndex)
             {}
 
@@ -26,17 +26,17 @@ namespace BladeEngine
                 ++m_Index;
             }
 
+            void operator --()
+            {
+                ++m_Index;
+            }
+
             Type& operator-> ()
             {
                 return m_Data[m_Index];
             }
 
-            const Type& operator -> () const
-            {
-                return m_Data[m_Index];
-            }
-
-            Type& operator. ()
+            const Type& operator-> () const
             {
                 return m_Data[m_Index];
             }
@@ -161,6 +161,15 @@ namespace BladeEngine
                 BladeCopyConstruct(&m_pData[i], m_pData[i + 1], Type);
             }
             BladeDestruct(&m_pData[m_Length - 1], Type);
+        }
+
+        void Clear()
+        {
+            for (SIZE_T i = index; i < m_Length - 1; ++i)
+            {
+                BladeDestruct(&m_pData[m_Length - 1], Type);
+            }
+            m_Length = 0;
         }
 
     public:

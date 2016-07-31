@@ -1,6 +1,8 @@
 #ifndef __BLADE_MATH_BMATH_H__
 #define __BLADE_MATH_BMATH_H__
 
+#include <BColor.h>
+
 namespace BladeEngine
 {
     class Math

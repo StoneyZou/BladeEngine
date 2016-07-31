@@ -14,18 +14,22 @@ namespace BladeEngine
         #define MAX_NUM_RENDER_TARGET 8
 
         class IRHIDevice;
+        class RHIContextBase;
 
         class RHIResource : public INoncopyable
         {
-        public:
-            static TArray<RHIResource*> s_DeferedDeleteResources;
-
         private:
+            bool m_IsRecycle;
             ECPU_GPU_ACCESS_MODE m_AccessMode;
             NotThreadSafeRefCount m_RefCount;
 
+        protected:
+            IRHIDevice* m_Device;
+
         public:
-            RHIResource(ECPU_GPU_ACCESS_MODE inAccessMode) : m_AccessMode(inAccessMode)
+            RHIResource(IRHIDevice* inDevice, ECPU_GPU_ACCESS_MODE inAccessMode) 
+                : m_AccessMode(inAccessMode), 
+                m_Device(inDevice)
             {}
 
             virtual ~RHIResource() {}
@@ -34,32 +38,31 @@ namespace BladeEngine
             ECPU_GPU_ACCESS_MODE GetAccessMode() const { return m_AccessMode; }
 
         public:
-            int32 AddRef() { return m_RefCount.AddRef(); }
-            int32 Release() 
-            { 
-                if (m_RefCount.Release() == 0) {
-                    s_DeferedDeleteResources.Add(this);
-                }
-            }
+            int32 AddRef() const { return m_RefCount.AddRef(); }
+            int32 Release() const { delete this; };
             int32 GetRefCount() const { return m_RefCount.GetRefCount(); }
+            int32 IsUnique() const { return m_RefCount.GetRefCount() == 1; }
         };
-        TArray<RHIResource*> RHIResource::s_DeferedDeleteResources;
 
         class IResourceLockable
         {
-            friend IRHIDevice;
+            friend RHIContextBase;
         protected:
-            virtual void* Lock(IRHIDevice* inParam, ERHIRESOURCE_LOCK_TYPE inType, const SIZE_T inIndex) = 0;
-            virtual void Unlock(IRHIDevice* inParam, const SIZE_T inIndex) = 0;
+            virtual void* Lock(RHIContextBase* inContext, ERES_LOCK_TYPE inType, const SIZE_T inIndex) = 0;
+            virtual void Unlock(RHIContextBase* inContext, const SIZE_T inIndex) = 0;
         };
-        typedef RefCountObject<IResourceLockable> IResourceLockableRef;
 
         class IResourceCopyable
         {
-            friend IRHIDevice;
+            friend RHIContextBase;
         protected:
-            virtual RHIResource* Copy(void* inParam, ECPU_GPU_ACCESS_MODE inMode) = 0;
+            virtual RHIResource* Copy(RHIContextBase* inContext, ECPU_GPU_ACCESS_MODE inMode) = 0;
         };
+
+        class IResourceLockable;
+        typedef RefCountObject<IResourceLockable> IResourceLockableRef;
+
+        class IResourceCopyable;
         typedef RefCountObject<IResourceCopyable> IResourceCopyableRef;
 
         class RHIResource;
@@ -74,7 +77,8 @@ namespace BladeEngine
         class RHIIndexBuffer;
         typedef RefCountObject<RHIIndexBuffer> RHIIndexBufferRef;
 
-        struct RHIShaderCreateInfo;
+        class RHIShaderResourceTable;
+        typedef RefCountObject<RHIShaderResourceTable> RHIShaderResourceTableRef;
 
         class RHIVertexShader;
         typedef RefCountObject<RHIVertexShader> RHIVertexShaderRef;
@@ -96,11 +100,21 @@ namespace BladeEngine
         class RHIShaderState;
         typedef RefCountObject<RHIShaderState> RHIShaderStateRef;
 
-        struct RHITexture2DCreateInfo;
+        class RHIUniformBuffer;
+        typedef RefCountObject<RHIUniformBuffer> RHIUniformBufferRef;
+
+        class RHIInputLayout;
+        typedef RefCountObject<RHIInputLayout> RHIInputLayoutRef;
+
+        class RHIShaderState;
+        typedef RefCountObject<RHIShaderState> RHIShaderStateRef;
+
+        class RHIShaderResourceTable;
+        typedef RefCountObject<RHIShaderResourceTable> RHIShaderResourceTableRef;
 
         struct RHIVertexBufferCreateInfo
         {
-        public:
+            bool Writable;
             uint32 VertexNumber;
             uint32 DataSize;
             void* Data;
@@ -108,37 +122,139 @@ namespace BladeEngine
 
         struct RHIIndexBufferCreateInfo
         {
-        public:
             uint32 VertexNumber;
+            uint32 DataSize;
+            void* Data;
+        };
+
+        struct RHIUniformCreateInfo
+        {
+            uint32 DataSize;
+            void* Data;
+        };
+
+        struct RHIInputLayoutCreateInfo
+        {
+            RHIVertexShader* BindShader;
+            RHIVertexBuffer* BindBuffer;
+        };
+
+        struct RHIShaderCreateInfo
+        {
+            BString Name;
+            RHIShaderResourceTableRef ResourceTable;
+            uint32 DataSize;
+            const void* Data;
+        };
+
+        struct RHIShaderRasterizerDesc
+        {
+            RHIShaderRasterizerDesc() :
+                FillMode(EMESH_FILL_SOLID),
+                CullMode(EFACE_CULL_BACK),
+                FrontCounterClockwise(false),
+                DepthBias(0)
+            {}
+
+            EMESH_FILL_MODE FillMode;
+            EFACE_CULL_MODE CullMode;
+            bool FrontCounterClockwise;
+            uint32 DepthBias;
+            float DepthBiasClamp;
+            float SlopeScaledDepthBias;
+            bool DepthClipEnable;
+            bool ScissorEnable;
+            bool MultisampleEnable;
+            bool AntialiasedLineEnable;
+        };
+
+        struct RHIRenderTargetBlendDesc
+        {
+            bool BlendEnable;
+            uint8 RenderTargetWriteMask;
+
+            EBLEND_ARG SrcBlend;
+            EBLEND_ARG DestBlend;
+            EBLEND_FUNC BlendOp;
+
+            EBLEND_ARG SrcBlendAlpha;
+            EBLEND_ARG DestBlendAlpha;
+            EBLEND_FUNC BlendOpAlpha;
+        };
+
+        struct RHIShaderBlendDesc
+        {
+            bool AlphaTest;
+            bool IndependentBlendEnable;
+            RHIRenderTargetBlendDesc RenderTarget[MAX_NUM_RENDER_TARGET];
+        };
+
+        struct RHIShaderDepthStencilDesc
+        {
+            bool DepthEnable;
+            bool StencilEnable;
+            uint8 StencilReadMask;
+            uint8 StencilWriteMask;
+
+            ECOMPARISON_FUNC DepthFunc;
+
+            EDEPTH_STENCIL_WRITE_FUNC FrontFaceSFailFunc;
+            EDEPTH_STENCIL_WRITE_FUNC FrontFaceSPassDFailFunc;
+            EDEPTH_STENCIL_WRITE_FUNC FrontFaceSPassDPassFunc;
+            ECOMPARISON_FUNC FrontFaceStencilFunc;
+
+            EDEPTH_STENCIL_WRITE_FUNC BackFaceSFailFunc;
+            EDEPTH_STENCIL_WRITE_FUNC BackFaceSPassDFailFunc;
+            EDEPTH_STENCIL_WRITE_FUNC BackFaceSPassDPassFunc;
+            ECOMPARISON_FUNC BackFaceStencilFunc;
+        };
+
+        struct RHIShaderStateCreateInfo
+        {
+            RHIShaderRasterizerDesc     RasterizerDesc;
+            RHIShaderBlendDesc          BlendDesc;
+            RHIShaderDepthStencilDesc   DepthStencilDesc;
+        };
+        
+        struct RHITexuteSamplerInfo
+        {
+            ETEXTURE_FILTER_MODE Filter;
+            ETEXTURE_ADDRESS_MODE AddressU;
+            ETEXTURE_ADDRESS_MODE AddressV;
+            ETEXTURE_ADDRESS_MODE AddressW;
+            float MipLODBias;
+            uint32 MaxAnisotropy;
+            ECOMPARISON_FUNC ComparisonFunc;
+            float BorderColor[4];
+            float MinLOD;
+            float MaxLOD;
+        };
+
+        /**
+        * @Desc Structure contains all infomations to create a texture
+        */
+        struct RHITextureCreateInfo
+        {
+            RHITexuteSamplerInfo Sampler;
+
+            uint32 Width;
+            uint32 Height;
+            EDATA_FORMAT Format;
+            ECPU_GPU_ACCESS_MODE AccessMode;
+            uint32 SampleQulity;
+            uint32 SampleCount;
+
             uint32 DataSize;
             void* Data;
         };
 
         class IRHIDevice
         {
+        protected:
+            TArray<RHIResource*> m_DeleteResourceList;
+
         public:
-           virtual RHITextureBaseRef CreateTexture2D(const RHITexture2DCreateInfo& inCreateInfo) = 0;
-
-           void* Lock(IResourceLockableRef& inResource, ERHIRESOURCE_LOCK_TYPE inType, const SIZE_T inIndex = 0)
-           {
-               if (((RHIResourceRef)inResource)->GetAccessMode() & ECPU_READ == 0)
-               {
-                   //log
-                   return NULL;
-               }
-
-               return inResource->Lock(this, inType, inIndex);
-           }
-
-           void Unlock(IResourceLockableRef& inResource, const SIZE_T inIndex = 0)
-           {
-               return inResource->Unlock(this, inIndex);
-           }
-
-           RHIResourceRef Copy(IResourceCopyableRef& inResource, ECPU_GPU_ACCESS_MODE inMode)
-           {
-               return inResource->Copy(this, inMode);
-           }
+           virtual RHITextureBaseRef CreateTexture2D(const RHITextureCreateInfo& inCreateInfo) = 0;
 
            virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo) = 0;
 
@@ -155,6 +271,10 @@ namespace BladeEngine
            virtual RHIIndexBufferRef CreateIndexBuffer(const RHIIndexBufferCreateInfo) = 0;
 
            virtual RHIShaderStateRef CreateShaderState(const RHIShaderStateCreateInfo&) = 0;
+
+           virtual RHIUniformBufferRef CreateUniformBuffer(const RHIUniformCreateInfo&) = 0;
+
+           virtual RHIInputLayoutRef CreateInputLayout(const RHIInputLayoutCreateInfo&) = 0;
         };
     }
 }
