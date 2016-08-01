@@ -72,6 +72,8 @@ namespace BladeEngine
         public:
             virtual RHITextureBaseRef CreateTexture2D(const RHITextureCreateInfo& inCreateInfo) = 0;
 
+            virtual RHITextureBaseRef CreateTexture2DAsDepthStencil(const RHITextureCreateInfo& inCreateInfo) = 0;
+
             virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo& inCreateInfo) = 0;
 
             virtual RHIPixelShaderRef CreatePixelShader(const RHIShaderCreateInfo& inCreateInfo) = 0;

@@ -109,7 +109,6 @@ namespace BladeEngine
                 }
             }
 
-
             RHIDirectX11Texture2D* texture2D = new RHIDirectX11Texture2D(
                 this, pD3D11Texture2D,
                 pD3D11ShaderResourceView, pSamplerState,

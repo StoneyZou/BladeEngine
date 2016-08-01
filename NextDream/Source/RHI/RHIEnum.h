@@ -37,11 +37,6 @@ namespace BladeEngine
             EDATA_FORMAT_R8G8B8A8_TYPELESS =    ( EDATA_LAYOUT_R8G8B8A8 << DATA_LAYOUT_SHIFT ) + EDATA_ELEMENT_TYPELESS,
         };
 
-        enum ECLEAR_MASK
-        {
-            ECLEAR_MASK_RENDERTARGET,
-        };
-
         enum ENUM_SHADER_TYPE
         {
             VERTEX_SHADER,

@@ -166,14 +166,29 @@ namespace BladeEngine
             virtual void SetRenderTarget(RHITextureBase* inTexture)
             {
                 ID3D11RenderTargetView* renderTargetViewView = ((IDirectX11TextureInterface*)inTexture)->GetRenderTargetView();
+                if (renderTargetViewView == NULL)
+                {
+                    //log
+                    return;
+                }
                 m_Context->OMSetRenderTargets(1, &renderTargetViewView, m_StateCahce.DepthStencilView);
             }
 
-            virtual void Clear(const BColor& inColor)
+            virtual void SetDepthStencil
+
+            virtual void ClearRenderTarget(const BColor& inColor)
             {
-                if (renderTargetViewView != NULL)
+                if (m_StateCahce.RenderTargetViews != NULL)
                 {
-                    m_Context->ClearRenderTargetView(inColor._data);
+                    m_Context->ClearRenderTargetView(m_StateCahce.RenderTargetViews, inColor._data);
+                }
+            }
+
+            virtual void ClearDepthStencil(float inDepthValue = 0.0f, uint32 inStencilValue = 0)
+            {
+                if (m_StateCahce.DepthStencilView != NULL)
+                {
+                    m_Context->ClearDepthStencilView(m_StateCahce->DepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, inDepthValue, inStencilValue);
                 }
             }
 

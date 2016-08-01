@@ -30,6 +30,9 @@ namespace BladeEngine
             uint32 m_Width;
             uint32 m_Height;
 
+            bool m_CanAsRenderTargetBuffer;
+            bool m_CanAsDepthStencilBuffer;
+
         public:
             RHITexture2D(IRHIDevice* inDevice, const RHITextureCreateInfo& inCreateInfo) :
                 RHITextureBase(inDevice, inCreateInfo), m_Width(inCreateInfo.Width), m_Height(inCreateInfo.Height)
