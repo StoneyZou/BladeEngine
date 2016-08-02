@@ -49,23 +49,30 @@ namespace BladeEngine
         public:
             typedef TArray<Declaration> DeclarationTable;
 
-        private:
-            SIZE_T m_VertexNum;
-            SIZE_T m_Size;
+        protected:
+            uint32 m_VertexNum;
+            uint32 m_DataSize;
             DeclarationTable m_DeclarationTable;
 
         public:
             RHIVertexBuffer(IRHIDevice* inDevice, const RHIVertexBufferCreateInfo& inCreateInfo)
-                : RHIResource(inDevice, inCreateInfo.Writable ? EGPU_READ_CPU_WRITE : EONLY_GPU_READ),
-                m_Size(inCreateInfo.DataSize)
+                : RHIResource(inDevice, inCreateInfo.CanCpuWrite ? EGPU_READ_CPU_WRITE : EONLY_GPU_READ),
+                m_DataSize(inCreateInfo.DataSize)
             {}
 
+        public:
             void AddVertexDeclaration(ESHADER_SEMANTIC_TYPE inSemantic, SIZE_T inIndex, EDATA_FORMAT Format, SIZE_T inOffset)
             {
                 m_DeclarationTable.Add(Declaration{ inSemantic, inIndex, Format, inOffset });
             }
 
+            void ClearVertexDeclaration() { m_DeclarationTable.Clear(); }
+
             const DeclarationTable& GetDeclaration() const { return m_DeclarationTable; }
+
+        public:
+            uint32 GetDataSize() const { return m_DataSize; }
+            uint32 GetVertexNum() const { return m_VertexNum; }
         };
     }
 }

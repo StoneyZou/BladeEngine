@@ -5,15 +5,22 @@
 #include <RHIContext.h>
 #include <RHIDirectX11ShaderBase.h>
 #include <RHIDirectX11TextureBase.h>
+#include <DirectX11BufferBase.h>
 
 namespace BladeEngine
 {
     namespace RHI
     {
+        struct MyStruct
+        {
+
+        };
+
         class DirectX11ContextBaseImpl : public IRHIContextBaseImpl
         {
         private:
-            static const SIZE_T SHADER_RESOURCE_CACHE_NUM = 8;
+            static const SIZE_T MAX_SHADER_RESOURCE_CACHE_NUM = 8;
+            static const SIZE_T MAX_RENDER_TARGET_NUM = 8;
             static const FLOAT BlendColor[4];
             static const UINT8 SamplerMask = 0;
 
@@ -31,11 +38,13 @@ namespace BladeEngine
                 ID3D11DepthStencilState* DepthStencilState;
 
                 ID3D11DepthStencilView* DepthStencilView;
-                ID3D11RenderTargetView* RenderTargetViews[8];
+                ID3D11RenderTargetView* RenderTargetViews[MAX_RENDER_TARGET_NUM];
 
-                ID3D11Buffer* UniformBuffers[SHADER_RESOURCE_CACHE_NUM];
-                ID3D11ShaderResourceView* Textures[SHADER_RESOURCE_CACHE_NUM];
-                ID3D11SamplerState* Samplers[SHADER_RESOURCE_CACHE_NUM];
+                ID3D11Buffer* UniformBuffers[MAX_SHADER_RESOURCE_CACHE_NUM];
+                ID3D11ShaderResourceView* Textures[MAX_SHADER_RESOURCE_CACHE_NUM];
+                ID3D11SamplerState* Samplers[MAX_SHADER_RESOURCE_CACHE_NUM];
+
+                TArray<ID3D11Buffer*> VertexBufferArray;
             };
 
         protected:
@@ -127,7 +136,7 @@ namespace BladeEngine
                 }
             }
 
-            virtual void SetTexture(RHITextureBase* inTexture, ESHADER_TYPE inType, SIZE_T inSlot)
+            virtual void SetShaderResource(RHITextureBase* inTexture, ESHADER_TYPE inType, SIZE_T inSlot)
             {
                 BladeAssert(inSlot >= 0);
 
@@ -163,18 +172,37 @@ namespace BladeEngine
                 }
             }
 
-            virtual void SetRenderTarget(RHITextureBase* inTexture)
+            virtual void SetRenderTarget(RHITextureBase* inTex, SIZE_T inIndex = 0)
             {
-                ID3D11RenderTargetView* renderTargetViewView = ((IDirectX11TextureInterface*)inTexture)->GetRenderTargetView();
-                if (renderTargetViewView == NULL)
+                if (!inTex->CanAsRenderTarget())
                 {
                     //log
                     return;
                 }
-                m_Context->OMSetRenderTargets(1, &renderTargetViewView, m_StateCahce.DepthStencilView);
+
+                if (inIndex < 0 || inIndex >= MAX_RENDER_TARGET_NUM)
+                {
+                    //log
+                    return;
+                }
+
+                ID3D11RenderTargetView* renderTargetViewView = ((IDirectX11TextureInterface*)inTex)->GetRenderTargetView();
+                m_StateCahce.RenderTargetViews[inIndex] = renderTargetViewView;
+                m_Context->OMSetRenderTargets(MAX_RENDER_TARGET_NUM, m_StateCahce.RenderTargetViews, m_StateCahce.DepthStencilView);
             }
 
-            virtual void SetDepthStencil
+            virtual void SetDepthStencil(RHITextureBase* inTex)
+            {
+                if (!inTex->CanAsDepthStencil())
+                {
+                    //log
+                    return;
+                }
+
+                ID3D11DepthStencilView* depthStencilView = ((IDirectX11TextureInterface*)inTex)->GetDepthStencilView();
+                m_StateCahce.DepthStencilView = depthStencilView;
+                m_Context->OMSetRenderTargets(MAX_RENDER_TARGET_NUM£¬ m_StateCahce.RenderTargetViews, m_StateCahce.DepthStencilView);
+            }
 
             virtual void ClearRenderTarget(const BColor& inColor)
             {
@@ -190,6 +218,34 @@ namespace BladeEngine
                 {
                     m_Context->ClearDepthStencilView(m_StateCahce->DepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, inDepthValue, inStencilValue);
                 }
+            }
+
+            virtual void SetVertexBuufer(SIZE_T inSlot, TArray<RHIVertexBuffer*> inVertexBuffers, TArray<uint32> inStrides, TArray<uint32> inOffset)
+            {
+                ID3D11Buffer* vertexBuffer = ((DirectX11VertexBuffer*)inVertexBuffer)->GetBuffer();
+                if (vertexBuffer == NULL)
+                {
+                    //log
+                    return;
+                }
+
+                D3D11_BUFFER_DESC desc;
+
+                m_Context->IASetVertexBuffers(vertexBuffer,)
+            }
+
+            virtual void SetVertexBuufer(SIZE_T inSlot, RHIVertexBuffer* inVertexBuffer, uint32 inStride, uint32 inOffset)
+            {
+                ID3D11Buffer* vertexBuffer = ((DirectX11VertexBuffer*)inVertexBuffer)->GetBuffer();
+                if (vertexBuffer == NULL)
+                {
+                    //log
+                    return;
+                }
+
+                m_Context->IASetInputLayout()
+
+                m_Context->IASetVertexBuffers(vertexBuffer, )
             }
 
         public:

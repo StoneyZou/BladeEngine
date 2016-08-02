@@ -19,7 +19,6 @@ namespace BladeEngine
         class RHIResource : public INoncopyable
         {
         private:
-            bool m_IsRecycle;
             ECPU_GPU_ACCESS_MODE m_AccessMode;
             NotThreadSafeRefCount m_RefCount;
 
@@ -36,6 +35,10 @@ namespace BladeEngine
 
         public:
             ECPU_GPU_ACCESS_MODE GetAccessMode() const { return m_AccessMode; }
+            bool CanCpuRead()  const    { return ((m_AccessMode & ECPU_READ) != 0); }
+            bool CanCpuWrite() const    { return ((m_AccessMode & ECPU_WRITE) != 0); }
+            bool CanGpuRead()  const    { return ((m_AccessMode & EGPU_READ) != 0); }
+            bool CanGpuWrite() const    { return ((m_AccessMode & EGPU_WRITE) != 0); }
 
         public:
             int32 AddRef() const { return m_RefCount.AddRef(); }
@@ -114,8 +117,8 @@ namespace BladeEngine
 
         struct RHIVertexBufferCreateInfo
         {
-            bool Writable;
-            uint32 VertexNumber;
+            bool CanCpuWrite;
+            uint32 VertexNum;
             uint32 DataSize;
             void* Data;
         };
@@ -137,6 +140,13 @@ namespace BladeEngine
         {
             RHIVertexShader* BindShader;
             RHIVertexBuffer* BindBuffer;
+        };
+
+        struct RHIInputElementDesc
+        {
+            RHIVertexBuffer* Buffer;
+            ESHADER_SEMANTIC_TYPE Semantic;
+            uint32 Index;
         };
 
         struct RHIShaderCreateInfo
@@ -236,16 +246,25 @@ namespace BladeEngine
         struct RHITextureCreateInfo
         {
             RHITexuteSamplerInfo Sampler;
-
-            uint32 Width;
-            uint32 Height;
-            EDATA_FORMAT Format;
+            uint32 Width, Height, Depth;
+            uint32 SampleCount, SampleQulity;
+            uint32 Usage;
+            EDATA_FORMAT BaseFormat;
+            EDATA_FORMAT RenderTargetFormat;
+            EDATA_FORMAT DepthStencilFormat;
             ECPU_GPU_ACCESS_MODE AccessMode;
-            uint32 SampleQulity;
-            uint32 SampleCount;
-
             uint32 DataSize;
             void* Data;
+        };
+
+        struct RHITextureInitInfo
+        {
+            bool CanAsRenderTarget, CanAsDepthStencil;
+            uint32 Width, Height;
+            uint32 SampleCount, SampleQulity;
+            uint32 Usage;
+            EDATA_FORMAT BaseFormat;
+            ECPU_GPU_ACCESS_MODE AccessMode;
         };
 
         class IRHIDevice

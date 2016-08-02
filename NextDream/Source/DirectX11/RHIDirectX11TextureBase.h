@@ -15,7 +15,16 @@ namespace BladeEngine
         struct IDirectX11TextureInterface
         {
             virtual ID3D11RenderTargetView* GetRenderTargetView() = 0;
+            virtual ID3D11DepthStencilView* GetDepthStencilView() = 0;
             virtual ID3D11ShaderResourceView* GetShaderResourceView() = 0;
+        };
+
+        struct DirectX11Texture2DInitInfo : public RHITextureInitInfo
+        {
+            ID3D11Texture2D* Texture;
+            ID3D11RenderTargetView* RenderTargetView;
+            ID3D11DepthStencilView* DepthStencilView;
+            ID3D11ShaderResourceView* ShaderResourceView;
         };
 
         class RHIDirectX11Texture2D : public RHITexture2D, public IDirectX11TextureInterface
@@ -23,42 +32,45 @@ namespace BladeEngine
         private:
             ID3D11Texture2D* m_Texture;
             ID3D11Texture2D* m_ShadowTexture;
-
-            ID3D11RenderTargetView* m_RenderTarget;
-            ID3D11ShaderResourceView* m_ShaderResource;
-
             ID3D11Texture2D* m_LockingTexture;
 
+            ID3D11RenderTargetView* m_RenderTarget;
+            ID3D11DepthStencilView* m_DepthStencil;
+            ID3D11ShaderResourceView* m_ShaderResource;
+
+
         public:
-            RHIDirectX11Texture2D(
-                DirectX11Device* inDevice, 
-                ID3D11Texture2D* inTexture2D, 
-                ID3D11ShaderResourceView* inShaderResource, ID3D11SamplerState* inSamplerState,
-                ID3D11RenderTargetView* inRenderTarget, 
-                const RHITextureCreateInfo& inCreateInfo)
-                : RHITexture2D(inDevice, inCreateInfo),
-                m_Texture(inTexture2D),
-                m_RenderTarget(inRenderTarget),
-                m_ShaderResource(inShaderResource)
+            RHIDirectX11Texture2D( DirectX11Device* inDevice, const DirectX11Texture2DInitInfo& inInitInfo)
+                : RHITexture2D(inDevice, inInitInfo),
+                m_Texture(inInitInfo.Texture),
+                m_ShadowTexture(NULL),
+                m_LockingTexture(NULL),
+                m_RenderTarget(inInitInfo.RenderTargetView),
+                m_DepthStencil(inInitInfo.DepthStencilView),
+                m_ShaderResource(inInitInfo.ShaderResourceView)
             {
-                BladeAssert(inTexture2D != NULL);
-                BladeAssert((GetAccessMode() & EGPU_WRITE) != 0 && m_RenderTarget != NULL);
-                BladeAssert((GetAccessMode() & EGPU_READ) != 0 && m_ShaderResource != NULL);
+                BladeAssert(m_Texture != NULL);
+                BladeAssert(m_ShaderResource != NULL)
+                BladeAssert(CanAsRenderTarget() ^ m_RenderTarget != NULL);
+                BladeAssert(CanAsDepthStencil() ^ m_ShaderResource != NULL);
 
                 m_Texture->AddRef();
-                if ((GetAccessMode() & EGPU_WRITE) != 0)
-                    m_RenderTarget->AddRef();
-                if ((GetAccessMode() & EGPU_READ) != 0)
-                    m_ShaderResource->AddRef();
+
+                m_ShaderResource->AddRef();
+                if (m_RenderTarget != NULL) { m_RenderTarget->AddRef(); }
+                if (m_DepthStencil != NULL) { m_DepthStencil->AddRef(); }
             }
 
             ~RHIDirectX11Texture2D()
             {
                 m_Texture->Release();
-                if ((GetAccessMode() & EGPU_WRITE) != 0)
-                    m_RenderTarget->Release();
-                if ((GetAccessMode() & EGPU_READ) != 0)
-                    m_ShaderResource->Release();
+                if (m_ShadowTexture != NULL) { m_ShadowTexture->Release(); }
+
+                m_ShaderResource->Release();
+                if (m_RenderTarget != NULL) { m_RenderTarget->Release(); }
+                if (m_DepthStencil != NULL) { m_DepthStencil->Release(); }
+
+                m_LockingTexture = NULL;
             }
 
         public:
@@ -66,9 +78,8 @@ namespace BladeEngine
             {
                 DirectX11ContextBaseImpl* contextImpl = static_cast<DirectX11ContextBaseImpl*>(inContext->GetImpl());
 
-                bool cantLock =
-                    (((GetAccessMode() & ECPU_READ) == 0) && ((inType & ERES_LOCK_READ) != 0)) ||
-                    (((GetAccessMode() & ECPU_WRITE) == 0) && ((inType & ERES_LOCK_WRITE) != 0));
+                bool cantLock =(CanCpuRead() && (inType & ERES_LOCK_READ) != 0) ||
+                    (CanCpuWrite() && (inType & ERES_LOCK_WRITE) != 0);
 
                 D3D11_MAP mapType = D3D11_MAP_READ_WRITE;
                 mapType = (inType == ERES_LOCK_ONLY_READ ? D3D11_MAP_READ : mapType);
@@ -77,9 +88,9 @@ namespace BladeEngine
                 mapType = (inType == ERES_LOCK_WRITE_DISCARD ? D3D11_MAP_WRITE_DISCARD : mapType);
 
 #if _DEBUG
-                if(((GetAccessMode() & ECPU_WRITE) != 0) && inType == ERES_LOCK_ONLY_WRITE)
+                if(!CanGpuWrite() && inType == ERES_LOCK_ONLY_WRITE)
                 {
-                    //log can create texture use EONLY_GPU_READ
+                    //log can create texture use EGPU_READ_CPU_WRITE
                 }
 #endif
 
@@ -114,7 +125,7 @@ namespace BladeEngine
                     desc.MipLevels = 0;
                     desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
                     desc.MiscFlags = 0;
-                    desc.Format = DirectXEnumMapping::Get(m_PixelFormat);
+                    desc.Format = DirectXEnumMapping::Get(m_DataFormat);
 
                     HRESULT hr = device->CreateTexture2D(&desc, NULL, &m_ShadowTexture);
                     if (FAILED(hr))
@@ -137,6 +148,7 @@ namespace BladeEngine
 
         public:
             ID3D11RenderTargetView* GetRenderTargetView() { return m_RenderTarget; }
+            ID3D11DepthStencilView* GetDepthStencilView() { return m_DepthStencil; }
             ID3D11ShaderResourceView* GetShaderResourceView() { return m_ShaderResource; }
         };
 

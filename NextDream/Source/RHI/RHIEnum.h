@@ -37,6 +37,13 @@ namespace BladeEngine
             EDATA_FORMAT_R8G8B8A8_TYPELESS =    ( EDATA_LAYOUT_R8G8B8A8 << DATA_LAYOUT_SHIFT ) + EDATA_ELEMENT_TYPELESS,
         };
 
+        enum ETEXTURE_USAGE
+        {
+            ETEXTURE_USAGE_DEPTH_STENCIL,
+            ETEXTURE_USAGE_RENDER_TARGET,
+            ETEXTURE_USAGE_SHADER_RESOURCE,
+        };
+
         enum ENUM_SHADER_TYPE
         {
             VERTEX_SHADER,
