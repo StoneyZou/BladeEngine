@@ -11,14 +11,9 @@ namespace BladeEngine
         class RHITextureBase : public RHIResource, public IResourceLockable
         {
         protected:
-            bool m_CanAsRenderTarget;
-            bool m_CanAsDepthStencil;
-            bool m_CanAsShaderResource;
-            
-            uint32 m_SampleCount;
-            uint32 m_SampleQulity;
-
             EDATA_FORMAT m_DataFormat;
+            uint32 m_SampleCount, m_SampleQulity;
+            bool m_CanAsRenderTarget, m_CanAsDepthStencil;
 
         public:
             RHITextureBase(IRHIDevice* inDevice, const RHITextureInitInfo& inInitInfo) :
@@ -27,18 +22,17 @@ namespace BladeEngine
                 m_SampleQulity(inInitInfo.SampleQulity),
                 m_SampleCount(inInitInfo.SampleCount),
                 m_CanAsRenderTarget(inInitInfo.CanAsRenderTarget),
-                m_CanAsDepthStencil(inInitInfo.CanAsDepthStencil),
-                m_CanAsShaderResource(inInitInfo.CanAsShaderResource)
+                m_CanAsDepthStencil(inInitInfo.CanAsDepthStencil)
             {}
 
         public:
             EDATA_FORMAT GetDataFormat() const { return m_DataFormat; }
-            uint32 GetSampleQulity() const { return m_SampleQulity; }
-            uint32 GetSampleCount() const { return m_SampleQulity; }
 
-            bool CanAsRenderTarget() const      { return m_CanAsRenderTarget; }
-            bool CanAsDepthStencil() const      { return m_CanAsDepthStencil; }
-            bool CanAsShaderResource() const    { return m_CanAsShaderResource; }
+            uint32 GetSamplerCount() const { return m_SampleCount; }
+            uint32 GetSamplerQuality() const { return m_SampleQulity; }
+
+            bool CanAsRenderTarget() const { return m_CanAsRenderTarget; }
+            bool CanAsDepthStencil() const { return m_CanAsDepthStencil; }
         };
 
         class RHITexture2D : public RHITextureBase
@@ -49,7 +43,7 @@ namespace BladeEngine
 
         public:
             RHITexture2D(IRHIDevice* inDevice, const RHITextureInitInfo& inInitInfo) :
-                RHITextureBase(inDevice, inInitInfo),
+                RHITextureBase(inDevice, inInitInfo), 
                 m_Width(inInitInfo.Width),
                 m_Height(inInitInfo.Height)
             {}

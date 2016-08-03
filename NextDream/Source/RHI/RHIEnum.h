@@ -39,14 +39,9 @@ namespace BladeEngine
 
         enum ETEXTURE_USAGE
         {
-            ETEXTURE_AS_RENDER_TARGET = 0x01,
-            ETEXTURE_AS_DEPTH_STENCIL = 0x02,
-            ETEXTURE_AS_SHADER_RESOURCE = 0x04,
-        };
-
-        enum ECLEAR_MASK
-        {
-            ECLEAR_MASK_RENDERTARGET,
+            ETEXTURE_USAGE_DEPTH_STENCIL,
+            ETEXTURE_USAGE_RENDER_TARGET,
+            ETEXTURE_USAGE_SHADER_RESOURCE,
         };
 
         enum ENUM_SHADER_TYPE

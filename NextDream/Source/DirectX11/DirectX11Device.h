@@ -51,11 +51,31 @@ namespace BladeEngine
                 }
             };
 
+            template<typename Type>
+            struct ArrayMemCompareFunc
+            {
+            public:
+                int32 Compare(const TArray<Type>& lh, const TArray<Type>& rh)
+                {
+                    if (lh.GetLength() < rh.GetLength())
+                    {
+                        return 1;
+                    }
+                    else if(lh.GetLength() > rh.GetLength())
+                    {
+                        return -1;
+                    }
+                    return  MemUtil::Memcmp(lh.VoidPtr(), rh.VoidPtr(), lh.GetLength() * sizeof(Type));
+                }
+            };
+
             typedef TMap<D3D11_RASTERIZER_DESC, ID3D11RasterizerState*, MemCompareFunc<RHIShaderRasterizerDesc>> RasterizerStateMap;
             typedef TMap<D3D11_BLEND_DESC, ID3D11BlendState*, MemCompareFunc<RHIShaderBlendDesc>> BlendStateMap;
             typedef TMap<D3D11_DEPTH_STENCIL_DESC, ID3D11DepthStencilState*, MemCompareFunc<RHIShaderDepthStencilDesc>> DepthStencilStateMap;
             typedef TMap<D3D11_SAMPLER_DESC, ID3D11SamplerState*, MemCompareFunc<RHITexuteSamplerInfo>> SamplerStateMap;
             typedef TArray<DirectX11UniformBuffer*> UniformBufferList;
+            typedef TArray<D3D11_INPUT_ELEMENT_DESC> InputElementDescArray;
+            typedef TMap<D3D11_SAMPLER_DESC, ID3D11SamplerState*, MemCompareFunc<RHITexuteSamplerInfo>> SamplerStateMap;
 
         private:
             ID3D11DeviceRef m_pDevice;
@@ -71,6 +91,8 @@ namespace BladeEngine
 
         public:
             virtual RHITextureBaseRef CreateTexture2D(const RHITextureCreateInfo& inCreateInfo) = 0;
+
+            virtual RHITextureBaseRef CreateTexture2DAsDepthStencil(const RHITextureCreateInfo& inCreateInfo) = 0;
 
             virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo& inCreateInfo) = 0;
 

@@ -68,7 +68,7 @@ namespace BladeEngine
                 BladeAssert(m_TotalData == NULL);
 
                 m_TotalSize = 0;
-                for(SIZE_T i = 0; i < m_UniformBufferArray.Length(); ++i)
+                for(SIZE_T i = 0; i < m_UniformBufferArray.GetLength(); ++i)
                 {
                     m_TotalSize += m_UniformBufferArray[i].PackSize;
                 }
@@ -79,7 +79,7 @@ namespace BladeEngine
 
             void AddAttributionDesc(const BString& inAttrName, SIZE_T inUniformIndex, SIZE_T inOffset, SIZE_T inSize, ESHADER_ATTRIB_TYPE inType, void* inDefault)
             {
-                BladeAssert(inUniformIndex >= 0 && inUniformIndex < m_UniformBufferArray.Length());
+                BladeAssert(inUniformIndex >= 0 && inUniformIndex < m_UniformBufferArray.GetLength());
 
                 AttributionDesc desc;
                 desc.UnifromIndex = inUniformIndex;
@@ -87,7 +87,7 @@ namespace BladeEngine
                 desc.Size = inSize;
                 desc.Type = inType;
 
-                m_AttributionDescMap.Insert(inAttrName, m_AttributionDescArr.Length());
+                m_AttributionDescMap.Insert(inAttrName, m_AttributionDescArr.GetLength());
                 m_AttributionDescArr.Add(desc);
 
                 const UniformBufferDesc& uniformBufferDesc = m_UniformBufferArray[inUniformIndex];
@@ -107,7 +107,7 @@ namespace BladeEngine
                 desc.Count = inCount;
                 desc.Type = inType;
 
-                m_ResourceDescMap.Insert(inResourceName, m_ResourceDescArr.Length());
+                m_ResourceDescMap.Insert(inResourceName, m_ResourceDescArr.GetLength());
                 m_ResourceDescArr.Add(desc);
             }
 

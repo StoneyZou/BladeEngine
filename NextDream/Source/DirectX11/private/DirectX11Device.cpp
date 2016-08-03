@@ -109,7 +109,6 @@ namespace BladeEngine
                 }
             }
 
-
             RHIDirectX11Texture2D* texture2D = new RHIDirectX11Texture2D(
                 this, pD3D11Texture2D,
                 pD3D11ShaderResourceView, pSamplerState,
@@ -266,7 +265,7 @@ namespace BladeEngine
             SIZE_T packDataSize = ((inCreateInfo.DataSize >> 4) + 1) << 4;
 
             DirectX11UniformBuffer* uniformBuffer = NULL;
-            for (SIZE_T i = 0; i < m_UniformBufferList.Length(); ++i)
+            for (SIZE_T i = 0; i < m_UniformBufferList.GetLength(); ++i)
             {
                 if (m_UniformBufferList[i]->GetPackSize() > packDataSize && m_UniformBufferList[i]->IsUnique())
                 {
@@ -321,8 +320,8 @@ namespace BladeEngine
                 inCreateInfo);
 
             // keep a reference
-            SIZE_T insertIndex = m_UniformBufferList.Length() - 1;
-            for(SIZE_T i = 0; i < m_UniformBufferList.Length(); ++ i)
+            SIZE_T insertIndex = m_UniformBufferList.GetLength() - 1;
+            for(SIZE_T i = 0; i < m_UniformBufferList.GetLength(); ++ i)
             {
                 if(m_UniformBufferList[i]->GetPackSize() > packDataSize)
                 {
@@ -345,11 +344,11 @@ namespace BladeEngine
             const RHIVertexShader::InputTable& inputTable = shader->GetInputTable();
 
             m_TempInputElementDescs.Clear();
-            for(SIZE_T iIndex = 0; iIndex < inputTable.Length(); ++iIndex)
+            for(SIZE_T iIndex = 0; iIndex < inputTable.GetLength(); ++iIndex)
             {
                 bool match = false;
 
-                for (SIZE_T dIndex = 0; dIndex < declarationTable.Length(); ++dIndex)
+                for (SIZE_T dIndex = 0; dIndex < declarationTable.GetLength(); ++dIndex)
                 {
                     if (inputTable[iIndex].Semantic == declarationTable[dIndex].Semantic &&
                         inputTable[iIndex].Index == declarationTable[dIndex].Semantic)
@@ -380,7 +379,7 @@ namespace BladeEngine
 
             ID3D11InputLayout* d3d11InputLayout = NULL;
 
-            HRESULT hr = m_pDevice->CreateInputLayout(m_TempInputElementDescs.TypePtr(), m_TempInputElementDescs.Length(), 
+            HRESULT hr = m_pDevice->CreateInputLayout(m_TempInputElementDescs.TypePtr(), m_TempInputElementDescs.GetLength(), 
                 shader->GetData(), shader->GetDataSize(), &d3d11InputLayout);
             D3D11PtrGuard(d3d11InputLayout);
 
