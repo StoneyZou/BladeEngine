@@ -19,20 +19,6 @@ namespace BladeEngine
             {}
         };
 
-        class RHIInputLayout : public RHIResource
-        {
-        private:
-            RHIVertexBuffer* m_BindBuffer;
-            RHIVertexShader* m_BindShader;
-
-        public:
-            RHIInputLayout(IRHIDevice* inDevice, const RHIInputLayoutCreateInfo& inCreateInfo)
-                : RHIResource(inDevice, EONLY_GPU_READ),
-                m_BindBuffer(inCreateInfo.BindBuffer),
-                m_BindShader(inCreateInfo.BindShader)
-            {}
-        };
-
         class RHIVertexBuffer : public RHIResource, public IResourceLockable
         {
         public: 
@@ -68,7 +54,7 @@ namespace BladeEngine
 
             void ClearVertexDeclaration() { m_DeclarationTable.Clear(); }
 
-            const DeclarationTable& GetDeclaration() const { return m_DeclarationTable; }
+            const DeclarationTable& GetDeclarationTable() const { return m_DeclarationTable; }
 
         public:
             uint32 GetDataSize() const { return m_DataSize; }

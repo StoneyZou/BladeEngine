@@ -27,11 +27,11 @@ namespace BladeEngine
         private:
             struct ContextStateCahce
             {
-                ID3D11VertexShader* VS;
-                ID3D11GeometryShader* GS;
-                ID3D11HullShader* HS;
-                ID3D11DomainShader* DS;
-                ID3D11PixelShader* PS;
+                RHIVertexShader* VS;
+                RHIGeometryShader* GS;
+                RHIHullShader* HS;
+                RHIDomainShader* DS;
+                RHIPixelShader* PS;
 
                 ID3D11RasterizerState* RasterizerState;
                 ID3D11BlendState* BlendState;
@@ -44,12 +44,13 @@ namespace BladeEngine
                 ID3D11ShaderResourceView* Textures[MAX_SHADER_RESOURCE_CACHE_NUM];
                 ID3D11SamplerState* Samplers[MAX_SHADER_RESOURCE_CACHE_NUM];
 
-                TArray<ID3D11Buffer*> VertexBufferArray;
+                RHIVertexBuffer* VertexBuffer;
             };
 
         protected:
             ID3D11DeviceContext* m_Context;
             ContextStateCahce m_StateCahce;
+            TArray<D3D11_INPUT_ELEMENT_DESC> m_InputElementDescs;
 
         public:
             DirectX11ContextBaseImpl(ID3D11DeviceContext* mContext)
@@ -220,7 +221,7 @@ namespace BladeEngine
                 }
             }
 
-            virtual void SetVertexBuufer(SIZE_T inSlot, TArray<RHIVertexBuffer*> inVertexBuffers, TArray<uint32> inStrides, TArray<uint32> inOffset)
+            virtual void SetVertexBuufer(RHIVertexBuffer* inVertexBuffer, uint32 inStride, uint32 inOffset, uint32 inSlot = 0)
             {
                 ID3D11Buffer* vertexBuffer = ((DirectX11VertexBuffer*)inVertexBuffer)->GetBuffer();
                 if (vertexBuffer == NULL)
@@ -229,23 +230,48 @@ namespace BladeEngine
                     return;
                 }
 
-                D3D11_BUFFER_DESC desc;
-
-                m_Context->IASetVertexBuffers(vertexBuffer,)
+                m_StateCahce.VertexBuffer = vertexBuffer;
+                m_Context->IASetVertexBuffers(inSlot, 1, &vertexBuffer, &inStride, &inOffset);
             }
 
-            virtual void SetVertexBuufer(SIZE_T inSlot, RHIVertexBuffer* inVertexBuffer, uint32 inStride, uint32 inOffset)
+            virtual void DrawAuto()
             {
-                ID3D11Buffer* vertexBuffer = ((DirectX11VertexBuffer*)inVertexBuffer)->GetBuffer();
-                if (vertexBuffer == NULL)
+                if(m_StateCahce.VertexBuffer == NULL || m_StateCahce.VS == NULL || m_StateCahce.PS == NULL)
                 {
-                    //log
                     return;
                 }
 
-                m_Context->IASetInputLayout()
+                const RHIVertexShader::InputTable& inputTable = m_StateCahce.VS->GetInputTable();
+                const RHIVertexBuffer::DeclarationTable& declarationTable = m_StateCahce.VertexBuffer->GetDeclarationTable();
 
-                m_Context->IASetVertexBuffers(vertexBuffer, )
+                for(int iTableIndex = 0; iTableIndex< inputTable.GetLength(); ++ iTableIndex)
+                {
+                    for( int dTableIndex = 0; dTableIndex < declarationTable.GetLength(); ++ dTableIndex)
+                    {
+                        if (declarationTable[dTableIndex].Semantic == inputTable[iTableIndex].Semantic ||
+                            declarationTable[dTableIndex].Index == declarationTable[dTableIndex].Index)
+                        {
+                            D3D11_INPUT_ELEMENT_DESC desc = 
+                            {
+                                ShaderSemanticName[declarationTable[dTableIndex].Semantic],
+                                declarationTable[dTableIndex].Index,
+                                D3D11 declarationTable[dTableIndex].Format,
+                            }
+                        }
+                    }
+                }
+
+                m_Context->DrawAuto();
+            }
+
+            virtual void Draw(uint32 inVertexNum, uint32 inVertexOffset)
+            {
+                if (m_StateCahce.VertexBuffer == NULL)
+                {
+                    return;
+                }
+
+                m_Context->Draw(inVertexNum, inVertexOffset);
             }
 
         public:

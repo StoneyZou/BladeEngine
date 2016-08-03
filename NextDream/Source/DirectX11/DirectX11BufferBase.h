@@ -53,30 +53,6 @@ namespace BladeEngine
             }
         };
 
-        class DirectX11InputLayout : public RHIInputLayout
-        {
-        private:
-            ID3D11InputLayout* m_Layout;
-
-        public:
-            DirectX11InputLayout(DirectX11Device* inDevice, ID3D11InputLayout* inLayout, 
-                const RHIInputLayoutCreateInfo& inCreateInfo)
-                : RHIInputLayout(inDevice, inCreateInfo), m_Layout(inLayout)
-            {
-                m_Layout->AddRef();
-            }
-
-            virtual ~DirectX11InputLayout()
-            {
-                if (m_Layout != NULL)
-                {
-                    m_Layout->Release();
-                }
-            }
-
-            ID3D11InputLayout* GetLayout() { return m_Layout; }
-        };
-
         class DirectX11VertexBuffer : public RHIVertexBuffer
         {
         private:

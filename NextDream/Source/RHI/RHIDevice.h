@@ -136,12 +136,6 @@ namespace BladeEngine
             void* Data;
         };
 
-        struct RHIInputLayoutCreateInfo
-        {
-            RHIVertexShader* BindShader;
-            RHIVertexBuffer* BindBuffer;
-        };
-
         struct RHIInputElementDesc
         {
             RHIVertexBuffer* Buffer;
@@ -292,8 +286,6 @@ namespace BladeEngine
            virtual RHIShaderStateRef CreateShaderState(const RHIShaderStateCreateInfo&) = 0;
 
            virtual RHIUniformBufferRef CreateUniformBuffer(const RHIUniformCreateInfo&) = 0;
-
-           virtual RHIInputLayoutRef CreateInputLayout(const RHIInputLayoutCreateInfo&) = 0;
         };
     }
 }

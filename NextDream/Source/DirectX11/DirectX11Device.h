@@ -76,6 +76,7 @@ namespace BladeEngine
             typedef TArray<DirectX11UniformBuffer*> UniformBufferList;
             typedef TArray<D3D11_INPUT_ELEMENT_DESC> InputElementDescArray;
             typedef TMap<D3D11_SAMPLER_DESC, ID3D11SamplerState*, MemCompareFunc<RHITexuteSamplerInfo>> SamplerStateMap;
+            typedef TMap<InputElementDescArray, ID3D11InputLayout*, ArrayMemCompareFunc<InputElementDescArray>> InputLayoutMap;
 
         private:
             ID3D11DeviceRef m_pDevice;
@@ -112,7 +113,6 @@ namespace BladeEngine
 
             virtual RHIUniformBufferRef CreateUniformBuffer(const RHIUniformCreateInfo& inCreateInfo);
 
-            virtual RHIInputLayoutRef CreateInputLayout(const RHIInputLayoutCreateInfo& inCreateInfo);
         };
     }
 }

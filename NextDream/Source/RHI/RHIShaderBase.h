@@ -127,7 +127,7 @@ namespace BladeEngine
 
             bool GetAttributionDesc(const BString& inAttrName, AttributionDesc* outDesc) const
             {
-                BStringToIntMap::Iterator ite = m_AttributionDescMap.Find(inAttrName);
+                BStringToIntMap::Iterator ite = m_AttributionDescMap.Find(inAttrName0);
                 if (ite == m_AttributionDescMap.End())
                 {
                     return false;
