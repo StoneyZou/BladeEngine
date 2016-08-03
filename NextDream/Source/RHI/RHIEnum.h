@@ -37,6 +37,13 @@ namespace BladeEngine
             EDATA_FORMAT_R8G8B8A8_TYPELESS =    ( EDATA_LAYOUT_R8G8B8A8 << DATA_LAYOUT_SHIFT ) + EDATA_ELEMENT_TYPELESS,
         };
 
+        enum ETEXTURE_USAGE
+        {
+            ETEXTURE_AS_RENDER_TARGET = 0x01,
+            ETEXTURE_AS_DEPTH_STENCIL = 0x02,
+            ETEXTURE_AS_SHADER_RESOURCE = 0x04,
+        };
+
         enum ECLEAR_MASK
         {
             ECLEAR_MASK_RENDERTARGET,

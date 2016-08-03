@@ -163,17 +163,47 @@ namespace BladeEngine
                 }
             }
 
-            virtual void SetRenderTarget(RHITextureBase* inTexture)
+            virtual void SetRenderTarget(RHITextureBase* inTexture, SIZE_T inIndex = 0)
             {
+                if (!inTexture->CanAsRenderTarget())
+                {
+                    //log
+                    return;
+                }
+
                 ID3D11RenderTargetView* renderTargetViewView = ((IDirectX11TextureInterface*)inTexture)->GetRenderTargetView();
+                
+                m_StateCahce.RenderTargetViews[inIndex] = renderTargetViewView;
                 m_Context->OMSetRenderTargets(1, &renderTargetViewView, m_StateCahce.DepthStencilView);
             }
 
-            virtual void Clear(const BColor& inColor)
+            virtual void ClearRenderTarget(const BColor& inColor, SIZE_T inIndex = 0)
             {
-                if (renderTargetViewView != NULL)
+                if (m_StateCahce.RenderTargetViews[inIndex] != NULL)
                 {
-                    m_Context->ClearRenderTargetView(inColor._data);
+                    m_Context->ClearRenderTargetView(m_StateCahce.RenderTargetViews[inIndex] inColor._data);
+                }
+            }
+
+            virtual void SetDepthStencil(RHITextureBase* inTexture)
+            {
+                if (!inTexture->CanAsDepthStencil))
+                {
+                    //log
+                    return;
+                }
+
+                ID3D11RenderTargetView* renderTargetViewView = ((IDirectX11TextureInterface*)inTexture)->G();
+
+                m_StateCahce.RenderTargetViews[inIndex] = renderTargetViewView;
+                m_Context->OMSetRenderTargets(1, &renderTargetViewView, m_StateCahce.DepthStencilView);
+            }
+
+            virtual void ClearDepthStencil(const BColor& inColor, SIZE_T inIndex = 0)
+            {
+                if (m_StateCahce.RenderTargetViews[inIndex] != NULL)
+                {
+                    m_Context->ClearRenderTargetView(m_StateCahce.RenderTargetViews[inIndex] inColor._data);
                 }
             }
 

@@ -117,6 +117,9 @@
     <ClInclude Include="Source\DirectX11\DirectX11BufferBase.h">
       <Filter>头文件\Source\DirectX11</Filter>
     </ClInclude>
+    <ClInclude Include="Source\RHI\RHIDataFormat.h">
+      <Filter>头文件\Source\RHI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
