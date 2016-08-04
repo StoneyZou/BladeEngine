@@ -27,14 +27,14 @@ namespace BladeEngine
 
             virtual void SetShaderState(RHIShaderState* inRHIShaderState) = 0;
 
-            virtual void SetTexture(RHITextureBase* inTex) = 0;
+            virtual void SetShaderResource(RHITextureBase* inTexture, ESHADER_TYPE inType, SIZE_T inSlot) = 0;
 
-            virtual void Flush();
+            virtual void Flush() = 0;
 
             //virtual bool SetUniformBuffer(RHIShaderState* inRHIShader) = 0;
         };
 
-        class RHIContextBase
+        class RHIContextBase : public IReferencable
         {
         private:
             bool m_IsDeferred;
@@ -45,7 +45,17 @@ namespace BladeEngine
 
         protected:
             RHIContextBase(IRHIContextBaseImpl* inImpl, bool inIsDeffered) : m_Impl(inImpl), m_IsDeferred(inIsDeffered)
-            {}
+            {
+            }
+
+        public:
+            ~RHIContextBase() 
+            {
+                if (m_Impl != NULL)
+                {
+                    delete m_Impl;
+                }
+            }
 
         public:
             IRHIContextBaseImpl* GetImpl() { return m_Impl; }
@@ -58,7 +68,7 @@ namespace BladeEngine
             void Flush()
             {
                 m_ResourcesInContext.Clear();
-
+                m_Impl->Flush();
             }
             
             void SetVertexShader(RHIVertexShaderRef& inRHIShader) 
@@ -97,20 +107,14 @@ namespace BladeEngine
                 m_Impl->SetShaderState(inRHIShaderState.GetReferencePtr()); 
             }
 
-            void SetTexture(RHITextureBaseRef inTex) 
+            void SetShaderResource(RHITextureBaseRef inRHITexture, ESHADER_TYPE inType, SIZE_T inSlot)
             {
-                m_ResourcesInContext.Add(inTex);
-                m_Impl->SetTexture(inTex.GetReferencePtr());
+                m_ResourcesInContext.Add(inRHITexture);
+                m_Impl->SetShaderResource(inRHITexture.GetReferencePtr(), inType, inSlot);
             }
 
             void* Lock(IResourceLockableRef& inResource, ERES_LOCK_TYPE inType, const SIZE_T inIndex = 0)
             {
-                if ((((RHIResourceRef)inResource)->GetAccessMode() & ECPU_READ) == 0)
-                {
-                    //log
-                    return NULL;
-                }
-
                 return inResource->Lock(this, inType, inIndex);
             }
 
@@ -125,9 +129,19 @@ namespace BladeEngine
             }
         };
 
-        class RHIImmediateContext : public RHIContextBase {};
+        class RHIImmediateContext : public RHIContextBase 
+        {
+        public:
+            RHIImmediateContext(IRHIContextBaseImpl* inImpl) : RHIContextBase(inImpl, false)
+            {}
+        };
 
-        class RHIDeferredContext : public RHIContextBase {};
+        class RHIDeferredContext : public RHIContextBase 
+        {
+        public:
+            RHIDeferredContext(IRHIContextBaseImpl* inImpl) : RHIContextBase(inImpl, true)
+            {}
+        };
     }
 }
 

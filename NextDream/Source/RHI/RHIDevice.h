@@ -14,7 +14,6 @@ namespace BladeEngine
         #define MAX_NUM_RENDER_TARGET 8
 
         class IRHIDevice;
-        class RHIContextBase;
 
         class RHIResource : public INoncopyable
         {
@@ -42,10 +41,19 @@ namespace BladeEngine
 
         public:
             int32 AddRef() const { return m_RefCount.AddRef(); }
-            int32 Release() const { delete this; };
+            int32 Release() const { if (m_RefCount.GetRefCount() == 1) { delete this; } return m_RefCount.Release(); };
             int32 GetRefCount() const { return m_RefCount.GetRefCount(); }
             int32 IsUnique() const { return m_RefCount.GetRefCount() == 1; }
         };
+
+        class RHIContextBase;
+        typedef RefCountObject<RHIContextBase> RHIContextBaseRef;
+
+        class RHIImmediateContext;
+        typedef RefCountObject<RHIImmediateContext> RHIImmediateContextRef;
+
+        class RHIDeferredContext;
+        typedef RefCountObject<RHIDeferredContext> RHIDeferredContextRef;
 
         class IResourceLockable
         {
@@ -120,7 +128,7 @@ namespace BladeEngine
             bool CanCpuWrite;
             uint32 VertexNum;
             uint32 DataSize;
-            void* Data;
+            const void* Data;
         };
 
         struct RHIIndexBufferCreateInfo
@@ -261,7 +269,7 @@ namespace BladeEngine
             ECPU_GPU_ACCESS_MODE AccessMode;
         };
 
-        class IRHIDevice
+        class IRHIDevice : public IReferencable
         {
         protected:
             TArray<RHIResource*> m_DeleteResourceList;
@@ -281,11 +289,14 @@ namespace BladeEngine
 
            virtual RHIVertexBufferRef CreateVertexBuffer(const RHIVertexBufferCreateInfo) = 0;
 
-           virtual RHIIndexBufferRef CreateIndexBuffer(const RHIIndexBufferCreateInfo) = 0;
-
            virtual RHIShaderStateRef CreateShaderState(const RHIShaderStateCreateInfo&) = 0;
 
            virtual RHIUniformBufferRef CreateUniformBuffer(const RHIUniformCreateInfo&) = 0;
+
+        public:
+            virtual RHIImmediateContextRef GetImmediateContext() = 0;
+
+            virtual RHIDeferredContextRef CreateDeferredContext() = 0;
         };
     }
 }

@@ -113,7 +113,8 @@ namespace BladeEngine
 
             for (SIZE_T i = oldLength; i < inNewLength; ++i)
             {
-                BladeConstruct(&m_pData[i], Type);
+                Type* newElement = &m_pData[i];
+                BladeConstruct(newElement, Type);
             }
         }
 
@@ -124,7 +125,8 @@ namespace BladeEngine
                 _ExpandCapacity();
             }
             
-            BladeCopyConstruct(&m_pData[m_Length], inValue, Type);
+            Type* newElement = &m_pData[m_Length];
+            BladeCopyConstruct(newElement, inValue, Type);
             m_Length = m_Length + 1;
 
             return m_pData[m_Length - 1];
@@ -137,17 +139,21 @@ namespace BladeEngine
                 _ExpandCapacity();
             }
 
+            Type* element = NULL;
             if (index == m_Length)
             {
-                BladeCopyConstruct(&m_pData[m_Length], inValue, Type);
+                element = &m_pData[m_Length];
+                BladeCopyConstruct(element, inValue, Type);
             }
             else if (index < m_Length)
             {
                 for (SIZE_T i = m_Length; i > m_Length; --i)
                 {
-                    BladeCopyConstruct(&m_pData[i], m_pData[i - 1], Type);
+                    element = &m_pData[i];
+                    BladeCopyConstruct(element, m_pData[i - 1], Type);
                 }
-                BladeCopyConstruct(&m_pData[index], inValue, Type);
+                element = &m_pData[index];
+                BladeCopyConstruct(element, inValue, Type);
             }
             m_Length = m_Length + 1;
 
@@ -156,18 +162,22 @@ namespace BladeEngine
 
         void RemoveAt(SIZE_T index)
         {
+            Type* element = NULL;
             for (SIZE_T i = index; i < m_Length - 1; ++i)
             {
-                BladeCopyConstruct(&m_pData[i], m_pData[i + 1], Type);
+                element = &m_pData[i];
+                BladeCopyConstruct(element, m_pData[i + 1], Type);
             }
-            BladeDestruct(&m_pData[m_Length - 1], Type);
+            element = &m_pData[m_Length - 1];
+            BladeDestruct(element, Type);
         }
 
         void Clear()
         {
-            for (SIZE_T i = index; i < m_Length - 1; ++i)
+            for (SIZE_T i = 0; i < m_Length - 1; ++i)
             {
-                BladeDestruct(&m_pData[m_Length - 1], Type);
+                Type* element = &m_pData[m_Length];
+                BladeDestruct(element, Type);
             }
             m_Length = 0;
         }

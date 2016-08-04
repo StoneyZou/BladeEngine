@@ -4,21 +4,14 @@
 #include <d3d11.h>
 #include <RHITextureBase.h>
 #include <RHIContext.h>
+#include <DirectX11Device.h>
 #include <DirectX11Context.h>
 #include <DirectXEnumMapping.h>
-#include <DirectX11Device.h>
 
 namespace BladeEngine
 {
     namespace RHI
     {
-        struct IDirectX11TextureInterface
-        {
-            virtual ID3D11RenderTargetView* GetRenderTargetView() = 0;
-            virtual ID3D11DepthStencilView* GetDepthStencilView() = 0;
-            virtual ID3D11ShaderResourceView* GetShaderResourceView() = 0;
-        };
-
         struct DirectX11Texture2DInitInfo : public RHITextureInitInfo
         {
             ID3D11Texture2D* Texture;
@@ -51,8 +44,8 @@ namespace BladeEngine
             {
                 BladeAssert(m_Texture != NULL);
                 BladeAssert(m_ShaderResource != NULL)
-                BladeAssert(CanAsRenderTarget() ^ m_RenderTarget != NULL);
-                BladeAssert(CanAsDepthStencil() ^ m_ShaderResource != NULL);
+                BladeAssert((CanAsRenderTarget() && m_RenderTarget != NULL) || (!CanAsRenderTarget() && m_RenderTarget == NULL));
+                BladeAssert((CanAsDepthStencil() && m_ShaderResource != NULL) || (!CanAsDepthStencil() && m_ShaderResource == NULL));
 
                 m_Texture->AddRef();
 

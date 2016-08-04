@@ -12,9 +12,6 @@ namespace BladeEngine
     {
         #define MAX_NUM_D3D11_RENDER_TARGET 8
 
-        typedef RefCountObject<ID3D11Device> ID3D11DeviceRef;
-        typedef RefCountObject<ID3D11DeviceContext> ID3D11ContextRef;
-
         class ComPtrGuard
         {
         private:
@@ -38,6 +35,13 @@ namespace BladeEngine
 
         class DirectX11UniformBuffer;
 
+        struct IDirectX11TextureInterface
+        {
+            virtual ID3D11RenderTargetView* GetRenderTargetView() = 0;
+            virtual ID3D11DepthStencilView* GetDepthStencilView() = 0;
+            virtual ID3D11ShaderResourceView* GetShaderResourceView() = 0;
+        };
+
         class DirectX11Device : public IRHIDevice
         {
         private:
@@ -45,7 +49,7 @@ namespace BladeEngine
             struct MemCompareFunc
             {
             public:
-                int32 Compare(const Type& lh, const Type& rh)
+                static int32 Compare(const Type& lh, const Type& rh)
                 {
                     return MemUtil::Memcmp(&lh, &rh, sizeof(Type));
                 }
@@ -55,7 +59,7 @@ namespace BladeEngine
             struct ArrayMemCompareFunc
             {
             public:
-                int32 Compare(const TArray<Type>& lh, const TArray<Type>& rh)
+                static int32 Compare(const TArray<Type>& lh, const TArray<Type>& rh)
                 {
                     if (lh.GetLength() < rh.GetLength())
                     {
@@ -69,18 +73,17 @@ namespace BladeEngine
                 }
             };
 
-            typedef TMap<D3D11_RASTERIZER_DESC, ID3D11RasterizerState*, MemCompareFunc<RHIShaderRasterizerDesc>> RasterizerStateMap;
-            typedef TMap<D3D11_BLEND_DESC, ID3D11BlendState*, MemCompareFunc<RHIShaderBlendDesc>> BlendStateMap;
-            typedef TMap<D3D11_DEPTH_STENCIL_DESC, ID3D11DepthStencilState*, MemCompareFunc<RHIShaderDepthStencilDesc>> DepthStencilStateMap;
-            typedef TMap<D3D11_SAMPLER_DESC, ID3D11SamplerState*, MemCompareFunc<RHITexuteSamplerInfo>> SamplerStateMap;
+            typedef TMap<D3D11_RASTERIZER_DESC, ID3D11RasterizerState*, MemCompareFunc<D3D11_RASTERIZER_DESC>> RasterizerStateMap;
+            typedef TMap<D3D11_BLEND_DESC, ID3D11BlendState*, MemCompareFunc<D3D11_BLEND_DESC>> BlendStateMap;
+            typedef TMap<D3D11_DEPTH_STENCIL_DESC, ID3D11DepthStencilState*, MemCompareFunc<D3D11_DEPTH_STENCIL_DESC>> DepthStencilStateMap;
+            typedef TMap<D3D11_SAMPLER_DESC, ID3D11SamplerState*, MemCompareFunc<D3D11_SAMPLER_DESC>> SamplerStateMap;
             typedef TArray<DirectX11UniformBuffer*> UniformBufferList;
             typedef TArray<D3D11_INPUT_ELEMENT_DESC> InputElementDescArray;
-            typedef TMap<D3D11_SAMPLER_DESC, ID3D11SamplerState*, MemCompareFunc<RHITexuteSamplerInfo>> SamplerStateMap;
             typedef TMap<InputElementDescArray, ID3D11InputLayout*, ArrayMemCompareFunc<InputElementDescArray>> InputLayoutMap;
 
         private:
-            ID3D11DeviceRef m_pDevice;
-            ID3D11ContextRef m_pContext;
+            ID3D11Device* m_pDevice;
+            ID3D11DeviceContext* m_pImmediateContext;
 
             RasterizerStateMap m_RasterizerStateMap;
             BlendStateMap m_BlendStateMap;
@@ -91,28 +94,30 @@ namespace BladeEngine
             TArray<D3D11_INPUT_ELEMENT_DESC> m_TempInputElementDescs;
 
         public:
-            virtual RHITextureBaseRef CreateTexture2D(const RHITextureCreateInfo& inCreateInfo) = 0;
+            virtual RHITextureBaseRef CreateTexture2D(const RHITextureCreateInfo& inCreateInfo);
 
-            virtual RHITextureBaseRef CreateTexture2DAsDepthStencil(const RHITextureCreateInfo& inCreateInfo) = 0;
+            virtual RHITextureBaseRef CreateTexture2DAsDepthStencil(const RHITextureCreateInfo& inCreateInfo);
 
-            virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo& inCreateInfo) = 0;
+            virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo& inCreateInfo);
 
-            virtual RHIPixelShaderRef CreatePixelShader(const RHIShaderCreateInfo& inCreateInfo) = 0;
+            virtual RHIPixelShaderRef CreatePixelShader(const RHIShaderCreateInfo& inCreateInfo);
 
-            virtual RHIHullShaderRef CreateHullShader(const RHIShaderCreateInfo) = 0;
+            virtual RHIHullShaderRef CreateHullShader(const RHIShaderCreateInfo& inCreateInfo);
 
-            virtual RHIDomainShaderRef CreateDomainShader(const RHIShaderCreateInfo) = 0;
+            virtual RHIDomainShaderRef CreateDomainShader(const RHIShaderCreateInfo& inCreateInfo);
 
-            virtual RHIGeometryShaderRef CreateGeometryShader(const RHIShaderCreateInfo) = 0;
+            virtual RHIGeometryShaderRef CreateGeometryShader(const RHIShaderCreateInfo& inCreateInfo);
 
-            virtual RHIVertexBufferRef CreateVertexBuffer(const RHIVertexBufferCreateInfo) = 0;
-
-            virtual RHIIndexBufferRef CreateIndexBuffer(const RHIIndexBufferCreateInfo) = 0;
+            virtual RHIVertexBufferRef CreateVertexBuffer(const RHIVertexBufferCreateInfo& inCreateInfo);
 
             virtual RHIShaderStateRef CreateShaderState(const RHIShaderStateCreateInfo& inCreateInfo);
 
             virtual RHIUniformBufferRef CreateUniformBuffer(const RHIUniformCreateInfo& inCreateInfo);
 
+        public:
+            virtual RHIImmediateContextRef GetImmediateContext();
+
+            virtual RHIDeferredContextRef CreateDeferredContext();
         };
     }
 }

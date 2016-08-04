@@ -1,6 +1,8 @@
 #include <DirectX11Device.h>
+#include <DirectX11Context.h>
 #include <DirectX11BufferBase.h>
 #include <RHIDirectX11ShaderBase.h>
+#include <RHIDirectX11TextureBase.h>
 #include <DirectXEnumMapping.h>
 
 namespace BladeEngine
@@ -25,7 +27,7 @@ namespace BladeEngine
                 (inCreateInfo.AccessMode & EGPU_READ ? D3D11_BIND_SHADER_RESOURCE : 0) |
                 (inCreateInfo.AccessMode & EGPU_WRITE ? D3D11_BIND_RENDER_TARGET : 0);
             textureDesc.MiscFlags = 0;
-            textureDesc.Format = DirectXEnumMapping::Get(inCreateInfo.Format);
+            textureDesc.Format = DirectXEnumMapping::Get(inCreateInfo.BaseFormat);
 
             D3D11_SUBRESOURCE_DATA textureData = { 0 };
             textureData.pSysMem = inCreateInfo.Data;
@@ -92,8 +94,14 @@ namespace BladeEngine
             }
 
             ID3D11RenderTargetView* pD3D11RenderTargetView = NULL;
-            if ((inCreateInfo.AccessMode & EGPU_WRITE) != 0)
+            if ((inCreateInfo.Usage & ETEXTURE_USAGE_RENDER_TARGET) != 0)
             {
+                if ((inCreateInfo.AccessMode & EGPU_WRITE) == 0)
+                {
+                    //Logger::Log()
+                    return NULL;
+                }
+
                 D3D11_RENDER_TARGET_VIEW_DESC desc;
                 desc.Format = textureDesc.Format;
                 desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
@@ -109,11 +117,46 @@ namespace BladeEngine
                 }
             }
 
-            RHIDirectX11Texture2D* texture2D = new RHIDirectX11Texture2D(
-                this, pD3D11Texture2D,
-                pD3D11ShaderResourceView, pSamplerState,
-                pD3D11RenderTargetView, inCreateInfo);
+            ID3D11DepthStencilView* pD3D11DepthStencilView = NULL;
+            if ((inCreateInfo.Usage & ETEXTURE_USAGE_DEPTH_STENCIL) != 0)
+            {
+                if ((inCreateInfo.AccessMode & EGPU_WRITE) == 0)
+                {
+                    //Logger::Log()
+                    return NULL;
+                }
 
+                D3D11_DEPTH_STENCIL_VIEW_DESC desc;
+                desc.Format = textureDesc.Format;
+                desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+                desc.Texture2D.MipSlice = 0;
+
+                hr = m_pDevice->CreateDepthStencilView(pD3D11Texture2D, &desc, &pD3D11DepthStencilView);
+                D3D11PtrGuard(pD3D11DepthStencilView);
+
+                if (FAILED(hr))
+                {
+                    //Logger::Log()
+                    return NULL;
+                }
+            }
+
+            DirectX11Texture2DInitInfo initInfo;
+            initInfo.Texture = pD3D11Texture2D;
+            initInfo.RenderTargetView = pD3D11RenderTargetView;
+            initInfo.DepthStencilView = pD3D11DepthStencilView;
+            initInfo.ShaderResourceView = pD3D11ShaderResourceView;
+            initInfo.CanAsRenderTarget = inCreateInfo.Usage & ETEXTURE_USAGE_RENDER_TARGET;
+            initInfo.CanAsDepthStencil = inCreateInfo.Usage & ETEXTURE_USAGE_DEPTH_STENCIL;
+            initInfo.Width = inCreateInfo.Width;;
+            initInfo.Height = inCreateInfo.Height;
+            initInfo.SampleCount = inCreateInfo.SampleCount;
+            initInfo.SampleQulity = inCreateInfo.SampleQulity;
+            initInfo.Usage = inCreateInfo.Usage;
+            initInfo.BaseFormat = inCreateInfo.BaseFormat;
+            initInfo.AccessMode = inCreateInfo.AccessMode;
+
+            RHIDirectX11Texture2D* texture2D = new RHIDirectX11Texture2D(this, initInfo);
             return RHITextureBaseRef(texture2D);
         }
 
@@ -136,23 +179,100 @@ namespace BladeEngine
 
         RHIPixelShaderRef DirectX11Device::CreatePixelShader(const RHIShaderCreateInfo& inCreateInfo)
         {
-            
+            ID3D11PixelShader* pD3D11PixelShader = NULL;
+
+            HRESULT hr = m_pDevice->CreatePixelShader((const char*)inCreateInfo.Data, inCreateInfo.DataSize, NULL, &pD3D11PixelShader);
+            D3D11PtrGuard(pD3D11PixelShader);
+
+            if (FAILED(hr))
+            {
+                //Logger::Log()
+                return NULL;
+            }
+
+            DirectX11PixelShader* pixelShader = new DirectX11PixelShader(this, pD3D11PixelShader, inCreateInfo);
+            return RHIPixelShaderRef(pixelShader);
         }
 
-        RHIHullShaderRef DirectX11Device::CreateHullShader(const RHIShaderCreateInfo)
-        {}
-
-        RHIDomainShaderRef DirectX11Device::CreateDomainShader(const RHIShaderCreateInfo)
-        {}
-
-        RHIGeometryShaderRef DirectX11Device::CreateGeometryShader(const RHIShaderCreateInfo)
-        {}
-
-        RHIVertexBufferRef DirectX11Device::CreateVertexBuffer(const RHIVertexBufferCreateInfo)
-        {}
-
-        RHIIndexBufferRef DirectX11Device::CreateIndexBuffer(const RHIIndexBufferCreateInfo)
+        RHIHullShaderRef DirectX11Device::CreateHullShader(const RHIShaderCreateInfo& inCreateInfo)
         {
+            ID3D11HullShader* pD3D11HullShader = NULL;
+
+            HRESULT hr = m_pDevice->CreateHullShader((const char*)inCreateInfo.Data, inCreateInfo.DataSize, NULL, &pD3D11HullShader);
+            D3D11PtrGuard(pD3D11HullShader);
+
+            if (FAILED(hr))
+            {
+                //Logger::Log()
+                return NULL;
+            }
+
+            DirectX11HullShader* hullShader = new DirectX11HullShader(this, pD3D11HullShader, inCreateInfo);
+            return RHIHullShaderRef(hullShader);
+        }
+
+        RHIDomainShaderRef DirectX11Device::CreateDomainShader(const RHIShaderCreateInfo& inCreateInfo)
+        {
+            ID3D11DomainShader* pD3D11DomainShader = NULL;
+
+            HRESULT hr = m_pDevice->CreateDomainShader((const char*)inCreateInfo.Data, inCreateInfo.DataSize, NULL, &pD3D11DomainShader);
+            D3D11PtrGuard(pD3D11DomainShader);
+
+            if (FAILED(hr))
+            {
+                //Logger::Log()
+                return NULL;
+            }
+
+            DirectX11DomainShader* domainShader = new DirectX11DomainShader(this, pD3D11DomainShader, inCreateInfo);
+            return RHIDomainShaderRef(domainShader);
+        }
+
+        RHIGeometryShaderRef DirectX11Device::CreateGeometryShader(const RHIShaderCreateInfo& inCreateInfo)
+        {
+            ID3D11GeometryShader* pD3D11GeometryShader = NULL;
+
+            HRESULT hr = m_pDevice->CreateGeometryShader((const char*)inCreateInfo.Data, inCreateInfo.DataSize, NULL, &pD3D11GeometryShader);
+            D3D11PtrGuard(pD3D11GeometryShader);
+
+            if (FAILED(hr))
+            {
+                //Logger::Log()
+                return NULL;
+            }
+
+            DirectX11GeometryShader* geometryShader = new DirectX11GeometryShader(this, pD3D11GeometryShader, inCreateInfo);
+            return RHIGeometryShaderRef(geometryShader);
+        }
+
+        RHIVertexBufferRef DirectX11Device::CreateVertexBuffer(const RHIVertexBufferCreateInfo& inCreateInfo)
+        {
+            ID3D11Buffer* pD3D11VertexBuffer = NULL;
+
+            D3D11_BUFFER_DESC desc;
+            desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+            desc.ByteWidth = inCreateInfo.DataSize;
+            desc.CPUAccessFlags = inCreateInfo.CanCpuWrite ? D3D11_CPU_ACCESS_WRITE : 0;
+            desc.MiscFlags = 0;
+            desc.StructureByteStride = inCreateInfo.DataSize / inCreateInfo.VertexNum;
+            desc.Usage = inCreateInfo.CanCpuWrite ? D3D11_USAGE_DYNAMIC : D3D11_USAGE_IMMUTABLE;
+
+            D3D11_SUBRESOURCE_DATA data;
+            data.pSysMem = inCreateInfo.Data;
+            data.SysMemPitch = inCreateInfo.DataSize;
+            data.SysMemSlicePitch = 0;
+
+            HRESULT hr = m_pDevice->CreateBuffer(&desc, &data, &pD3D11VertexBuffer);
+            D3D11PtrGuard(pD3D11VertexBuffer);
+
+            if (FAILED(hr))
+            {
+                //log
+                return NULL;
+            }
+
+            DirectX11VertexBuffer* vertexBuffer = new DirectX11VertexBuffer(this, pD3D11VertexBuffer, inCreateInfo);
+            return RHIVertexBufferRef(vertexBuffer);
         }
 
         RHIShaderStateRef DirectX11Device::CreateShaderState(const RHIShaderStateCreateInfo& inCreateInfo)
@@ -279,7 +399,7 @@ namespace BladeEngine
                 if(inCreateInfo.Data != NULL)
                 {
                     D3D11_MAPPED_SUBRESOURCE data;
-                    HRESULT hr = m_pContext->Map(uniformBuffer->GetBuffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &data);
+                    HRESULT hr = m_pImmediateContext->Map(uniformBuffer->GetBuffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &data);
                     if (FAILED(hr))
                     {
                         //log
@@ -287,7 +407,7 @@ namespace BladeEngine
                     }
 
                     MemUtil::Memcopy(data.pData, uniformBuffer->GetPackSize(), inCreateInfo.Data, inCreateInfo.DataSize);
-                    m_pContext->Unmap(uniformBuffer->GetBuffer(), 0);
+                    m_pImmediateContext->Unmap(uniformBuffer->GetBuffer(), 0);
                 }
                 return uniformBuffer;
             }
@@ -335,65 +455,38 @@ namespace BladeEngine
             return RHIUniformBufferRef(uniformBuffer);
         }
 
-        RHIInputLayoutRef DirectX11Device::CreateInputLayout(const RHIInputLayoutCreateInfo& inCreateInfo)
+        RHIImmediateContextRef DirectX11Device::GetImmediateContext()
         {
-            DirectX11VertexBuffer* buffer = (DirectX11VertexBuffer*)inCreateInfo.BindBuffer;
-            DirectX11VertexShader* shader = (DirectX11VertexShader*)inCreateInfo.BindShader;
+            ID3D11DeviceContext* pD3D11DeviceContext = NULL;
+            
+            m_pDevice->GetImmediateContext(&pD3D11DeviceContext);
+            D3D11PtrGuard(pD3D11DeviceContext);
 
-            const RHIVertexBuffer::DeclarationTable& declarationTable = buffer->GetDeclaration();
-            const RHIVertexShader::InputTable& inputTable = shader->GetInputTable();
-
-            m_TempInputElementDescs.Clear();
-            for(SIZE_T iIndex = 0; iIndex < inputTable.GetLength(); ++iIndex)
+            if(pD3D11DeviceContext == NULL)
             {
-                bool match = false;
-
-                for (SIZE_T dIndex = 0; dIndex < declarationTable.GetLength(); ++dIndex)
-                {
-                    if (inputTable[iIndex].Semantic == declarationTable[dIndex].Semantic &&
-                        inputTable[iIndex].Index == declarationTable[dIndex].Semantic)
-                    {
-                        D3D11_INPUT_ELEMENT_DESC elementDesc =
-                        {
-                            ShaderSemanticName[(int)declarationTable[dIndex].Semantic],
-                            declarationTable[dIndex].Index,
-                            DirectXEnumMapping::Get(declarationTable[dIndex].Format),
-                            inputTable[iIndex].Slot,
-                            declarationTable[dIndex].Offset,
-                            DirectXEnumMapping::Get(declarationTable[dIndex].InputType),
-                            declarationTable[dIndex].InstanceDataStepRate,
-                        };
-
-                        match = true;
-                        m_TempInputElementDescs.Add(elementDesc);
-
-                        break;
-                    }
-                }
-
-                if (!match)
-                {
-                    //log
-                }
-            }
-
-            ID3D11InputLayout* d3d11InputLayout = NULL;
-
-            HRESULT hr = m_pDevice->CreateInputLayout(m_TempInputElementDescs.TypePtr(), m_TempInputElementDescs.GetLength(), 
-                shader->GetData(), shader->GetDataSize(), &d3d11InputLayout);
-            D3D11PtrGuard(d3d11InputLayout);
-
-            if(FAILED(hr))
-            {
+                //log
                 return NULL;
             }
 
-            DirectX11InputLayout* inputLayout = new DirectX11InputLayout(
-                this, 
-                d3d11InputLayout, 
-                inCreateInfo);
-            
-            return RHIInputLayoutRef(inputLayout);
+            DirectX11ImmediateContextImpl* immediateContext = new DirectX11ImmediateContextImpl(pD3D11DeviceContext);
+            return RHIImmediateContextRef(new RHIImmediateContext(immediateContext));
+        }
+
+        RHIDeferredContextRef DirectX11Device::CreateDeferredContext()
+        {
+            ID3D11DeviceContext* pD3D11DeviceContext = NULL;
+
+            HRESULT hr = m_pDevice->CreateDeferredContext(0, &pD3D11DeviceContext);
+            D3D11PtrGuard(pD3D11DeviceContext);
+
+            if (FAILED(hr))
+            {
+                //log
+                return NULL;
+            }
+
+            DirectX11DeferredContextImpl* deferredContext = new DirectX11DeferredContextImpl(pD3D11DeviceContext);
+            return RHIDeferredContextRef(new RHIDeferredContext(deferredContext));
         }
     }
 }

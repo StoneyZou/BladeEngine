@@ -90,16 +90,6 @@ namespace BladeEngine
             ESHADER_SEMANTIC_TEXCOORD,
         };
 
-        const TCHAR* ShaderSemanticName[] =
-        {
-            TEXT("Unknown"),
-            TEXT("Position"),
-            TEXT("Normal"),
-            TEXT("Color"),
-            TEXT("Tangent"),
-            TEXT("Texcoord"),
-        };
-
         enum ECPU_GPU_ACCESS_SUB_MODE
         {
             ECPU_READ = 0x01,

@@ -5,10 +5,7 @@
 
 namespace BladeEngine
 {
-	void _BladeAssert_Impl(bool inCondition, const char* inMessage, const char* inFile, int inLine)
-	{
-
-	}
+    void _BladeAssert_Impl(bool inCondition, const char* inMessage, const char* inFile, int inLine);
 
 	#define BladeAssert(condition) _BladeAssert_Impl(condition, "Condition of assertion couldn't be satisfied!", __FILE__,  __LINE__);
 	//#define BladeAssert(condition, message) _BladeAssert_Impl(condition, message, __FILE__,  __LINE__);
@@ -81,7 +78,7 @@ namespace BladeEngine
         template<typename Type>
         _BladeCopyConstruct(Type* ptr, const Type& value)
         {
-            new((void*)ptr)type(value);
+            new((void*)ptr)Type(value);
         }
     };
 
@@ -94,9 +91,9 @@ namespace BladeEngine
         }
     };
 
-    #define BladeCopyConstruct(ptr, value, type) _BladeCopyConstruct ptr##_BladeCopyConstruct(static_cast<type*>(ptr), value);
-    #define BladeDestruct(ptr, type) _BladeDestruct ptr##_BladeDestruct(static_cast<type*>(ptr));
-    #define BladeConstruct(ptr, type) _BladeConstruct ptr##_BladeConstruct (static_cast<type*>(ptr));
+    #define BladeCopyConstruct(ptr, value, type) _BladeCopyConstruct ptr##_BladeCopyConstruct(ptr, value);
+    #define BladeDestruct(ptr, type) _BladeDestruct ptr##_BladeDestruct(ptr);
+    #define BladeConstruct(ptr, type) _BladeConstruct ptr##_BladeConstruct (ptr);
 
     class INoncopyable
     {
@@ -139,7 +136,7 @@ namespace BladeEngine
         NotThreadSafeRefCount m_RefCount;
 
     protected:
-        ~IReferencable();
+        virtual ~IReferencable() {};
         
     public:
         int32 AddRef() const { return m_RefCount.AddRef(); }
@@ -203,13 +200,13 @@ namespace BladeEngine
         template<typename Other>
         operator RefCountObject<Other>()
         {
-            return RefCountObject<Other>(static_cast<Other>(m_pPtr));
+            return RefCountObject<Other>(static_cast<Other*>(m_pPtr));
         }
 
         template<typename Other>
         operator RefCountObject<Other>() const
         {
-            return RefCountObject<Other>(static_cast<Other>(m_pPtr));
+            return RefCountObject<Other>(static_cast<Other*>(m_pPtr));
         }
 
 		ReferenceType& operator* () { return *m_pPtr; }

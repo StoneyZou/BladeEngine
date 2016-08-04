@@ -1,12 +1,13 @@
 #ifndef __BLADE_CORE_MEMORY_H__
 #define __BLADE_CORE_MEMORY_H__
 
-#include "TypeDefine.h"
-#include "Utility.h"
+#include <malloc.h>
+
+#include <TypeDefine.h>
+#include <Utility.h>
 
 namespace BladeEngine
 {
-    #include <malloc.h>
 
 	class IMalloc : public INoncopyable
 	{
@@ -41,7 +42,6 @@ namespace BladeEngine
         void Dump() {}
 #endif // DEBUG
     };
-    SystemMalloc SystemMalloc::s_Instance;
 }
 
 #endif // !__BLADE_CORE_MEMORY_H__

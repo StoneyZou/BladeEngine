@@ -216,7 +216,7 @@ namespace BladeEngine
             inNode->LeftNode = leftRightNode;
         }
 
-        _RBTree_Node* _RBTreeSreachNode(const KeyType& inKey, _RBTree_Node* inRoot)
+        _RBTree_Node* _RBTreeSreachNode(const KeyType& inKey, _RBTree_Node* inRoot) const
         {
             _RBTree_Node* node = inRoot;
             int32 result = 0;
@@ -241,7 +241,7 @@ namespace BladeEngine
             return node;
         }
 
-        int32 _RBTreeInsert_SreachParentNode(KeyType inKey, _RBTree_Node* inRoot, _RBTree_Node** inParent)
+        int32 _RBTreeInsert_SreachParentNode(const KeyType& inKey, _RBTree_Node* inRoot, _RBTree_Node** inParent)
         {
             _RBTree_Node* node = inRoot;
             _RBTree_Node* insertParentNode = NULL;
@@ -655,7 +655,7 @@ namespace BladeEngine
 
         bool TryGetValue(const KeyType& inKey, ValueType* outValue) const
         {
-            _RBTree_Node* node = _RBTreeSreachNode(inKey, &m_Root);
+            _RBTree_Node* node = const_cast<_RBTree_Node*>(_RBTreeSreachNode(inKey, m_Root));
             if (node == NULL)
             {
                 return false;
@@ -711,7 +711,8 @@ namespace BladeEngine
 
         const Iterator Find(const KeyType& inKey) const
         {
-            _RBTree_Node* node = _RBTreeSreachNode(inKey, m_Root);
+            // 常量限定符转移到Iterator上，第一次用到const_cast
+            _RBTree_Node* node = const_cast<_RBTree_Node*>(_RBTreeSreachNode(inKey, m_Root));
             if (node == m_Root || node->ParentNode->LeftNode == node)
             {
                 return Iterator(node->ParentNode, node);

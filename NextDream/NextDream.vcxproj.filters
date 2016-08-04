@@ -37,6 +37,15 @@
     <Filter Include="头文件\Source\DirectX11\private">
       <UniqueIdentifier>{7eb4afcc-53c9-4b39-a790-bf59e207b0eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Source\Core\Private">
+      <UniqueIdentifier>{50bec063-ebab-4d90-8f8c-6219131b719f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Source\RHI\Private">
+      <UniqueIdentifier>{aaecbf73-f44f-4497-a77e-b5b858c43df4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Source\FrameWork">
+      <UniqueIdentifier>{c718b833-0543-406f-b1eb-b3e3602d6b5e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Utility.h">
@@ -120,13 +129,19 @@
     <ClInclude Include="Source\RHI\RHIDataFormat.h">
       <Filter>头文件\Source\RHI</Filter>
     </ClInclude>
+    <ClInclude Include="Source\FrameWork\BModule.h">
+      <Filter>头文件\Source\FrameWork</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>头文件\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\DirectX11\private\DirectX11Device.cpp">
       <Filter>头文件\Source\DirectX11\private</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DirectX11\private\DirectX11Context.cpp">
+      <Filter>头文件\Source\DirectX11\private</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Private\CoreMisc.cpp">
+      <Filter>头文件\Source\Core\Private</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

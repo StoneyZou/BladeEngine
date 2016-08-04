@@ -22,11 +22,13 @@ namespace BladeEngine
                     break;
                 }
 
-                return result;
+                //log
+                return DXGI_FORMAT_R8G8B8A8_UINT;
             }
 
             static D3D11_MAP Get(ERES_LOCK_TYPE inType)
             {
+                //log
                 return D3D11_MAP_READ;
             }
 
@@ -62,7 +64,9 @@ namespace BladeEngine
                         //log
                     }
                 }
+
                 //log
+                return D3D11_USAGE_DEFAULT;
             }
 
             static D3D11_FILL_MODE Get(EMESH_FILL_MODE inMode)
@@ -76,8 +80,9 @@ namespace BladeEngine
                 default:
                     break;
                 }
-                return D3D11_FILL_SOLID;
+
                 //log()
+                return D3D11_FILL_SOLID;
             }
 
             static D3D11_CULL_MODE Get(EFACE_CULL_MODE inMode)
@@ -91,9 +96,10 @@ namespace BladeEngine
                 case BladeEngine::RHI::EFACE_CULL_BACK:
                     return D3D11_CULL_FRONT;
                 default:
-                    //log
                     break;
                 }
+
+                //log
                 return D3D11_CULL_NONE;
             }
 
@@ -136,9 +142,11 @@ namespace BladeEngine
                 case BladeEngine::RHI::EBLEND_ARG_INV_SRC1_ALPHA:
                     return D3D11_BLEND_INV_SRC1_ALPHA;
                 default:
-                    //log
                     break;
                 }
+
+                //log
+                return D3D11_BLEND_ZERO;
             }
 
             static D3D11_BLEND_OP Get(EBLEND_FUNC inFunc)
@@ -156,9 +164,11 @@ namespace BladeEngine
                 case BladeEngine::RHI::EBLEND_FUNC_MAX:
                     return D3D11_BLEND_OP_MAX;;
                 default:
-                    //log
                     break;
                 }
+
+                //log
+                return D3D11_BLEND_OP_ADD;
             }
 
             static D3D11_COMPARISON_FUNC Get(ECOMPARISON_FUNC inFunc)
@@ -182,9 +192,11 @@ namespace BladeEngine
                 case BladeEngine::RHI::ECOMPARISON_ALWAYS:
                     return D3D11_COMPARISON_ALWAYS;
                 default:
-                    //log
                     break;
                 }
+
+                //log
+                return D3D11_COMPARISON_NEVER;
             }
 
             static D3D11_STENCIL_OP Get(EDEPTH_STENCIL_WRITE_FUNC inFunc)
@@ -208,9 +220,11 @@ namespace BladeEngine
                 case BladeEngine::RHI::EDEPTH_STENCIL_WRITE_DECR:
                     return D3D11_STENCIL_OP_DECR;
                 default:
-                    //log
                     break;
                 }
+
+                //log
+                return D3D11_STENCIL_OP_KEEP;
             }
 
             static D3D11_TEXTURE_ADDRESS_MODE Get(ETEXTURE_ADDRESS_MODE inMode)
@@ -224,6 +238,9 @@ namespace BladeEngine
                 default:
                     break;
                 }
+
+                //log
+                return D3D11_TEXTURE_ADDRESS_WRAP;
             }
 
             static D3D11_FILTER Get(ETEXTURE_FILTER_MODE inMode)
@@ -249,6 +266,9 @@ namespace BladeEngine
                 default:
                     break;
                 }
+
+                //log
+                return D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
             }
 
             static D3D11_INPUT_CLASSIFICATION Get(EINPUT_CLASSIFICATION inType)
@@ -262,6 +282,9 @@ namespace BladeEngine
                 default:
                     break;
                 }
+
+                //log
+                return D3D11_INPUT_PER_VERTEX_DATA;
             }
         };
     }
