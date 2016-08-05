@@ -7,8 +7,10 @@ namespace BladeEngine
     {
         struct IModule
         {
+            virtual bool Load() = 0;
             virtual bool StartUp() = 0;
             virtual void ShutDowm() = 0;
+            virtual void Unload() = 0;
         };
     }
 }

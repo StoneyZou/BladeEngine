@@ -2,9 +2,12 @@
 #define __BLADE_RHI_RHI_DIRECTX_11_DEVICE_H__
 
 #include <d3d11.h>
-#include "RHIDevice.h"
+#include <RHIDevice.h>
 #include <TMap.h>
 #include <BMath.h>
+#include <BModule.h>
+#include <GeneralSystemAPI.h>
+#include <shared_ptr>
 
 namespace BladeEngine
 {
@@ -120,6 +123,48 @@ namespace BladeEngine
             virtual RHIDeferredContextRef CreateDeferredContext();
         };
     }
+
+    class DirectX11Module : public FrameWork::IModule
+    {
+	private:
+		typedef HRESULT (__stdcall *PFN_CREATE_DXGI_FACTORY1)(REFIID riid, void **ppFactory);
+
+    private:
+        PFN_D3D11_CREATE_DEVICE m_FuncD3D11CreateDevice;
+		PFN_CREATE_DXGI_FACTORY1 m_FuncCreateDXGIFactory1;
+
+		ID3D11
+
+    public:
+        virtual bool Load(const BString& inFileName )
+        {
+            HModule module = SystemAPI::LoadBaseModule(inFileName);
+            if (!SystemAPI::CheckModuleHandleValid(module))
+            {
+                //log
+                return false;
+            }
+
+            m_FuncD3D11CreateDevice = (PFN_D3D11_CREATE_DEVICE)SystemAPI::GetProcAddress(module, "D3D11CreateDevice");
+            if (m_FuncD3D11CreateDevice != NULL)
+            {
+                //log
+                return false;
+            }
+
+			m_FuncCreateDXGIFactory1 = (PFN_CREATE_DXGI_FACTORY1)SystemAPI::GetProcAddress(module, "CreateDXGIFactory1"); 
+			if (m_FuncCreateDXGIFactory1 != NULL)
+			{
+				//log
+				return false;
+			}
+        }
+        
+        virtual bool StartUp()
+        {
+			m_FuncCreateDXGIFactory1
+        }
+    };
 }
 
 #endif // !__BLADE_RHI_RHI_DIRECTX_11_DEVICE_H__

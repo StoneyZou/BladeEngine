@@ -49,6 +49,8 @@ namespace BladeEngine
             m_Buffer = (TCHAR*)SystemMalloc::GetInstance().Alloc(sizeInByte);
             StringUtil::Strcpy(m_Buffer, sizeInByte, rl.m_Buffer);
         }
+
+        operator const TCHAR*() const { return m_Buffer; }
        
         SIZE_T GetLength() const
         {

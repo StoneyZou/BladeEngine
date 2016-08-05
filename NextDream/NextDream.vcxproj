@@ -39,6 +39,8 @@
     <ClInclude Include="Source\FrameWork\BModule.h" />
     <ClInclude Include="Source\Math\BColor.h" />
     <ClInclude Include="Source\Math\BMath.h" />
+    <ClInclude Include="Source\Platform\GeneralSystemAPI.h" />
+    <ClInclude Include="Source\Platform\Windows\WindowsSystemAPI.h" />
     <ClInclude Include="Source\RHI\RHI.h" />
     <ClInclude Include="Source\RHI\RHIContext.h" />
     <ClInclude Include="Source\RHI\RHIDataFormat.h" />
@@ -107,7 +109,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>.\Source\Math;.\Source\Contains;.\Source\Core\Platforms;.\Source\DirectX11;.\Source\RHI;.\Source\Core;$(IncludePath)</IncludePath>
+    <IncludePath>.\Source\Platform\Windows;.\Source\Platform;.\Source\FrameWork;.\Source\Math;.\Source\Contains;.\Source\Core\Platforms;.\Source\DirectX11;.\Source\RHI;.\Source\Core;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>

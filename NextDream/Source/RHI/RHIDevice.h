@@ -6,13 +6,12 @@
 #include <TMap.h>
 #include <BString.h>
 #include <Utility.h>
+#include <BModule.h>
 
 namespace BladeEngine
 {
     namespace RHI
     {
-        #define MAX_NUM_RENDER_TARGET 8
-
         class IRHIDevice;
 
         class RHIResource : public INoncopyable
@@ -299,5 +298,16 @@ namespace BladeEngine
             virtual RHIDeferredContextRef CreateDeferredContext() = 0;
         };
     }
+
+    struct IRHIModule : public FrameWork::IModule
+    {
+        virtual uint32 GetAdapterNum() const = 0;
+        
+        virtual const BString& GetAdapterName(uint32 inIndex) const = 0;
+
+        virtual void SwitchAdapterByIndex(uint32 inIndex) const = 0;
+
+        virtual uint32 GetBestAdapterIndex() const = 0;
+    };
 }
 #endif // !__BLADE_RHI_RHI_DEVICE_H__

@@ -46,6 +46,12 @@
     <Filter Include="头文件\Source\FrameWork">
       <UniqueIdentifier>{c718b833-0543-406f-b1eb-b3e3602d6b5e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Source\Platform">
+      <UniqueIdentifier>{5b205555-564d-4899-b367-12fddc14c8c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Source\Platform\Windows">
+      <UniqueIdentifier>{4e12d103-c6ff-48fd-8e15-841b6ce419c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Utility.h">
@@ -131,6 +137,12 @@
     </ClInclude>
     <ClInclude Include="Source\FrameWork\BModule.h">
       <Filter>头文件\Source\FrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Platform\Windows\WindowsSystemAPI.h">
+      <Filter>头文件\Source\Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Platform\GeneralSystemAPI.h">
+      <Filter>头文件\Source\Platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
