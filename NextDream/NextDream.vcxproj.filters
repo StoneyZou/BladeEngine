@@ -144,6 +144,9 @@
     <ClInclude Include="Source\Platform\GeneralSystemAPI.h">
       <Filter>头文件\Source\Platform</Filter>
     </ClInclude>
+    <ClInclude Include="Source\FrameWork\GlobalConfig.h">
+      <Filter>头文件\Source\FrameWork</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\DirectX11\private\DirectX11Device.cpp">

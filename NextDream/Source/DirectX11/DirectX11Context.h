@@ -11,9 +11,9 @@ namespace BladeEngine
     {
         class DirectX11ContextBaseImpl : public IRHIContextBaseImpl
         {
-        private:
-            static const SIZE_T MAX_SHADER_RESOURCE_CACHE_NUM = 8;
-            static const SIZE_T MAX_RENDER_TARGET_NUM = 8;
+        public:
+            static const uint32 MAX_SHADER_RESOURCE_CACHE_NUM = 8;
+            static const uint32 MAX_RENDER_TARGET_NUM = 8;
             static const FLOAT BlendColor[4];
             static const UINT8 SamplerMask = 0;
 

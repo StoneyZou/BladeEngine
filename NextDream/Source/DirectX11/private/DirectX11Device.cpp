@@ -37,7 +37,7 @@ namespace BladeEngine
             ID3D11Texture2D* pD3D11Texture2D = NULL;    
 
             HRESULT hr = m_pDevice->CreateTexture2D(&textureDesc, &textureData, &pD3D11Texture2D);
-            D3D11PtrGuard(pD3D11Texture2D);
+            ComPtrGuard(pD3D11Texture2D);
 
             if (FAILED(hr))
             {
@@ -57,7 +57,7 @@ namespace BladeEngine
                 desc.Texture2D.MostDetailedMip = 0;
 
                 hr = m_pDevice->CreateShaderResourceView(pD3D11Texture2D, &desc, &pD3D11ShaderResourceView);
-                D3D11PtrGuard(pD3D11ShaderResourceView);
+                ComPtrGuard(pD3D11ShaderResourceView);
 
                 if (FAILED(hr))
                 {
@@ -83,7 +83,7 @@ namespace BladeEngine
                 if (!m_SamplerStateMap.TryGetValue(samplerDesc, &pSamplerState))
                 {
                     hr = m_pDevice->CreateSamplerState(&samplerDesc, &pSamplerState);
-                    D3D11PtrGuard(pSamplerState);
+                    ComPtrGuard(pSamplerState);
 
                     if (FAILED(hr))
                     {
@@ -108,7 +108,7 @@ namespace BladeEngine
                 desc.Texture2D.MipSlice = 0;
 
                 hr = m_pDevice->CreateRenderTargetView(pD3D11Texture2D, &desc, &pD3D11RenderTargetView);
-                D3D11PtrGuard(pD3D11RenderTargetView);
+                ComPtrGuard(pD3D11RenderTargetView);
 
                 if (FAILED(hr))
                 {
@@ -132,7 +132,7 @@ namespace BladeEngine
                 desc.Texture2D.MipSlice = 0;
 
                 hr = m_pDevice->CreateDepthStencilView(pD3D11Texture2D, &desc, &pD3D11DepthStencilView);
-                D3D11PtrGuard(pD3D11DepthStencilView);
+                ComPtrGuard(pD3D11DepthStencilView);
 
                 if (FAILED(hr))
                 {
@@ -165,7 +165,7 @@ namespace BladeEngine
             ID3D11VertexShader* pD3D11VertexShader = NULL;
             
             HRESULT hr = m_pDevice->CreateVertexShader((const char*)inCreateInfo.Data, inCreateInfo.DataSize, NULL, &pD3D11VertexShader);
-            D3D11PtrGuard(pD3D11VertexShader);
+            ComPtrGuard(pD3D11VertexShader);
 
             if (FAILED(hr))
             {
@@ -182,7 +182,7 @@ namespace BladeEngine
             ID3D11PixelShader* pD3D11PixelShader = NULL;
 
             HRESULT hr = m_pDevice->CreatePixelShader((const char*)inCreateInfo.Data, inCreateInfo.DataSize, NULL, &pD3D11PixelShader);
-            D3D11PtrGuard(pD3D11PixelShader);
+            ComPtrGuard(pD3D11PixelShader);
 
             if (FAILED(hr))
             {
@@ -199,7 +199,7 @@ namespace BladeEngine
             ID3D11HullShader* pD3D11HullShader = NULL;
 
             HRESULT hr = m_pDevice->CreateHullShader((const char*)inCreateInfo.Data, inCreateInfo.DataSize, NULL, &pD3D11HullShader);
-            D3D11PtrGuard(pD3D11HullShader);
+            ComPtrGuard(pD3D11HullShader);
 
             if (FAILED(hr))
             {
@@ -216,7 +216,7 @@ namespace BladeEngine
             ID3D11DomainShader* pD3D11DomainShader = NULL;
 
             HRESULT hr = m_pDevice->CreateDomainShader((const char*)inCreateInfo.Data, inCreateInfo.DataSize, NULL, &pD3D11DomainShader);
-            D3D11PtrGuard(pD3D11DomainShader);
+            ComPtrGuard(pD3D11DomainShader);
 
             if (FAILED(hr))
             {
@@ -233,7 +233,7 @@ namespace BladeEngine
             ID3D11GeometryShader* pD3D11GeometryShader = NULL;
 
             HRESULT hr = m_pDevice->CreateGeometryShader((const char*)inCreateInfo.Data, inCreateInfo.DataSize, NULL, &pD3D11GeometryShader);
-            D3D11PtrGuard(pD3D11GeometryShader);
+            ComPtrGuard(pD3D11GeometryShader);
 
             if (FAILED(hr))
             {
@@ -263,7 +263,7 @@ namespace BladeEngine
             data.SysMemSlicePitch = 0;
 
             HRESULT hr = m_pDevice->CreateBuffer(&desc, &data, &pD3D11VertexBuffer);
-            D3D11PtrGuard(pD3D11VertexBuffer);
+            ComPtrGuard(pD3D11VertexBuffer);
 
             if (FAILED(hr))
             {
@@ -293,7 +293,7 @@ namespace BladeEngine
             if (!m_RasterizerStateMap.TryGetValue(rasterizerStateDesc, &rasterizerState))
             {
                 HRESULT hr = m_pDevice->CreateRasterizerState(&rasterizerStateDesc, &rasterizerState);
-                D3D11PtrGuard(rasterizerState);
+                ComPtrGuard(rasterizerState);
 
                 if (FAILED(hr))
                 {
@@ -304,12 +304,12 @@ namespace BladeEngine
                 rasterizerState->AddRef();
                 m_RasterizerStateMap.Insert(rasterizerStateDesc, rasterizerState);
             }
-            D3D11PtrGuard(rasterizerState);
+            ComPtrGuard(rasterizerState);
 
             D3D11_BLEND_DESC blendStateDesc;
             blendStateDesc.AlphaToCoverageEnable = inCreateInfo.BlendDesc.AlphaTest;
             blendStateDesc.IndependentBlendEnable = inCreateInfo.BlendDesc.IndependentBlendEnable;
-            SIZE_T numRT = Math::Min(MAX_NUM_RENDER_TARGET, MAX_NUM_D3D11_RENDER_TARGET);
+            SIZE_T numRT = Math::Min(DirectX11ContextBaseImpl::MAX_RENDER_TARGET_NUM, (uint32)MAX_NUM_RENDER_TARGET);
             for (SIZE_T i = 0; i < numRT; ++i)
             {
                 blendStateDesc.RenderTarget[i].BlendEnable = inCreateInfo.BlendDesc.RenderTarget[i].BlendEnable;
@@ -337,7 +337,7 @@ namespace BladeEngine
                 blendState->AddRef();
                 m_BlendStateMap.Insert(blendStateDesc, blendState);
             }
-            D3D11PtrGuard(blendState);
+            ComPtrGuard(blendState);
 
             D3D11_DEPTH_STENCIL_DESC depthStencilStateDesc;
             depthStencilStateDesc.DepthEnable = inCreateInfo.DepthStencilDesc.DepthEnable;
@@ -368,7 +368,7 @@ namespace BladeEngine
                 depthStencilState->AddRef();
                 m_DepthStencilStateMap.Insert(depthStencilStateDesc, depthStencilState);
             }
-            D3D11PtrGuard(depthStencilState);
+            ComPtrGuard(depthStencilState);
 
             DirectX11ShaderState* shaderState = new DirectX11ShaderState(
                 this,
@@ -460,7 +460,7 @@ namespace BladeEngine
             ID3D11DeviceContext* pD3D11DeviceContext = NULL;
             
             m_pDevice->GetImmediateContext(&pD3D11DeviceContext);
-            D3D11PtrGuard(pD3D11DeviceContext);
+            ComPtrGuard(pD3D11DeviceContext);
 
             if(pD3D11DeviceContext == NULL)
             {
@@ -477,7 +477,7 @@ namespace BladeEngine
             ID3D11DeviceContext* pD3D11DeviceContext = NULL;
 
             HRESULT hr = m_pDevice->CreateDeferredContext(0, &pD3D11DeviceContext);
-            D3D11PtrGuard(pD3D11DeviceContext);
+            ComPtrGuard(pD3D11DeviceContext);
 
             if (FAILED(hr))
             {

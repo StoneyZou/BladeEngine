@@ -7,35 +7,12 @@
 #include <BMath.h>
 #include <BModule.h>
 #include <GeneralSystemAPI.h>
-#include <shared_ptr>
+#include <GlobalConfig.h>
 
 namespace BladeEngine
 {
     namespace RHI
     {
-        #define MAX_NUM_D3D11_RENDER_TARGET 8
-
-        class ComPtrGuard
-        {
-        private:
-            IUnknown* m_Ptr;
-
-        public:
-            ComPtrGuard(IUnknown* inPtr) : m_Ptr(m_Ptr)
-            {
-            }
-
-            ~ComPtrGuard()
-            {
-                if (m_Ptr != NULL)
-                {
-                    m_Ptr->Release();
-                }
-            }
-        };
-
-        #define D3D11PtrGuard(ptr) ComPtrGuard ptr##Guard(ptr)
-
         class DirectX11UniformBuffer;
 
         struct IDirectX11TextureInterface
@@ -97,9 +74,20 @@ namespace BladeEngine
             TArray<D3D11_INPUT_ELEMENT_DESC> m_TempInputElementDescs;
 
         public:
-            virtual RHITextureBaseRef CreateTexture2D(const RHITextureCreateInfo& inCreateInfo);
+            DirectX11Device(ID3D11Device* inDevice, ID3D11DeviceContext* inContext) : m_pDevice(inDevice), m_pImmediateContext(inContext)
+            {
+                m_pDevice->AddRef();
+                m_pImmediateContext->AddRef();
+            }
 
-            virtual RHITextureBaseRef CreateTexture2DAsDepthStencil(const RHITextureCreateInfo& inCreateInfo);
+            virtual ~DirectX11Device()
+            {
+                m_pDevice->Release();
+                m_pImmediateContext->Release();
+            }
+
+        public:
+            virtual RHITextureBaseRef CreateTexture2D(const RHITextureCreateInfo& inCreateInfo);
 
             virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo& inCreateInfo);
 
@@ -124,7 +112,7 @@ namespace BladeEngine
         };
     }
 
-    class DirectX11Module : public FrameWork::IModule
+    class DirectX11RHIModule : public IRHIModule
     {
 	private:
 		typedef HRESULT (__stdcall *PFN_CREATE_DXGI_FACTORY1)(REFIID riid, void **ppFactory);
@@ -133,13 +121,21 @@ namespace BladeEngine
         PFN_D3D11_CREATE_DEVICE m_FuncD3D11CreateDevice;
 		PFN_CREATE_DXGI_FACTORY1 m_FuncCreateDXGIFactory1;
 
-		ID3D11
+        HModule m_Module;
+		IDXGIFactory1* m_DXGIFactory1;
+        TArray<BString> m_AdapterNames;
+        TArray<IDXGIAdapter1*> m_Adapters;
+
+    public:
+        DirectX11RHIModule() : m_DXGIFactory1(NULL)
+        {
+        }
 
     public:
         virtual bool Load(const BString& inFileName )
         {
-            HModule module = SystemAPI::LoadBaseModule(inFileName);
-            if (!SystemAPI::CheckModuleHandleValid(module))
+            m_Module = SystemAPI::LoadBaseModule(inFileName);
+            if (!SystemAPI::CheckModuleHandleValid(m_Module))
             {
                 //log
                 return false;
@@ -152,17 +148,137 @@ namespace BladeEngine
                 return false;
             }
 
-			m_FuncCreateDXGIFactory1 = (PFN_CREATE_DXGI_FACTORY1)SystemAPI::GetProcAddress(module, "CreateDXGIFactory1"); 
-			if (m_FuncCreateDXGIFactory1 != NULL)
-			{
-				//log
-				return false;
-			}
+            m_FuncCreateDXGIFactory1 = (PFN_CREATE_DXGI_FACTORY1)SystemAPI::GetProcAddress(module, "CreateDXGIFactory1"); 
+            if (m_FuncCreateDXGIFactory1 != NULL)
+            {
+                //log
+                return false;
+            }
         }
         
         virtual bool StartUp()
         {
-			m_FuncCreateDXGIFactory1
+            HRESULT hr = m_FuncCreateDXGIFactory1(IID_IDXGIFactory1, (void**)&m_DXGIFactory1);
+            ComPtrGuard(m_DXGIFactory1);
+
+            if (FAILED(hr))
+            {
+                return false;
+            }
+
+            uint32 index = 0;
+            IDXGIAdapter1* adapter1 = NULL;
+
+            while (FAILED(m_DXGIFactory1->EnumAdapters1(index, &adapter1)))
+            {
+                ComPtrGuard(adapter1);
+                if(adapter1 == NULL)
+                {
+                    //
+                    return false;
+                }
+
+                DXGI_ADAPTER_DESC1 desc; 
+                hr = adapter1->GetDesc1(&desc);
+                if (FAILED(hr))
+                {
+                    continue;
+                }
+
+                m_AdapterNames.Add(StringUtil::WideCahrToTChar(desc.Description));
+            }
+
+            m_DXGIFactory1->AddRef();
+            return true;
+        }
+
+        virtual void ShutDown()
+        {
+            if (m_DXGIFactory1 != NULL) { m_DXGIFactory1->Release(); }
+            if (m_Device != NULL) { delete m_Device; }
+
+            m_Adapters.Clear();
+            m_AdapterNames.Clear();
+
+            m_Device = NULL;
+            m_DXGIFactory1 = NULL;
+        }
+
+        virtual void Unload()
+        {
+            SystemAPI::FreeBaseModule(m_Module);
+
+            m_FuncD3D11CreateDevice = NULL;
+            m_FuncCreateDXGIFactory1 = NULL;
+            m_Module = 0;
+        }
+
+        virtual bool InitDevice()
+        {
+            const BString& defaultAdapterName = Framework::GlobalConfig::GetInstance().m_DefaultAdapterName;
+            
+            int32 selectAdapterIndex = -1;
+            for(uint32 i = 0; i < m_AdapterNames.GetLength(); ++i)
+            {
+                if (m_AdapterNames[i] == defaultAdapterName)
+                {
+                    selectAdapterIndex = (int32)i;
+                    break;
+                }
+            }
+
+            if( selectAdapterIndex < 0 )
+            {
+                //
+                return false;
+            }
+
+            IDXGIAdapter1* selectAdapter = NULL;
+            HRESULT hr = m_DXGIFactory1->EnumAdapters1(selectAdapterIndex, &selectAdapter);
+            ComPtrGuard(selectAdapter);
+
+            if (FAILED(hr))
+            {
+                selectAdapterIndex = -1;
+            }
+
+            const D3D_FEATURE_LEVEL featureLevels[] = {
+                D3D_FEATURE_LEVEL_11_1,
+                D3D_FEATURE_LEVEL_11_0,
+                D3D_FEATURE_LEVEL_10_1,
+                D3D_FEATURE_LEVEL_10_0,
+                D3D_FEATURE_LEVEL_9_3,
+                D3D_FEATURE_LEVEL_9_2,
+                D3D_FEATURE_LEVEL_9_1,
+            };
+
+            D3D_FEATURE_LEVEL feature;
+            ID3D11Device* device = NULL;
+            ID3D11DeviceContext* context = NULL;
+
+            hr = m_FuncD3D11CreateDevice(
+                selectAdapterIndex < 0 ? NULL : m_Adapters[selectAdapterIndex],
+                D3D_DRIVER_TYPE_HARDWARE,
+                0,
+                0,
+                featureLevels,
+                countof(featureLevels),
+                D3D11_SDK_VERSION,
+                &device,
+                &feature,
+                &context
+            );
+            ComPtrGuard(device);
+            ComPtrGuard(context);
+
+            if (FAILED(hr))
+            {
+                //
+                return false;
+            }
+
+            m_Device = new RHI::DirectX11Device(device, context);
+            return true;
         }
     };
 }

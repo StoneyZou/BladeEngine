@@ -3,7 +3,7 @@
 
 namespace BladeEngine
 {
-    namespace FrameWork
+    namespace Framework
     {
         struct IModule
         {

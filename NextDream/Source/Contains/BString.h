@@ -114,7 +114,7 @@ namespace BladeEngine
 
         bool operator == (const BString& rh) const
         {
-            return m_Length == rh.m_Length && ( StringUtil::Strcmp(m_Buffer, rh.m_Buffer, m_Length < rh.m_Length ? m_Length : rh.m_Length) == 0 );
+            return m_Length == rh.m_Length && ( StringUtil::Strcmp(m_Buffer, rh.m_Buffer, m_Length) == 0 );
         }
 
         bool operator != (const BString& rh) const
@@ -122,7 +122,15 @@ namespace BladeEngine
             return !(*this == rh);
         }
 
+        bool operator == (const TCHAR* other) const
+        {
+            return m_Length == StringUtil::Strlen(other) && (StringUtil::Strcmp(m_Buffer, other, m_Length) == 0);
+        }
 
+        bool operator != (const TCHAR* other) const
+        {
+            return !(*this == other);
+        }
     };
 }
 

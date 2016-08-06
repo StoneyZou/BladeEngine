@@ -12,6 +12,8 @@ namespace BladeEngine
 {
     namespace RHI
     {
+        #define MAX_NUM_RENDER_TARGET 8
+
         class IRHIDevice;
 
         class RHIResource : public INoncopyable
@@ -276,17 +278,17 @@ namespace BladeEngine
         public:
            virtual RHITextureBaseRef CreateTexture2D(const RHITextureCreateInfo& inCreateInfo) = 0;
 
-           virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo) = 0;
+           virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo&) = 0;
 
-           virtual RHIPixelShaderRef CreatePixelShader(const RHIShaderCreateInfo) = 0;
+           virtual RHIPixelShaderRef CreatePixelShader(const RHIShaderCreateInfo&) = 0;
 
-           virtual RHIHullShaderRef CreateHullShader(const RHIShaderCreateInfo) = 0;
+           virtual RHIHullShaderRef CreateHullShader(const RHIShaderCreateInfo&) = 0;
 
-           virtual RHIDomainShaderRef CreateDomainShader(const RHIShaderCreateInfo) = 0;
+           virtual RHIDomainShaderRef CreateDomainShader(const RHIShaderCreateInfo&) = 0;
 
-           virtual RHIGeometryShaderRef CreateGeometryShader(const RHIShaderCreateInfo) = 0;
+           virtual RHIGeometryShaderRef CreateGeometryShader(const RHIShaderCreateInfo&) = 0;
 
-           virtual RHIVertexBufferRef CreateVertexBuffer(const RHIVertexBufferCreateInfo) = 0;
+           virtual RHIVertexBufferRef CreateVertexBuffer(const RHIVertexBufferCreateInfo&) = 0;
 
            virtual RHIShaderStateRef CreateShaderState(const RHIShaderStateCreateInfo&) = 0;
 
@@ -299,8 +301,16 @@ namespace BladeEngine
         };
     }
 
-    struct IRHIModule : public FrameWork::IModule
+    struct IRHIModule : public Framework::IModule
     {
+    protected:
+        RHI::IRHIDevice* m_Device;
+
+    protected:
+        IRHIModule() : m_Device(NULL) 
+        {}
+
+    public:
         virtual uint32 GetAdapterNum() const = 0;
         
         virtual const BString& GetAdapterName(uint32 inIndex) const = 0;
@@ -308,6 +318,10 @@ namespace BladeEngine
         virtual void SwitchAdapterByIndex(uint32 inIndex) const = 0;
 
         virtual uint32 GetBestAdapterIndex() const = 0;
+
+        virtual bool InitDevice() = 0;
+
+        RHI::IRHIDevice* GetDevice() { return m_Device; }
     };
 }
 #endif // !__BLADE_RHI_RHI_DEVICE_H__

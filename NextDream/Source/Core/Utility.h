@@ -220,6 +220,8 @@ namespace BladeEngine
 
 		bool IsNull() { return m_pPtr == NULL; }
 	};
+
+    #define countof(arr) sizeof(arr) / sizeof(arr[0])
 }
 
 #endif	// !__BLADE_CORE_UTILITY_H__

@@ -10,7 +10,7 @@
 namespace BladeEngine
 {
     #if defined WINDOWS_PLATFORM
-    class SystemAPI : public Windows::WindowsSystemAPI
+    class SystemAPI : public WindowsSystemAPI
     #endif
     {
     };
