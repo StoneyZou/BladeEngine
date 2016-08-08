@@ -14,18 +14,18 @@ namespace BladeEngine
             static GlobalConfig m_Instance;
 
         public:
-            BString m_DirectX11DllPath;
-            BString m_DefaultAdapterName;
+            BString DirectX11DllPath;
+            BString DefaultAdapterName;
 
         private:
             GlobalConfig()
             {
-                m_DirectX11DllPath = "";
-                m_DefaultAdapterName = "";
+                DirectX11DllPath = "";
+                DefaultAdapterName = "";
             }
 
         public:
-            static const GlobalConfig& GetInstance() { return m_Instance; }
+            static GlobalConfig& GetInstance() { return m_Instance; }
         };
 
     }

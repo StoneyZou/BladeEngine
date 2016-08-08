@@ -52,6 +52,9 @@
     <Filter Include="头文件\Source\Platform\Windows">
       <UniqueIdentifier>{4e12d103-c6ff-48fd-8e15-841b6ce419c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Source\FrameWork\Private">
+      <UniqueIdentifier>{6eedc0c9-31df-46bf-9f33-a7e685f55c63}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Utility.h">
@@ -157,6 +160,15 @@
     </ClCompile>
     <ClCompile Include="Source\Core\Private\CoreMisc.cpp">
       <Filter>头文件\Source\Core\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>头文件\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RHIPrivate.cpp">
+      <Filter>头文件\Source\RHI\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FrameWork\Private\GlobalConfig.cpp">
+      <Filter>头文件\Source\FrameWork\Private</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

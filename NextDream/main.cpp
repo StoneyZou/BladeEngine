@@ -1,48 +1,40 @@
+#include <DirectX11Device.h>
+#include <stdio.h>
 
-#include <TMap.h>
-#include <BString.h>
-#include <TArray.h>
-
-struct BStringComapareFunc
-{
-public:
-    static BladeEngine::int32 Compare(const BladeEngine::BString& lh, const BladeEngine::BString& rh)
-    {
-        return lh.Compare(rh);
-    }
-};
-
+using namespace BladeEngine;
 void main()
 {
-    BladeEngine::BString str("ddfsf");
-    str = "dsscsdff";
+    Framework::GlobalConfig::GetInstance().DirectX11DllPath = TEXT("..");
 
-    BladeEngine::TArray<void*> t;
-    BladeEngine::TMap<BladeEngine::BString, BladeEngine::int32> test;
-
-    test.Insert("A", 100);
-    test.Insert("B", 200);
-    test.Insert("C", 300);
-    test.Insert("D", 400);
-    test.Insert("R", 500);
-    test.Insert("F", 600);
-    test.Insert("G", 700);
-    test.Insert("H", 800);
-    test.Insert("I", 900);
-
-    test.Erase("A");
-    test.Erase("B");
-    test.Erase("C");
-    test.Erase("D");
-    test.Erase("R");
-    test.Erase("F");
-    test.Erase("G");
-    test.Erase("H");
-    test.Erase("I");
-
-    BladeEngine::TMap<BladeEngine::BString, BladeEngine::int32>::Iterator ite = test.Find("R");
-    if(ite != test.End())
+    IRHIModule* module = new DirectX11RHIModule();
+    
+    bool result = module->Load(Framework::GlobalConfig::GetInstance().DirectX11DllPath);
+    if (!result)
     {
         return;
     }
+
+    result = module->StartUp();
+    if (result)
+    {
+        for(uint32 i = 0; i < module->GetAdapterNum(); ++i)
+        {
+            ::printf(module->GetAdapterName(i));
+        }
+        uint32 adapterIndex = 0;
+        ::scanf_s("%d", &adapterIndex);
+
+        if (module->InitDevice(adapterIndex))
+        {
+            ::printf("InitDevice Success!");
+        }
+        else
+        {
+            ::printf("InitDevice Failed!");
+        }
+        module->ShutDown();
+    }
+
+    module->Unload();
+    return;
 }

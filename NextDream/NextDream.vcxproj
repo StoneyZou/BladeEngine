@@ -52,9 +52,12 @@
     <ClInclude Include="Source\RHI\RHIBufferBase.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="RHIPrivate.cpp" />
     <ClCompile Include="Source\Core\Private\CoreMisc.cpp" />
     <ClCompile Include="Source\DirectX11\private\DirectX11Context.cpp" />
     <ClCompile Include="Source\DirectX11\private\DirectX11Device.cpp" />
+    <ClCompile Include="Source\FrameWork\Private\GlobalConfig.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C8A5591A-0BD7-4617-820A-E1844B8D9DDC}</ProjectGuid>
@@ -133,6 +136,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

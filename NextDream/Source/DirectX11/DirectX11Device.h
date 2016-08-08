@@ -2,6 +2,7 @@
 #define __BLADE_RHI_RHI_DIRECTX_11_DEVICE_H__
 
 #include <d3d11.h>
+#include <dxgi.h>
 #include <RHIDevice.h>
 #include <TMap.h>
 #include <BMath.h>
@@ -123,7 +124,6 @@ namespace BladeEngine
 
         HModule m_Module;
 		IDXGIFactory1* m_DXGIFactory1;
-        TArray<BString> m_AdapterNames;
         TArray<IDXGIAdapter1*> m_Adapters;
 
     public:
@@ -132,7 +132,7 @@ namespace BladeEngine
         }
 
     public:
-        virtual bool Load(const BString& inFileName )
+        virtual bool Load(const BString& inFileName)
         {
             m_Module = SystemAPI::LoadBaseModule(inFileName);
             if (!SystemAPI::CheckModuleHandleValid(m_Module))
@@ -141,19 +141,21 @@ namespace BladeEngine
                 return false;
             }
 
-            m_FuncD3D11CreateDevice = (PFN_D3D11_CREATE_DEVICE)SystemAPI::GetProcAddress(module, "D3D11CreateDevice");
+            m_FuncD3D11CreateDevice = (PFN_D3D11_CREATE_DEVICE)SystemAPI::GetProcAddress(m_Module, "D3D11CreateDevice");
             if (m_FuncD3D11CreateDevice != NULL)
             {
                 //log
                 return false;
             }
 
-            m_FuncCreateDXGIFactory1 = (PFN_CREATE_DXGI_FACTORY1)SystemAPI::GetProcAddress(module, "CreateDXGIFactory1"); 
+            m_FuncCreateDXGIFactory1 = (PFN_CREATE_DXGI_FACTORY1)SystemAPI::GetProcAddress(m_Module, "CreateDXGIFactory1");
             if (m_FuncCreateDXGIFactory1 != NULL)
             {
                 //log
                 return false;
             }
+
+            return true;
         }
         
         virtual bool StartUp()
@@ -168,6 +170,12 @@ namespace BladeEngine
 
             uint32 index = 0;
             IDXGIAdapter1* adapter1 = NULL;
+
+            uint64 maxDedicatedVideoMemory = 0;
+            uint64 maxDedicatedSystemMemory = 0;
+            uint64 maxSharedSystemMemory = 0;
+            
+            m_bestAdapterIndex = 0;
 
             while (FAILED(m_DXGIFactory1->EnumAdapters1(index, &adapter1)))
             {
@@ -185,6 +193,23 @@ namespace BladeEngine
                     continue;
                 }
 
+                if (maxDedicatedVideoMemory < desc.DedicatedVideoMemory)
+                {
+                    m_bestAdapterIndex = index;
+                }
+
+                if (maxDedicatedVideoMemory == 0 && desc.DedicatedSystemMemory)
+                {
+                    m_bestAdapterIndex = index;
+                }
+
+                if (maxDedicatedVideoMemory == 0 && maxSharedSystemMemory == 0 && desc.SharedSystemMemory)
+                {
+                    m_bestAdapterIndex = index;
+                }
+
+                ++index;
+                m_Adapters.Add(adapter1);
                 m_AdapterNames.Add(StringUtil::WideCahrToTChar(desc.Description));
             }
 
@@ -213,34 +238,15 @@ namespace BladeEngine
             m_Module = 0;
         }
 
-        virtual bool InitDevice()
+        virtual bool InitDevice(uint32 inAdapterIndex)
         {
-            const BString& defaultAdapterName = Framework::GlobalConfig::GetInstance().m_DefaultAdapterName;
-            
-            int32 selectAdapterIndex = -1;
-            for(uint32 i = 0; i < m_AdapterNames.GetLength(); ++i)
-            {
-                if (m_AdapterNames[i] == defaultAdapterName)
-                {
-                    selectAdapterIndex = (int32)i;
-                    break;
-                }
-            }
-
-            if( selectAdapterIndex < 0 )
+            if(inAdapterIndex < 0 || inAdapterIndex >= m_Adapters.GetLength())
             {
                 //
                 return false;
             }
 
-            IDXGIAdapter1* selectAdapter = NULL;
-            HRESULT hr = m_DXGIFactory1->EnumAdapters1(selectAdapterIndex, &selectAdapter);
-            ComPtrGuard(selectAdapter);
-
-            if (FAILED(hr))
-            {
-                selectAdapterIndex = -1;
-            }
+            IDXGIAdapter1* selectAdapter = m_Adapters[inAdapterIndex];
 
             const D3D_FEATURE_LEVEL featureLevels[] = {
                 D3D_FEATURE_LEVEL_11_1,
@@ -256,8 +262,8 @@ namespace BladeEngine
             ID3D11Device* device = NULL;
             ID3D11DeviceContext* context = NULL;
 
-            hr = m_FuncD3D11CreateDevice(
-                selectAdapterIndex < 0 ? NULL : m_Adapters[selectAdapterIndex],
+            HRESULT hr = m_FuncD3D11CreateDevice(
+                selectAdapter,
                 D3D_DRIVER_TYPE_HARDWARE,
                 0,
                 0,
@@ -280,6 +286,8 @@ namespace BladeEngine
             m_Device = new RHI::DirectX11Device(device, context);
             return true;
         }
+
+        //virtual void SwitchAdapterByIndex(uint32 inIndex) const = 0;
     };
 }
 

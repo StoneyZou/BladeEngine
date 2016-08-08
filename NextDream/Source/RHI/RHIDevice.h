@@ -1,12 +1,12 @@
 #ifndef __BLADE_RHI_RHI_DEVICE_H__
 #define __BLADE_RHI_RHI_DEVICE_H__
 
-#include <RHIEnum.h>
-#include <TArray.h>
 #include <TMap.h>
 #include <BString.h>
 #include <Utility.h>
 #include <BModule.h>
+#include <RHIEnum.h>
+#include <TArray.h>
 
 namespace BladeEngine
 {
@@ -304,22 +304,37 @@ namespace BladeEngine
     struct IRHIModule : public Framework::IModule
     {
     protected:
+        // 需要在子类赋值，放在这里只是为了避免多态
         RHI::IRHIDevice* m_Device;
 
+        uint32 m_bestAdapterIndex;
+        TArray<BString> m_AdapterNames;
+
+    private:
+        static const BString NullAdapterName;
+
     protected:
-        IRHIModule() : m_Device(NULL) 
+        IRHIModule() : m_Device(NULL)
         {}
 
     public:
-        virtual uint32 GetAdapterNum() const = 0;
+        virtual bool InitDevice(uint32 inAdapterIndex) = 0;
+
+    public:
+        uint32 GetAdapterNum() const { return m_AdapterNames.GetLength(); }
         
-        virtual const BString& GetAdapterName(uint32 inIndex) const = 0;
+        const BString& GetAdapterName(uint32 inIndex) const 
+        { 
+            if(inIndex < 0 || inIndex >= m_AdapterNames.GetLength())
+            {
+                return NullAdapterName;
+            }
+            return m_AdapterNames[inIndex]; 
+        }
 
-        virtual void SwitchAdapterByIndex(uint32 inIndex) const = 0;
+        //virtual void SwitchAdapterByIndex(uint32 inIndex) const = 0;
 
-        virtual uint32 GetBestAdapterIndex() const = 0;
-
-        virtual bool InitDevice() = 0;
+        uint32 GetBestAdapterIndex() const { return m_bestAdapterIndex; }
 
         RHI::IRHIDevice* GetDevice() { return m_Device; }
     };

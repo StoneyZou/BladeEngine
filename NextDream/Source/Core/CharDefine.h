@@ -11,14 +11,6 @@ namespace BladeEngine
 	Character type functions.
 	-----------------------------------------------------------------------------*/
 
-    #ifndef TEXT
-        #ifdef _UNICODE
-            #define TEXT(str) L##str
-        #else
-            #define TEXT(str) str
-        #endif
-    #endif // !TEXT
-
 	/**
 	* Templated literal struct to allow selection of wide or ansi string 
 	* based on the character type provided, and not on compiler switches.

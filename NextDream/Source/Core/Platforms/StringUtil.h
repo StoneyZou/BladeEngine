@@ -1,10 +1,9 @@
 #ifndef __BLADE_CORE_PLATFORMS_STRING_H__
 #define __BLADE_CORE_PLATFORMS_STRING_H__
 
-#include <Stringapiset.h>
+#include <GeneralSystemAPI.h>
 #include <CharDefine.h>
 #include <TypeDefine.h>
-#include <cstring>
 
 namespace BladeEngine
 {
@@ -51,44 +50,14 @@ namespace BladeEngine
 #ifdef _UNICODE    
             return inSrc;
 #else
-            static TArray<TCHAR> tempStr;
-
-            int32 length = WideCharToMultiByte(CP_ACP, 0, inSrc, Strlen(inSrc), NULL, 0, NULL, false);
-            if (length == 0)
-            {
-                return "";
-            }
-            
-            tempStr.Resize(length + 1);
-            length = WideCharToMultiByte(CP_ACP, 0, inSrc, Strlen(inSrc), tempStr.TypePtr(), tempStr.GetLength(), NULL, false);
-            if (length == 0)
-            {
-                return "";
-            }
-
-            return tempStr.TypePtr();
+            return SystemAPI::WideCahrToAnsiChar(inSrc);
 #endif
         }
 
         static const TCHAR* AnsiCahrToTChar(const ANSICHAR* inSrc)
         {
-#ifdef _UNICODE    
-            static TArray<WCHAR> tempStr;
-
-            int32 length = MultiByteToWideChar(CP_ACP, 0, inSrc, Strlen(inSrc), NULL, 0);
-            if (length == 0)
-            {
-                return "";
-            }
-
-            tempStr.Resize(length + 1);
-            length = MultiByteToWideChar(CP_ACP, 0, inSrc, Strlen(inSrc), tempStr.TypePtr(), tempStr.GetLength());
-            if (length == 0)
-            {
-                return "";
-            }
-
-            return tempStr.TypePtr();
+#ifdef _UNICODE   
+            return SystemAPI::AnsiCahrToWideChar(inSrc);
 #endif
             return inSrc;
         }

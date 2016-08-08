@@ -1,7 +1,9 @@
 #ifndef __BLADE_CORE_UTILITY_H__
 #define __BLADE_CORE_UTILITY_H__
 
-#include "TypeDefine.h"
+#include <new>
+#include <type_traits>
+#include <TypeDefine.h>
 
 namespace BladeEngine
 {
