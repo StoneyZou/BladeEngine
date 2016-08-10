@@ -73,7 +73,7 @@ namespace BladeEngine
                     m_TotalSize += m_UniformBufferArray[i].PackSize;
                 }
                 
-                m_TotalData = (byte*)SystemMalloc::GetInstance().Alloc(m_TotalSize);
+                m_TotalData = (byte*)Malloc::Alloc(m_TotalSize);
                 MemUtil::Memset(m_TotalData, 0, m_TotalSize);
             }
 

@@ -43,17 +43,20 @@
     <Filter Include="头文件\Source\RHI\Private">
       <UniqueIdentifier>{aaecbf73-f44f-4497-a77e-b5b858c43df4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\Source\FrameWork">
-      <UniqueIdentifier>{c718b833-0543-406f-b1eb-b3e3602d6b5e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="头文件\Source\Platform">
       <UniqueIdentifier>{5b205555-564d-4899-b367-12fddc14c8c6}</UniqueIdentifier>
     </Filter>
     <Filter Include="头文件\Source\Platform\Windows">
       <UniqueIdentifier>{4e12d103-c6ff-48fd-8e15-841b6ce419c2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\Source\FrameWork\Private">
+    <Filter Include="头文件\Source\Framework">
+      <UniqueIdentifier>{c718b833-0543-406f-b1eb-b3e3602d6b5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Source\Framework\Private">
       <UniqueIdentifier>{6eedc0c9-31df-46bf-9f33-a7e685f55c63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Source\Serialization">
+      <UniqueIdentifier>{ebfade99-a2f9-42b5-98bd-2d40bf57fb8f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -139,7 +142,7 @@
       <Filter>头文件\Source\RHI</Filter>
     </ClInclude>
     <ClInclude Include="Source\FrameWork\BModule.h">
-      <Filter>头文件\Source\FrameWork</Filter>
+      <Filter>头文件\Source\Framework</Filter>
     </ClInclude>
     <ClInclude Include="Source\Platform\Windows\WindowsSystemAPI.h">
       <Filter>头文件\Source\Platform\Windows</Filter>
@@ -148,7 +151,16 @@
       <Filter>头文件\Source\Platform</Filter>
     </ClInclude>
     <ClInclude Include="Source\FrameWork\GlobalConfig.h">
-      <Filter>头文件\Source\FrameWork</Filter>
+      <Filter>头文件\Source\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\BVector.h">
+      <Filter>头文件\Source\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FrameWork\BFramework.h">
+      <Filter>头文件\Source\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FrameWork\BArchive.h">
+      <Filter>头文件\Source\Serialization</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -168,7 +180,7 @@
       <Filter>头文件\Source\RHI\Private</Filter>
     </ClCompile>
     <ClCompile Include="Source\FrameWork\Private\GlobalConfig.cpp">
-      <Filter>头文件\Source\FrameWork\Private</Filter>
+      <Filter>头文件\Source\Framework\Private</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -71,7 +71,7 @@ namespace BladeEngine
                 m_VertexShader(inShader)
             {
                 m_DataSize = inCreateInfo.DataSize;
-                m_Data = (byte*)SystemMalloc::GetInstance().Alloc(m_DataSize);
+                m_Data = (byte*)Malloc::Alloc(m_DataSize);
                 MemUtil::Memcopy(m_Data, m_DataSize, inCreateInfo.Data, inCreateInfo.DataSize);
 
                 m_VertexShader->AddRef();

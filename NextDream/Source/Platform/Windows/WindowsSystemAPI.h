@@ -48,7 +48,7 @@ namespace BladeEngine
 
         static void FreeBaseModule(HModule inHModule)
         {
-            if (inHModule == 0)
+            if (!CheckModuleHandleValid(inHModule))
             {
                 return;
             }
@@ -57,7 +57,7 @@ namespace BladeEngine
 
         static bool CheckModuleHandleValid(HModule inHModule)
         {
-            return inHModule == 0;
+            return inHModule != 0;
         }
 
         static void* GetProcAddress(HModule inHModule, const TCHAR* inFuncName)

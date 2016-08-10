@@ -314,7 +314,7 @@ namespace BladeEngine
         static const BString NullAdapterName;
 
     protected:
-        IRHIModule() : m_Device(NULL)
+        IRHIModule(uint32 inSubType) : m_Device(NULL), IModule((uint32)EMODULE_RHI, inSubType)
         {}
 
     public:

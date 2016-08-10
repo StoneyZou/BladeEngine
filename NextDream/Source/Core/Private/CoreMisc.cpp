@@ -3,7 +3,7 @@
 
 namespace BladeEngine
 {
-    SystemMalloc SystemMalloc::s_Instance;
+    IMalloc* Malloc::s_RegisterMalloc = NULL;
 
     void _BladeAssert_Impl(bool inCondition, const char* inMessage, const char* inFile, int inLine)
     {

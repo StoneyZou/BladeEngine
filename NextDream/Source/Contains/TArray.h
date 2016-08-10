@@ -59,13 +59,13 @@ namespace BladeEngine
             }
 
             m_Capacity = inNewCapacity;
-            m_pData = (Type*)SystemMalloc::GetInstance().Alloc(sizeof(Type) * m_Capacity);
+            m_pData = (Type*)Malloc::Alloc(sizeof(Type) * m_Capacity);
         }
 
         void _ExpandCapacity()
         {
             SIZE_T newCapacity = m_Capacity * 2 + 1;
-            newCapacity = newCapacity < MIN_ADJUST_CAPACITY ? newCapacity : MIN_ADJUST_CAPACITY;
+            newCapacity = newCapacity < MIN_ADJUST_CAPACITY ? MIN_ADJUST_CAPACITY : newCapacity;
 
             _ExpandCapacity(newCapacity);
         }
@@ -76,7 +76,7 @@ namespace BladeEngine
 
         TArray(SIZE_T inCapacity) : m_Length(0), m_Capacity(inCapacity)
         {
-            m_pData = (Type*)SystemMalloc::GetInstance().Alloc(sizeof(Type) * inCapacity);
+            m_pData = (Type*)Malloc::Alloc(sizeof(Type) * inCapacity);
         }
 
     public:
@@ -106,7 +106,7 @@ namespace BladeEngine
             m_Length = inNewLength;
             m_Capacity = m_Length < m_Capacity ? m_Capacity : m_Length;
 
-            if (oldLength >= m_Capacity)
+            if (oldLength < m_Capacity)
             {
                 _ExpandCapacity();
             }

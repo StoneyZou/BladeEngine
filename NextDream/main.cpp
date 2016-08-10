@@ -1,10 +1,13 @@
 #include <DirectX11Device.h>
 #include <stdio.h>
+#include <BVector.h>
+#include <RHIBufferBase.h>
+#include <d3d11.h>
 
 using namespace BladeEngine;
 void main()
 {
-    Framework::GlobalConfig::GetInstance().DirectX11DllPath = TEXT("..");
+    Framework::GlobalConfig::GetInstance().DirectX11DllPath = TEXT("C:\\Windows\\System32\\d3d11.dll");
 
     IRHIModule* module = new DirectX11RHIModule();
     
@@ -27,6 +30,28 @@ void main()
         if (module->InitDevice(adapterIndex))
         {
             ::printf("InitDevice Success!");
+
+            RHI::IRHIDevice* device = module->GetDevice();
+
+            BVector3 vertexs[] =
+            {
+                { 0.0f, 0.0f, 0.0f },
+                { 1.0f, 0.0f, 0.0f },
+                { 1.0f, 1.0f, 0.0f },
+            };
+
+            RHI::RHIVertexBufferCreateInfo info;
+            info.CanCpuWrite = false;
+            info.Data = vertexs;
+            info.DataSize = sizeof(vertexs);
+            info.VertexNum = 3;
+
+            RHI::RHIVertexBufferRef vertexBuffer = device->CreateVertexBuffer(info);
+            if(!vertexBuffer.IsNull())
+            {
+                ::printf("InitVertexBuffer Success!");
+                vertexBuffer->AddVertexDeclaration(RHI::ESHADER_SEMANTIC_POSITION, 0, RHI::EDATA_FORMAT_R32G32B32A32_FLOAT, 0);
+            }
         }
         else
         {

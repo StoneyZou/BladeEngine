@@ -36,10 +36,13 @@
     <ClInclude Include="Source\DirectX11\RHIDirectX11TextureBase.h" />
     <ClInclude Include="Source\DirectX11\DirectX11BufferBase.h" />
     <ClInclude Include="Source\DirectX11\DirectXEnumMapping.h" />
+    <ClInclude Include="Source\FrameWork\BFramework.h" />
     <ClInclude Include="Source\FrameWork\BModule.h" />
     <ClInclude Include="Source\FrameWork\GlobalConfig.h" />
+    <ClInclude Include="Source\FrameWork\BArchive.h" />
     <ClInclude Include="Source\Math\BColor.h" />
     <ClInclude Include="Source\Math\BMath.h" />
+    <ClInclude Include="Source\Math\BVector.h" />
     <ClInclude Include="Source\Platform\GeneralSystemAPI.h" />
     <ClInclude Include="Source\Platform\Windows\WindowsSystemAPI.h" />
     <ClInclude Include="Source\RHI\RHI.h" />

@@ -97,7 +97,7 @@ namespace BladeEngine
     #define BladeDestruct(ptr, type) _BladeDestruct ptr##_BladeDestruct(ptr);
     #define BladeConstruct(ptr, type) _BladeConstruct ptr##_BladeConstruct (ptr);
 
-    class INoncopyable
+    struct INoncopyable
     {
     protected:
         INoncopyable() {}
@@ -159,7 +159,7 @@ namespace BladeEngine
         RefCountObject() : m_pPtr(NULL)
         {}
 
-        RefCountObject(ReferenceType* inPtr) : m_pPtr(m_pPtr)
+        RefCountObject(ReferenceType* inPtr) : m_pPtr(inPtr)
         {
             m_pPtr->AddRef();
         }

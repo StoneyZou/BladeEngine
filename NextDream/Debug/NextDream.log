@@ -1,2 +1,10 @@
-﻿  main.cpp
+﻿  RHIPrivate.cpp
+  正在生成代码...
+  正在编译...
+  main.cpp
+  GlobalConfig.cpp
+  DirectX11Device.cpp
+  DirectX11Context.cpp
+  CoreMisc.cpp
+  正在生成代码...
   NextDream.vcxproj -> E:\BladeEngine\Debug\BladeEngine.exe

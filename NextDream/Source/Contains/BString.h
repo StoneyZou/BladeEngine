@@ -30,7 +30,7 @@ namespace BladeEngine
             m_Capacity = m_Length = StringUtil::Strlen(inStr);
             SIZE_T sizeInByte = (m_Capacity + 1) * sizeof(TCHAR);
 
-            m_Buffer = (TCHAR*)SystemMalloc::GetInstance().Alloc(sizeInByte);
+            m_Buffer = (TCHAR*)Malloc::Alloc(sizeInByte);
             StringUtil::Strcpy(m_Buffer, sizeInByte, inStr);
         }
 
@@ -38,7 +38,7 @@ namespace BladeEngine
         {
             SIZE_T sizeInByte = (m_Capacity + 1) * sizeof(TCHAR);
 
-            m_Buffer = (TCHAR*)SystemMalloc::GetInstance().Alloc(sizeInByte);
+            m_Buffer = (TCHAR*)Malloc::Alloc(sizeInByte);
             StringUtil::Strcpy(m_Buffer, sizeInByte, inStr);
         }
 
@@ -46,7 +46,7 @@ namespace BladeEngine
         {
             SIZE_T sizeInByte = (m_Capacity + 1) * sizeof(TCHAR);
 
-            m_Buffer = (TCHAR*)SystemMalloc::GetInstance().Alloc(sizeInByte);
+            m_Buffer = (TCHAR*)Malloc::Alloc(sizeInByte);
             StringUtil::Strcpy(m_Buffer, sizeInByte, rl.m_Buffer);
         }
 
@@ -83,10 +83,10 @@ namespace BladeEngine
         BString& operator = (const BString& rl)
         {
             SIZE_T sizeInByte = (rl.m_Length + 1) * sizeof(TCHAR);
-            if (m_Capacity < rl.m_Length)
+            if (m_Capacity < sizeInByte)
             {
-                m_Capacity = rl.m_Length;
-                m_Buffer = (TCHAR*)SystemMalloc::GetInstance().Realloc(m_Buffer, sizeInByte);
+                m_Capacity = sizeInByte;
+                m_Buffer = (TCHAR*)Malloc::Realloc(m_Buffer, sizeInByte);
             }    
 
             m_Length = rl.m_Length;
@@ -100,10 +100,10 @@ namespace BladeEngine
             SIZE_T newLength = StringUtil::Strlen(inStr);
             SIZE_T sizeInByte = (newLength + 1) * sizeof(TCHAR);
 
-            if (m_Capacity < newLength)
+            if (m_Capacity < sizeInByte)
             {
-                m_Capacity = newLength;
-                m_Buffer = (TCHAR*)SystemMalloc::GetInstance().Realloc(m_Buffer, sizeInByte);
+                m_Capacity = sizeInByte;
+                m_Buffer = (TCHAR*)Malloc::Realloc(m_Buffer, sizeInByte);
             }
             
             m_Length = newLength;

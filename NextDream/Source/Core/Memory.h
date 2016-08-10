@@ -8,10 +8,8 @@
 
 namespace BladeEngine
 {
-
-	class IMalloc : public INoncopyable
-	{
-	public:
+    struct IMalloc : public INoncopyable
+    {
         virtual void* Alloc(SIZE_T inSize) = 0;
         virtual void* Realloc(void* inBlock, SIZE_T inSize) = 0;
         virtual void Free(void* inBlock) = 0;
@@ -21,26 +19,52 @@ namespace BladeEngine
         virtual void Free(void* inBlock) = 0;
         virtual void Dump() = 0;
 #endif // DEBUG
-	};
+    };
 
-    class SystemMalloc : public IMalloc
+    class Malloc
     {
     private:
-        static SystemMalloc s_Instance;
-
-    public:
-        static SystemMalloc& GetInstance() { return s_Instance;  }
-
-    public:
-        void* Alloc(SIZE_T inSize) { return malloc(inSize); }
-        void* Realloc(void* inBlock, SIZE_T inSize) { return realloc(inBlock, inSize); }
-        void Free(void* inBlock) { free(inBlock); }
+        static IMalloc* s_RegisterMalloc;
+        
+    private:
+        static void* _Alloc(SIZE_T inSize) { return malloc(inSize); }
+        static void* _Realloc(void* inBlock, SIZE_T inSize) { return realloc(inBlock, inSize); }
+        static void _Free(void* inBlock) { free(inBlock); }
 #ifdef DEBUG
-        void* Alloc(SIZE_T inSize, TCHAR* inFile, uint32 inLine) { return malloc(inSize); }
-        void* Realloc(void* inBlock, SIZE_T inSize, TCHAR* inFile, uint32 inLine) { return realloc(inBlock, inSize); }
-        void Free(void* inBlock) { free(inBlock); }
-        void Dump() {}
+        static void* _Alloc(SIZE_T inSize, TCHAR* inFile, uint32 inLine) { return malloc(inSize); }
+        static void* _Realloc(void* inBlock, SIZE_T inSize, TCHAR* inFile, uint32 inLine) { return realloc(inBlock, inSize); }
+        static void _Free(void* inBlock) { free(inBlock); }
+        static void _Dump() {}
 #endif // DEBUG
+
+    public:
+        static void* Alloc(SIZE_T inSize) {
+            return s_RegisterMalloc != NULL ? s_RegisterMalloc->Alloc(inSize) : _Alloc(inSize);
+        }
+        static void* Realloc(void* inBlock, SIZE_T inSize) {
+            return s_RegisterMalloc != NULL ? s_RegisterMalloc->Realloc(inBlock, inSize) : _Realloc(inBlock, inSize);
+        }
+        static void Free(void* inBlock) {
+            return s_RegisterMalloc != NULL ? s_RegisterMalloc->Free(inBlock) : _Free(inBlock);
+        }
+#ifdef DEBUG
+        static void* Alloc(SIZE_T inSize, TCHAR* inFile, uint32 inLine) {
+            return s_RegisterMalloc != NULL ? s_RegisterMalloc->Alloc(inSize, inFile, inLine) : _Alloc(inSize, inFile, inLine);
+        }
+        static void* Realloc(void* inBlock, SIZE_T inSize, TCHAR* inFile, uint32 inLine) {
+            return s_RegisterMalloc != NULL ? s_RegisterMalloc->Realloc(inBlock, inSize, inFile, inLine) : Realloc(inBlock, inSize, inFile, inLine);
+    }
+        static void Free(void* inBlock) {
+            return s_RegisterMalloc != NULL ? s_RegisterMalloc->Free(inBlock) : Free(inBlock);
+        }
+        static void Dump() {
+            return s_RegisterMalloc != NULL ? s_RegisterMalloc->Dump() : _Dump(inSize);
+        }
+#endif // DEBUG
+
+    public:
+        static void Register(IMalloc* inMalloc) { s_RegisterMalloc = inMalloc; }
+        static void Unregister() { s_RegisterMalloc = NULL; }
     };
 }
 
