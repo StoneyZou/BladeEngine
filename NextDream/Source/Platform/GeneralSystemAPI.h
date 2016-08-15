@@ -16,6 +16,7 @@ namespace BladeEngine
     };
 
     typedef SystemAPI::HModule HModule;
+    typedef SystemAPI::HFile HFile;
 }
 
 #endif // !__BLADE_GENERAL_SYSTEM_API_H__

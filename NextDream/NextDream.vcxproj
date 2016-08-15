@@ -23,6 +23,7 @@
     <ClInclude Include="Source\Contains\TArray.h" />
     <ClInclude Include="Source\Contains\TMap.h" />
     <ClInclude Include="Source\Core\CharDefine.h" />
+    <ClInclude Include="Source\Core\EnumDefine.h" />
     <ClInclude Include="Source\Core\Guid.h" />
     <ClInclude Include="Source\Core\Logger.h" />
     <ClInclude Include="Source\Core\Memory.h" />

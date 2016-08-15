@@ -8,6 +8,9 @@
 
 namespace BladeEngine
 {
+    class IReader;
+    class IWritter;
+
     class BString
     {
     private:
@@ -21,6 +24,11 @@ namespace BladeEngine
     public:
         BString() : m_Length(0), m_Capacity(0), m_Buffer(NULL)
         {}
+
+        ~BString()
+        {
+            Malloc::Free(m_Buffer);
+        }
 
         /**
         * @param inStr      An array of character encoding with ansi/unicode
@@ -51,17 +59,8 @@ namespace BladeEngine
         }
 
         operator const TCHAR*() const { return m_Buffer; }
-       
-        SIZE_T GetLength() const
-        {
-            return m_Length;
-        }
 
-        int32 Compare(const BString& rh) const
-        {
-            return StringUtil::Strcmp(m_Buffer, rh.m_Buffer, m_Length < rh.m_Length ? m_Length : rh.m_Length);
-        }
-
+    public:
         TCHAR& operator[] (const SIZE_T index)
         {
             if (index < 0 || index >= m_Length)
@@ -131,6 +130,27 @@ namespace BladeEngine
         {
             return !(*this == other);
         }
+
+    public:
+        int32 Compare(const BString& rh) const
+        {
+            return StringUtil::Strcmp(m_Buffer, rh.m_Buffer, m_Length < rh.m_Length ? m_Length : rh.m_Length);
+        }
+
+        void Append(const TCHAR* inStr)
+        {
+
+        }
+
+    public:
+        SIZE_T GetLength() const
+        {
+            return m_Length;
+        }
+
+    public:
+        friend IReader& operator >> (IReader& inReader, BString& inStr);
+        friend IWritter& operator << (IWritter& inReader, BString& inStr);
     };
 }
 

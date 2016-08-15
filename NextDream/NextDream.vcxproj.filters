@@ -72,9 +72,6 @@
     <ClInclude Include="Source\Core\CharDefine.h">
       <Filter>头文件\Source\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\TypeDefine.h">
-      <Filter>头文件\Source\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\Memory.h">
       <Filter>头文件\Source\Core</Filter>
     </ClInclude>
@@ -161,6 +158,12 @@
     </ClInclude>
     <ClInclude Include="Source\FrameWork\BArchive.h">
       <Filter>头文件\Source\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\TypeDefine.h">
+      <Filter>头文件\Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\EnumDefine.h">
+      <Filter>头文件\Source\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
