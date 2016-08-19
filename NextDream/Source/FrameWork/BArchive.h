@@ -274,9 +274,9 @@ namespace BladeEngine
         HFile m_HFile;
         uint64 m_FileSize;
 
-        uint64 m_PreReadPos;
-        uint64 m_PreReadBufSize;
-        TArray<byte*> m_PreReadBuf;
+        uint64 m_CurPreReadPos;
+        uint64 m_ReadBufferSize;
+        TArray<byte> m_ReadBuffer;
 
         uint64 m_CurLocalPos;
         uint64 m_CurFilePos;
@@ -286,9 +286,9 @@ namespace BladeEngine
             : IReader(), 
             m_HFile(inHFile),
             m_FileSize(0), 
-            m_PreReadPos(0),
-            m_PreReadBufSize(inReadBufSize),
-            m_PreReadBuf(inReadBufSize),
+            m_CurPreReadPos(0),
+            m_ReadBufferSize(0),
+            m_ReadBuffer(inReadBufSize),
             m_CurLocalPos(0),
             m_CurFilePos(0)
         {
@@ -322,22 +322,67 @@ namespace BladeEngine
             return m_IsFailed;
         }
 
-        int32 ReadFile(HFile inFile, byte* inBuf, uint32 inBufSize)
+        int32 ReadFile(byte* inBuffer, uint32 inBufferSize)
         {
-            int32 realSize = SystemAPI::ReadFile(m_HFile, inBuf, inBufSize);
+            int32 realSize = SystemAPI::ReadFile(m_HFile, inBuffer, inBufferSize);
             if (realSize == -1)
             {
                 m_IsFailed = true;
+                return -1;
             }
 
             m_CurFilePos += realSize;
+            m_CurLocalPos = m_CurFilePos;
+
             return realSize;
+        }
+
+        int32 ReadBuffer(byte* inBuffer, uint32 inBufferSize)
+        {
+            if ( m_CurLocalPos < m_CurPreReadPos || m_CurLocalPos > m_CurPreReadPos + m_ReadBufferSize)
+            {
+                m_IsFailed = true;
+                return -1;
+            }
+
+            if (inBufferSize > m_ReadBufferSize + m_CurPreReadPos - m_CurLocalPos)
+            {
+                m_IsFailed = true;
+                return -1;
+            }
+
+            MemUtil::Memcopy(inBuffer, inBufferSize, m_ReadBuffer.TypePtr(), inBufferSize);
+            m_BufferReadLen += inBufferSize;
+            m_CurLocalPos = m_CurFilePos + m_BufferReadLen;
+
+            return inBufferSize;
+        }
+
+        int PreRead()
+        {
+            m_ReadBufferSize = SystemAPI::ReadFile(m_HFile, m_ReadBuffer.TypePtr(), m_ReadBuffer.GetLength());
+            if (m_ReadBufferSize == -1)
+            {
+                m_IsFailed = true;
+                return -1;
+            }
+
+            m_CurFilePos += realSize;
+
+
+            return m_ReadBufferSize;
         }
 
         int32 SeekFile(HFile inFile, uint32 inPos)
         {
+            int32 result = SystemAPI::SeekFile(m_HFile, inPos, ESEEK_POS_BEGIN);
+            if (result == -1)
+            {
+                m_IsFailed = true;
+            }
+
             m_CurFilePos = inPos;
-            return (int32)SystemAPI::SeekFile(m_HFile, inPos, ESEEK_POS_BEGIN);
+            m_CurLocalPos = m_CurFilePos;
         }
 
     public:
@@ -505,16 +550,6 @@ namespace BladeEngine
         
         virtual bool IsEOF() const { return m_CurPos == m_BufferSize; }
 
-    private:
-        bool SetCurPos(SIZE_T inPos)
-        {
-            if (inPos > m_BufferSize && inPos < 0)
-                m_IsFailed = true;
-
-            m_CurPos = inPos;
-            return m_IsFailed;
-        }
-
     public:
         virtual int32 Seek(ESEEK_POS inRelativePos, uint32 inOffset)
         {
@@ -534,7 +569,13 @@ namespace BladeEngine
                 break;
             }
 
-            SetCurPos(pos + inOffset);
+            if (pos > m_BufferSize && pos < 0)
+            {
+                m_IsFailed = true;
+                return -1;
+            }
+
+            m_CurPos = pos + inOffset;
             return m_CurPos;
         }
 
@@ -552,7 +593,9 @@ namespace BladeEngine
             }
 
             MemUtil::Memcopy(m_Buffer + m_CurPos, inBufferSize, inBuffer, inBufferSize);
-            return SetCurPos(m_CurPos + inBufferSize) ? inBufferSize : -1;
+            m_CurPos = m_CurPos + inBufferSize;
+
+            return inBufferSize;
         }
 
         virtual IWriter& operator << (uint8 outValue)
@@ -618,6 +661,207 @@ namespace BladeEngine
         }
     };
 
+    class FileWriter : public IWriter
+    {
+    private:
+        HFile m_HFile;
+
+        uint64 m_BufferWrittenLen;
+        TArray<byte> m_WritetBuffer;
+
+        uint64 m_CurLocalPos;
+        uint64 m_CurFilePos;
+
+    public:
+        FileWriter(HFile inHFile, uint32 inWriteBufSize)
+            : IWriter(),
+            m_HFile(inHFile),
+            m_BufferWrittenLen(0),
+            m_WritetBuffer(inWriteBufSize),
+            m_CurLocalPos(0),
+            m_CurFilePos(0)
+        {
+        }
+
+        virtual ~FileWriter()
+        {
+        };
+
+        virtual bool IsEOF() const { return false; }
+
+    private:
+        int32 WriteFile(HFile inFile, const byte* inBuf, uint32 inBufSize)
+        {
+            Flush();
+            int32 realSize = SystemAPI::WriteFile(m_HFile, inBuf, inBufSize);
+            if (realSize == -1)
+            {
+                m_IsFailed = true;
+            }
+
+            m_CurFilePos += realSize;
+            m_CurLocalPos = m_CurFilePos;
+
+            return realSize;
+        }
+
+        int32 WriteBuffer(const byte* inBuffer, uint32 inBufferSize)
+        {
+            if (inBufferSize > m_WritetBuffer.GetLength() - m_BufferWrittenLen)
+            {
+                m_IsFailed = true;
+                return -1;
+            }
+
+            MemUtil::Memcopy(m_WritetBuffer.TypePtr() + m_BufferWrittenLen, inBufferSize, inBuffer, inBufferSize);
+            m_BufferWrittenLen += inBufferSize;
+            m_CurLocalPos = m_CurFilePos + m_BufferWrittenLen;
+
+            return inBufferSize;
+        }
+
+        void SeekFile(HFile inFile, uint32 inPos)
+        {
+            Flush();
+            int32 result = SystemAPI::SeekFile(m_HFile, inPos, ESEEK_POS_BEGIN);
+            if ( result == -1)
+            {
+                m_IsFailed = true;
+            }
+
+            m_CurFilePos = inPos;
+            m_CurLocalPos = m_CurFilePos;
+        }
+
+    public:
+        virtual int32 Flush()
+        {
+            int32 realSize = 0;
+            if (m_BufferWrittenLen > 0)
+            {
+                realSize = SystemAPI::WriteFile(m_HFile, m_WritetBuffer.TypePtr(), m_BufferWrittenLen);
+                if (realSize == -1)
+                {
+                    m_IsFailed = true;
+                }
+            }
+
+            m_CurFilePos += realSize;
+            m_BufferWrittenLen = 0;
+            return realSize;
+        }
+
+        virtual int32 Seek(ESEEK_POS inRelativePos, uint32 inOffset)
+        {
+            uint32 pos = 0;
+            switch (inRelativePos)
+            {
+            case BladeEngine::ESEEK_POS_BEGIN:
+                pos = 0;
+                break;
+            case BladeEngine::ESEEK_POS_CUR:
+                pos = m_CurLocalPos;
+                break;
+            case BladeEngine::ESEEK_POS_END:
+                //pos = m_FileSize;
+                break;
+            default:
+                break;
+            }
+
+            if (pos < m_CurFilePos && pos >= m_CurFilePos + m_WritetBuffer.GetLength())
+            {
+                SeekFile(m_HFile, pos);
+            }
+            else
+            {
+                m_CurLocalPos = pos;
+            }
+        }
+
+        virtual int32 Write(const byte* inBuffer, SIZE_T inBufferSize)
+        {
+            if (m_IsFailed)
+                return -1;
+
+            if (inBufferSize == 0)
+                return 0;
+            
+            int realSize = 0;
+            if (inBufferSize > m_WritetBuffer.GetLength() - m_BufferWrittenLen)
+            {
+                realSize = WriteFile(m_HFile, inBuffer, inBufferSize);
+            }
+            else
+            {
+                realSize = WriteBuffer(inBuffer, inBufferSize);
+            }
+
+            return realSize;
+        }
+
+        virtual IWriter& operator << (uint8 outValue)
+        {
+            Write((const byte*)&outValue, sizeof(uint8));
+            return *this;
+        }
+
+        virtual IWriter& operator << (uint16 outValue)
+        {
+            Write((const byte*)&outValue, sizeof(uint16));
+            return *this;
+        }
+        virtual IWriter& operator << (uint32 outValue)
+        {
+            Write((const byte*)&outValue, sizeof(uint32));
+            return *this;
+        }
+        virtual IWriter& operator << (uint64 outValue)
+        {
+            Write((const byte*)&outValue, sizeof(uint64));
+            return *this;
+        }
+        virtual IWriter& operator << (int8 outValue)
+        {
+            Write((const byte*)&outValue, sizeof(int8));
+            return *this;
+        }
+        virtual IWriter& operator << (int16 outValue)
+        {
+            Write((const byte*)&outValue, sizeof(int16));
+            return *this;
+        }
+        virtual IWriter& operator << (int32 outValue)
+        {
+            Write((const byte*)&outValue, sizeof(int32));
+            return *this;
+        }
+        virtual IWriter& operator << (int64 outValue)
+        {
+            Write((const byte*)&outValue, sizeof(int64));
+            return *this;
+        }
+        virtual IWriter& operator << (float outValue)
+        {
+            Write((const byte*)&outValue, sizeof(float));
+            return *this;
+        }
+        virtual IWriter& operator << (double outValue)
+        {
+            Write((const byte*)&outValue, sizeof(double));
+            return *this;
+        }
+        virtual IWriter& operator << (OutputAnsiStr& outStr)
+        {
+            Write((const byte*)&outStr.StrBuf, sizeof(OutputAnsiStr::CharType) *  outStr.StrLen);
+            return *this;
+        }
+        virtual IWriter& operator << (OutputWideStr& outStr)
+        {
+            Write((const byte*)&outStr.StrBuf, sizeof(InputWideStr::CharType) * outStr.StrLen);
+            return *this;
+        }
+    };
 }
 
 #endif // !__BLADE_SERIALZATION_ARCHIVE_H__
