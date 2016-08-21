@@ -271,7 +271,7 @@ namespace BladeEngine
     class FileReader : public IReader
     {
     private:
-        HFile m_HFile;
+        FileHandle m_FileHandle;
         uint64 m_FileSize;
 
         uint64 m_CurPreReadPos;
@@ -282,9 +282,9 @@ namespace BladeEngine
         uint64 m_CurFilePos;
 
     public:
-        FileReader(HFile inHFile, uint32 inReadBufSize) 
+        FileReader(FileHandle inHFile, uint32 inReadBufSize) 
             : IReader(), 
-            m_HFile(inHFile),
+            m_FileHandle(inHFile),
             m_FileSize(0), 
             m_CurPreReadPos(0),
             m_ReadBufferSize(0),
@@ -292,7 +292,7 @@ namespace BladeEngine
             m_CurLocalPos(0),
             m_CurFilePos(0)
         {
-            m_FileSize = SystemAPI::GetFileSize(m_HFile);
+            m_FileSize = SystemAPI::GetFileSize(m_FileHandle);
         }
 
         virtual ~FileReader() 
@@ -313,7 +313,7 @@ namespace BladeEngine
             // 读取指针超出了读取缓存，重新调整文件读取指针并清空读取缓存区
             if (inPos < m_PreReadPos && inPos >= m_PreReadPos + m_PreReadBuf.GetLength())
             {
-                SeekFile(m_HFile, inPos);
+                SeekFile(m_FileHandle, inPos);
                 m_PreReadPos = 0;
                 m_PreReadBuf.Clear();
             }
@@ -324,7 +324,7 @@ namespace BladeEngine
 
         int32 ReadFile(byte* inBuffer, uint32 inBufferSize)
         {
-            int32 realSize = SystemAPI::ReadFile(m_HFile, inBuffer, inBufferSize);
+            int32 realSize = SystemAPI::ReadFile(m_FileHandle, inBuffer, inBufferSize);
             if (realSize == -1)
             {
                 m_IsFailed = true;
@@ -360,7 +360,7 @@ namespace BladeEngine
 
         int PreRead()
         {
-            m_ReadBufferSize = SystemAPI::ReadFile(m_HFile, m_ReadBuffer.TypePtr(), m_ReadBuffer.GetLength());
+            m_ReadBufferSize = SystemAPI::ReadFile(m_FileHandle, m_ReadBuffer.TypePtr(), m_ReadBuffer.GetLength());
             if (m_ReadBufferSize == -1)
             {
                 m_IsFailed = true;
@@ -373,9 +373,9 @@ namespace BladeEngine
             return m_ReadBufferSize;
         }
 
-        int32 SeekFile(HFile inFile, uint32 inPos)
+        int32 SeekFile(FileHandle inFile, uint32 inPos)
         {
-            int32 result = SystemAPI::SeekFile(m_HFile, inPos, ESEEK_POS_BEGIN);
+            int32 result = SystemAPI::SeekFile(m_FileHandle, inPos, ESEEK_POS_BEGIN);
             if (result == -1)
             {
                 m_IsFailed = true;
@@ -425,17 +425,16 @@ namespace BladeEngine
             uint32 preReadPartSize = 0;
             int32 realSize = 0;
             
-            if (m_CurLocalPos >= m_PreReadPos && m_CurLocalPos < m_PreReadPos + preReadSize)
+            if (m_CurLocalPos >= m_CurPreReadPos && m_CurLocalPos < m_CurPreReadPos + m_ReadBufferSize)
             {
-                if (inBufferSize < m_PreReadPos + preReadSize - m_CurLocalPos)
+                if (inBufferSize < m_CurPreReadPos + m_ReadBufferSize - m_CurLocalPos)
                 {
-                    MemUtil::Memcopy(inBuffer, inBufferSize, m_PreReadBuf.TypePtr() + m_PreReadPos - m_CurLocalPos, inBufferSize);
-                    return SetCurPos(m_CurLocalPos + inBufferSize) ? inBufferSize : -1;
+                    return ReadBuffer(inBuffer, inBufferSize);
                 }
                 else
                 {
-                    preReadPartSize = m_PreReadPos + preReadSize - m_CurLocalPos;
-                    MemUtil::Memcopy(inBuffer, preReadPartSize, m_PreReadBuf.TypePtr() + m_PreReadPos - preReadPartSize, preReadPartSize);
+                    preReadPartSize = m_CurPreReadPos + m_CurPreReadPos - m_CurLocalPos;
+                    ReadBuffer(inBuffer, inBufferSize)(inBuffer, preReadPartSize, m_PreReadBuf.TypePtr() + m_PreReadPos - preReadPartSize, preReadPartSize);
                     
                     inBuffer += preReadPartSize;
                     inBufferSize -= preReadPartSize;
@@ -451,12 +450,12 @@ namespace BladeEngine
             // 本次读取超过读取缓存区的一半大小或者直接读取到文件结尾，直接从文件中读取不经过读取缓存
             if (inBufferSize > (m_PreReadBufSize >> 1) || inBufferSize > m_FileSize - m_CurLocalPos)
             {
-                realSize = ReadFile(m_HFile, inBuffer, inBufferSize);
+                realSize = ReadFile(m_FileHandle, inBuffer, inBufferSize);
                 return SetCurPos(m_CurLocalPos + realSize + preReadPartSize) ? realSize + preReadPartSize : -1;
             }
 
             m_PreReadPos = m_CurFilePos;
-            realSize = ReadFile(m_HFile, inBuffer, inBufferSize);
+            realSize = ReadFile(m_FileHandle, inBuffer, inBufferSize);
             return SetCurPos(m_CurLocalPos + realSize + preReadPartSize) ? realSize + preReadPartSize : -1;
         }
 
@@ -664,7 +663,7 @@ namespace BladeEngine
     class FileWriter : public IWriter
     {
     private:
-        HFile m_HFile;
+        FileHandle m_HFile;
 
         uint64 m_BufferWrittenLen;
         TArray<byte> m_WritetBuffer;
@@ -673,7 +672,7 @@ namespace BladeEngine
         uint64 m_CurFilePos;
 
     public:
-        FileWriter(HFile inHFile, uint32 inWriteBufSize)
+        FileWriter(FileHandle inHFile, uint32 inWriteBufSize)
             : IWriter(),
             m_HFile(inHFile),
             m_BufferWrittenLen(0),
@@ -690,7 +689,7 @@ namespace BladeEngine
         virtual bool IsEOF() const { return false; }
 
     private:
-        int32 WriteFile(HFile inFile, const byte* inBuf, uint32 inBufSize)
+        int32 WriteFile(FileHandle inFile, const byte* inBuf, uint32 inBufSize)
         {
             Flush();
             int32 realSize = SystemAPI::WriteFile(m_HFile, inBuf, inBufSize);
@@ -720,7 +719,7 @@ namespace BladeEngine
             return inBufferSize;
         }
 
-        void SeekFile(HFile inFile, uint32 inPos)
+        void SeekFile(FileHandle inFile, uint32 inPos)
         {
             Flush();
             int32 result = SystemAPI::SeekFile(m_HFile, inPos, ESEEK_POS_BEGIN);

@@ -4,19 +4,20 @@
 #define WINDOWS_PLATFORM 1
 
 #if defined WINDOWS_PLATFORM
-    #include <WindowsSystemAPI.h>
+    #include <WindowsAPI.h>
 #endif
 
 namespace BladeEngine
 {
     #if defined WINDOWS_PLATFORM
-    class SystemAPI : public WindowsSystemAPI
+    class SystemAPI : public WindowsAPI
     #endif
     {
     };
 
-    typedef SystemAPI::HModule HModule;
-    typedef SystemAPI::HFile HFile;
+    typedef SystemAPI::ModuleHandle ModuleHandle;
+    typedef SystemAPI::FileHandle FileHandle;
+    typedef SystemAPI::WindowHandle WindowHandle;
 }
 
 #endif // !__BLADE_GENERAL_SYSTEM_API_H__

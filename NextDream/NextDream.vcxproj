@@ -45,7 +45,11 @@
     <ClInclude Include="Source\Math\BMath.h" />
     <ClInclude Include="Source\Math\BVector.h" />
     <ClInclude Include="Source\Platform\GeneralSystemAPI.h" />
-    <ClInclude Include="Source\Platform\Windows\WindowsSystemAPI.h" />
+    <ClInclude Include="Source\Platform\Windows\MacroDefine.h" />
+    <ClInclude Include="Source\Platform\Windows\PlatformWindow.h" />
+    <ClInclude Include="Source\Platform\Windows\WindowsPCH.h" />
+    <ClInclude Include="Source\Platform\Windows\WindowsAPI.h" />
+    <ClInclude Include="Source\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="Source\RHI\RHI.h" />
     <ClInclude Include="Source\RHI\RHIContext.h" />
     <ClInclude Include="Source\RHI\RHIDataFormat.h" />

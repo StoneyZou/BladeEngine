@@ -455,6 +455,26 @@ namespace BladeEngine
             return RHIUniformBufferRef(uniformBuffer);
         }
 
+        RHITextureBaseRef DirectX11Device::CreateTexture2D(WindowsWindowRef inWindow)
+        {
+            DXGI_SWAP_CHAIN_DESC swapChainDesc = { 0 };
+            swapChainDesc.BufferCount = 2;
+            swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UINT;
+            swapChainDesc.BufferDesc.Height = inWindow->GetHeight();
+            swapChainDesc.BufferDesc.Width = inWindow->GetWidth();
+            swapChainDesc.BufferDesc.RefreshRate.Denominator = D3D11_REFRESH_RATE;
+            swapChainDesc.BufferDesc.RefreshRate.Numerator = 1;
+            swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
+            swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;		// ÔÊÐíÇÐ»»µ½È«ÆÁ
+            swapChainDesc.OutputWindow = inWindow->GetWindowHandle();
+            swapChainDesc.SampleDesc.Count = 1;
+            swapChainDesc.SampleDesc.Quality = 0;
+            swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+            swapChainDesc.Windowed = !inWindow->IsFullScreen();
+
+
+        }
+
         RHIImmediateContextRef DirectX11Device::GetImmediateContext()
         {
             ID3D11DeviceContext* pD3D11DeviceContext = NULL;

@@ -141,9 +141,6 @@
     <ClInclude Include="Source\FrameWork\BModule.h">
       <Filter>头文件\Source\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Platform\Windows\WindowsSystemAPI.h">
-      <Filter>头文件\Source\Platform\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Platform\GeneralSystemAPI.h">
       <Filter>头文件\Source\Platform</Filter>
     </ClInclude>
@@ -164,6 +161,21 @@
     </ClInclude>
     <ClInclude Include="Source\Core\EnumDefine.h">
       <Filter>头文件\Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Platform\Windows\WindowsWindow.h">
+      <Filter>头文件\Source\Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Platform\Windows\PlatformWindow.h">
+      <Filter>头文件\Source\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Platform\Windows\WindowsPCH.h">
+      <Filter>头文件\Source\Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Platform\Windows\MacroDefine.h">
+      <Filter>头文件\Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Platform\Windows\WindowsAPI.h">
+      <Filter>头文件\Source\Platform\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

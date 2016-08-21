@@ -106,6 +106,8 @@ namespace BladeEngine
 
             virtual RHIUniformBufferRef CreateUniformBuffer(const RHIUniformCreateInfo& inCreateInfo);
 
+            virtual RHITextureBaseRef CreateTexture2D(const WindowHandle& inWindowHandle);
+
         public:
             virtual RHIImmediateContextRef GetImmediateContext();
 
@@ -118,7 +120,7 @@ namespace BladeEngine
     private:
         PFN_D3D11_CREATE_DEVICE m_FuncD3D11CreateDevice;
 
-        HModule m_Module;
+        ModuleHandle m_Module;
 		IDXGIFactory* m_DXGIFactory;
         TArray<IDXGIAdapter*> m_Adapters;
 

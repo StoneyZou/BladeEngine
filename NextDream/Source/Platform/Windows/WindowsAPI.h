@@ -1,9 +1,10 @@
 #ifndef __BLADE_PLATFORM_WINDOWS_SYSTEM_API_H__
 #define __BLADE_PLATFORM_WINDOWS_SYSTEM_API_H__
 
-#include <Windows.h>
+#include <WindowsPCH.h>
 #include <TArray.h>
 #include <EnumDefine.h>
+#include <WindowsWindow.h>
 
 namespace BladeEngine
 {
@@ -56,19 +57,20 @@ namespace BladeEngine
 
     #define ComPtrGuard(ptr) _ComPtrGuard ptr##Guard(ptr)
 
-    class WindowsSystemAPI
+    class WindowsAPI
     {
     public:
-        typedef HMODULE HModule;
-        typedef HANDLE HFile;
+        typedef HMODULE ModuleHandle;
+        typedef HANDLE FileHandle;
+        typedef HWND WindowHandle;
 
     public:
-        static HModule LoadBaseModule(const TCHAR* inFileName)
+        static ModuleHandle LoadBaseModule(const TCHAR* inFileHandleName)
         {
-            return ::LoadLibrary(inFileName);
+            return ::LoadLibrary(inFileHandleName);
         }
 
-        static void FreeBaseModule(HModule inHModule)
+        static void FreeBaseModule(ModuleHandle inHModule)
         {
             if (!CheckModuleHandleValid(inHModule))
             {
@@ -77,12 +79,12 @@ namespace BladeEngine
             ::FreeLibrary(inHModule);
         }
 
-        static bool CheckModuleHandleValid(HModule inHModule)
+        static bool CheckModuleHandleValid(ModuleHandle inHModule)
         {
             return inHModule != 0;
         }
 
-        static void* GetProcAddress(HModule inHModule, const TCHAR* inFuncName)
+        static void* GetProcAddress(ModuleHandle inHModule, const TCHAR* inFuncName)
         {
             return ::GetProcAddress(inHModule, inFuncName);
         }
@@ -127,7 +129,7 @@ namespace BladeEngine
             return tempStr.TypePtr();
         }
 
-        static const HFile OpenFile(const TCHAR* inFileName, EFILE_ACCESS_MODE inAccessMode, EFILE_SHARE_MODE inShareMode, EFILE_OPEN_MODE inOpenMode)
+        static const FileHandle OpenFile(const TCHAR* inFileName, EFILE_ACCESS_MODE inAccessMode, EFILE_SHARE_MODE inShareMode, EFILE_OPEN_MODE inOpenMode)
         {
             DWORD accessMode =
                 (inAccessMode & EFILE_READ) != 0 ? GENERIC_READ : 0 |
@@ -155,37 +157,37 @@ namespace BladeEngine
             return CreateFile(inFileName, accessMode, shareMode, NULL, openMode, FILE_ATTRIBUTE_NORMAL, 0);
         }
 
-        static void CloseFile(HFile inHFile)
+        static void CloseFile(FileHandle inFileHandle)
         {
-            CloseHandle(inHFile);
+            CloseHandle(inFileHandle);
         }
 
-        static bool CheckFileHandleValid(HFile inHFile)
+        static bool CheckFileHandleValid(FileHandle inFileHandle)
         {
-            return inHFile != 0;
+            return inFileHandle != 0;
         }
 
-        static int32 ReadFile(HFile inFile, byte* inBuf, uint32 inBufSize)
+        static int32 ReadFile(FileHandle inFileHandle, byte* inBuf, uint32 inBufSize)
         {
             DWORD readSize = 0;
-            if (!::ReadFile(inFile, inBuf, inBufSize, &readSize, NULL))
+            if (!::ReadFile(inFileHandle, inBuf, inBufSize, &readSize, NULL))
             {
                 return -1;
             }
             return readSize;
         }
 
-        static int32 WriteFile(HFile inFile, const byte* inBuf, uint32 inBufSize)
+        static int32 WriteFile(FileHandle inFileHandle, const byte* inBuf, uint32 inBufSize)
         {
             DWORD writeSize = 0;
-            if (!::WriteFile(inFile, inBuf, inBufSize, &writeSize, NULL))
+            if (!::WriteFile(inFileHandle, inBuf, inBufSize, &writeSize, NULL))
             {
                 return -1;
             }
             return writeSize;
         }
 
-        static int64 SeekFile(HFile inFile, uint64 inOffset, ESEEK_POS inSeekPos)
+        static int64 SeekFile(FileHandle inFileHandle, uint64 inOffset, ESEEK_POS inSeekPos)
         {
             DWORD seekPos = FILE_BEGIN;
             switch (inSeekPos)
@@ -206,21 +208,51 @@ namespace BladeEngine
             LONG low32Bits = *reinterpret_cast<uint32*>((byte*)&inOffset);
             LONG high32Bits = *reinterpret_cast<uint32*>(((byte*)&inOffset) + 32);
 
-            low32Bits = SetFilePointer(inFile, low32Bits, &high32Bits, seekPos);
+            low32Bits = SetFilePointer(inFileHandle, low32Bits, &high32Bits, seekPos);
 
             uint64 result = low32Bits + ((uint64)high32Bits << 32);
             return result;
         }
         
-        static int32 GetFileSize(HFile inFile)
+        static int32 GetFileSize(FileHandle inFileHandle)
         {
             DWORD low32Bits = 0;
             DWORD high32Bits = 0;
 
-            low32Bits =::GetFileSize(inFile, &high32Bits);
+            low32Bits =::GetFileSize(inFileHandle, &high32Bits);
 
             uint64 result = low32Bits + ((uint64)high32Bits << 32);
             return result;
+        }
+
+        static WindowsWindowRef CreatePlatformWindow(const TCHAR* inWindowName, uint32 inWidth, uint32 inHeight)
+        {
+            // 获取当前进程的实例句柄
+            HINSTANCE hInstance = GetModuleHandle(0);
+
+            WNDCLASS wndClass = { 0 };
+            wndClass.cbClsExtra = 0;	// 无class扩展
+            wndClass.cbWndExtra = 0;	// 无窗口扩展
+            wndClass.hbrBackground = (HBRUSH)(GetStockObject(WHITE_BRUSH));		// 取得白色画刷
+            wndClass.hCursor = LoadCursor(nullptr, IDI_APPLICATION);			// 取应用程序默认光标
+            wndClass.hIcon = LoadIcon(nullptr, IDC_ICON);						// 取默认图标
+            wndClass.hInstance = hInstance;
+            wndClass.lpfnWndProc = ::DefWindowProc;
+            wndClass.lpszClassName = "D3D11RenderWindow";
+            wndClass.lpszMenuName = "";
+            wndClass.style = 0;		// 默认格式
+                                    // 注册窗口类
+            RegisterClass(&wndClass);
+
+            HWND hWnd = CreateWindow("D3D11RenderWindow", inWindowName, WS_VISIBLE | WS_OVERLAPPEDWINDOW,
+                50, 50, inWidth, inHeight, nullptr, nullptr, hInstance, 0);
+            
+            return WindowsWindowRef(new WindowsWindow(hWnd, inWidth, inHeight));
+        }
+
+        static void ClosePlatformWindow(WindowHandle inWindowHandle)
+        {
+            CloseWindow(inWindowHandle);
         }
     };
 }
