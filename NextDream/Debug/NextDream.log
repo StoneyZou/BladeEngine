@@ -1,10 +1,21 @@
-﻿  RHIPrivate.cpp
+﻿  DirectX11Device.cpp
+e:\bladeengine\nextdream\source\core\utility.h(174): error C2440: “初始化”: 无法从“const BladeEngine::PlatformWindow *”转换为“BladeEngine::WindowsWindow *”
+  e:\bladeengine\nextdream\source\core\utility.h(174): note: 从基类型到派生类型的强制转换需要 dynamic_cast 或 static_cast
+  e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(469): note: 参见对正在编译的函数 模板 实例化“BladeEngine::RefCountObject<BladeEngine::WindowsWindow>::RefCountObject<BladeEngine::PlatformWindow>(const BladeEngine::RefCountObject<BladeEngine::PlatformWindow> &)”的引用
+  e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(469): note: 参见对正在编译的函数 模板 实例化“BladeEngine::RefCountObject<BladeEngine::WindowsWindow>::RefCountObject<BladeEngine::PlatformWindow>(const BladeEngine::RefCountObject<BladeEngine::PlatformWindow> &)”的引用
+e:\bladeengine\nextdream\source\core\utility.h(174): error C2439: “BladeEngine::RefCountObject<BladeEngine::WindowsWindow>::m_pPtr”: 未能初始化成员
+  e:\bladeengine\nextdream\source\core\utility.h(156): note: 参见“BladeEngine::RefCountObject<BladeEngine::WindowsWindow>::m_pPtr”的声明
+e:\bladeengine\nextdream\source\core\utility.h(175): error C2248: “BladeEngine::RefCountObject<BladeEngine::PlatformWindow>::m_pPtr”: 无法访问 private 成员(在“BladeEngine::RefCountObject<BladeEngine::PlatformWindow>”类中声明)
+  e:\bladeengine\nextdream\source\core\utility.h(156): note: 参见“BladeEngine::RefCountObject<BladeEngine::PlatformWindow>::m_pPtr”的声明
+  e:\bladeengine\nextdream\source\platform\windows\platformwindow.h(11): note: 参见“BladeEngine::RefCountObject<BladeEngine::PlatformWindow>”的声明
+  RHIPrivate.cpp
+c1xx : fatal error C1083: 无法打开源文件: “RHIPrivate.cpp”: No such file or directory
+  正在生成代码...
+  正在编译...
+  CoreMisc.cpp
   正在生成代码...
   正在编译...
   main.cpp
   GlobalConfig.cpp
-  DirectX11Device.cpp
   DirectX11Context.cpp
-  CoreMisc.cpp
   正在生成代码...
-  NextDream.vcxproj -> E:\BladeEngine\Debug\BladeEngine.exe

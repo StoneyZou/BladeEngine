@@ -7,7 +7,7 @@
 #include <TMap.h>
 #include <BMath.h>
 #include <BModule.h>
-#include <GeneralSystemAPI.h>
+#include <SystemAPI.h>
 #include <GlobalConfig.h>
 
 namespace BladeEngine
@@ -63,6 +63,7 @@ namespace BladeEngine
             typedef TMap<InputElementDescArray, ID3D11InputLayout*, ArrayMemCompareFunc<InputElementDescArray>> InputLayoutMap;
 
         private:
+			IDXGIFactory* m_pDXGIFactory;
             ID3D11Device* m_pDevice;
             ID3D11DeviceContext* m_pImmediateContext;
 
@@ -73,9 +74,11 @@ namespace BladeEngine
             UniformBufferList m_UniformBufferList;
 
             TArray<D3D11_INPUT_ELEMENT_DESC> m_TempInputElementDescs;
+            TArray<RHISwapChainRef> m_SwapChainList;
 
         public:
-            DirectX11Device(ID3D11Device* inDevice, ID3D11DeviceContext* inContext) : m_pDevice(inDevice), m_pImmediateContext(inContext)
+            DirectX11Device(IDXGIFactory* inFactory, ID3D11Device* inDevice, ID3D11DeviceContext* inContext) 
+				: m_pDevice(inDevice), m_pImmediateContext(inContext)
             {
                 m_pDevice->AddRef();
                 m_pImmediateContext->AddRef();
@@ -88,7 +91,7 @@ namespace BladeEngine
             }
 
         public:
-            virtual RHITextureBaseRef CreateTexture2D(const RHITextureCreateInfo& inCreateInfo);
+            virtual RHITexture2DRef CreateTexture2D(const RHITextureCreateInfo& inCreateInfo);
 
             virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo& inCreateInfo);
 
@@ -106,7 +109,7 @@ namespace BladeEngine
 
             virtual RHIUniformBufferRef CreateUniformBuffer(const RHIUniformCreateInfo& inCreateInfo);
 
-            virtual RHITextureBaseRef CreateTexture2D(const WindowHandle& inWindowHandle);
+            virtual RHISwapChainRef CreateSwapChain(const RHISwapChainCreateInfo& inCreateInfo);
 
         public:
             virtual RHIImmediateContextRef GetImmediateContext();
@@ -287,7 +290,7 @@ namespace BladeEngine
                 return false;
             }
 
-            m_Device = new RHI::DirectX11Device(device, context);
+            m_Device = new RHI::DirectX11Device(m_DXGIFactory, device, context);
             return true;
         }
 

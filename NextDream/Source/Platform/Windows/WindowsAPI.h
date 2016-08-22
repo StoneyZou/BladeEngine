@@ -132,13 +132,13 @@ namespace BladeEngine
         static const FileHandle OpenFile(const TCHAR* inFileName, EFILE_ACCESS_MODE inAccessMode, EFILE_SHARE_MODE inShareMode, EFILE_OPEN_MODE inOpenMode)
         {
             DWORD accessMode =
-                (inAccessMode & EFILE_READ) != 0 ? GENERIC_READ : 0 |
-                (inAccessMode & EFILE_WRITE) != 0 ? GENERIC_WRITE : 0;
+                ((inAccessMode & EFILE_READ) != 0 ? GENERIC_READ : 0) |
+                ((inAccessMode & EFILE_WRITE) != 0 ? GENERIC_WRITE : 0);
 
             DWORD shareMode =
-                (inShareMode & EFILE_SHARE_READ) != 0 ? FILE_SHARE_READ : 0 |
-                (inShareMode & EFILE_SHARE_WRITE) != 0 ? FILE_SHARE_WRITE : 0 |
-                (inShareMode & EFILE_SHARE_DELETE) != 0 ? FILE_SHARE_DELETE : 0;
+                ((inShareMode & EFILE_SHARE_READ) != 0 ? FILE_SHARE_READ : 0) |
+                ((inShareMode & EFILE_SHARE_WRITE) != 0 ? FILE_SHARE_WRITE : 0) |
+                ((inShareMode & EFILE_SHARE_DELETE) != 0 ? FILE_SHARE_DELETE : 0);
 
             DWORD openMode = EFILE_OPEN_EXISTING;
             switch (inOpenMode)
@@ -214,7 +214,7 @@ namespace BladeEngine
             return result;
         }
         
-        static int32 GetFileSize(FileHandle inFileHandle)
+        static uint64 GetFileSize(FileHandle inFileHandle)
         {
             DWORD low32Bits = 0;
             DWORD high32Bits = 0;

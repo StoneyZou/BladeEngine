@@ -20,7 +20,7 @@ namespace BladeEngine
             ID3D11ShaderResourceView* ShaderResourceView;
         };
 
-        class RHIDirectX11Texture2D : public RHITexture2D, public IDirectX11TextureInterface
+        class DirectX11Texture2D : public RHITexture2D, public IDirectX11TextureInterface
         {
         private:
             ID3D11Texture2D* m_Texture;
@@ -33,7 +33,7 @@ namespace BladeEngine
 
 
         public:
-            RHIDirectX11Texture2D( DirectX11Device* inDevice, const DirectX11Texture2DInitInfo& inInitInfo)
+            DirectX11Texture2D( DirectX11Device* inDevice, const DirectX11Texture2DInitInfo& inInitInfo)
                 : RHITexture2D(inDevice, inInitInfo),
                 m_Texture(inInitInfo.Texture),
                 m_ShadowTexture(NULL),
@@ -54,7 +54,7 @@ namespace BladeEngine
                 if (m_DepthStencil != NULL) { m_DepthStencil->AddRef(); }
             }
 
-            ~RHIDirectX11Texture2D()
+            ~DirectX11Texture2D()
             {
                 m_Texture->Release();
                 if (m_ShadowTexture != NULL) { m_ShadowTexture->Release(); }
@@ -143,6 +143,25 @@ namespace BladeEngine
             ID3D11RenderTargetView* GetRenderTargetView() { return m_RenderTarget; }
             ID3D11DepthStencilView* GetDepthStencilView() { return m_DepthStencil; }
             ID3D11ShaderResourceView* GetShaderResourceView() { return m_ShaderResource; }
+        };
+
+        class DirectX11SwapChain : public RHISwapChain
+        {
+        private:
+            IDXGISwapChain* m_SwapChain;
+
+        public:
+            DirectX11SwapChain(DirectX11Device* inDevice, IDXGISwapChain* inSwapChain, const RHISwapChainInitInfo& inIntiInfo)
+                : RHISwapChain(inDevice, inIntiInfo),
+                m_SwapChain(inSwapChain)
+            {
+                BladeAssert(inSwapChain != NULL);
+            }
+
+            ~DirectX11SwapChain()
+            {
+                if (m_SwapChain != NULL) { m_SwapChain->Release(); m_SwapChain = NULL; }
+            }
         };
 
     }

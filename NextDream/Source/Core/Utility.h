@@ -187,7 +187,7 @@ namespace BladeEngine
 		{
 			if (rl.m_pPtr == m_pPtr)
 			{
-				return;
+				return *this;
 			}
 
 			if (m_pPtr != NULL)
@@ -197,7 +197,12 @@ namespace BladeEngine
 			rl.m_pPtr->AddRef();
 
 			m_pPtr = rl.m_pPtr;
+            return *this;
 		}
+
+        RefCountObject& operator = (TYPE_OF_NULLPTR) { m_pPtr = NULL; return *this; }
+
+        RefCountObject& operator = (TYPE_OF_NULL inPtr) { BladeAssert(inPtr == 0); m_pPtr = NULL; return *this; }
 
         template<typename Other>
         operator RefCountObject<Other>()
@@ -221,6 +226,14 @@ namespace BladeEngine
 		const ReferenceType* GetReferencePtr() const { return m_pPtr; }
 
 		bool IsNull() { return m_pPtr == NULL; }
+
+        bool operator == (TYPE_OF_NULLPTR) const { return m_pPtr == NULL; }
+
+        bool operator != (TYPE_OF_NULLPTR) const { return m_pPtr != NULL; }
+
+        bool operator == (TYPE_OF_NULL inPtr) const { BladeAssert(inPtr == 0); return m_pPtr == NULL; }
+
+        bool operator != (TYPE_OF_NULL inPtr) const { BladeAssert(inPtr == 0); return m_pPtr != NULL; }
 	};
 
     #define countof(arr) sizeof(arr) / sizeof(arr[0])

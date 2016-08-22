@@ -5,7 +5,7 @@
 #include <MemUtil.h>
 #include <BString.h>
 #include <EnumDefine.h>
-#include <GeneralSystemAPI.h>
+#include <SystemAPI.h>
 
 namespace BladeEngine
 {

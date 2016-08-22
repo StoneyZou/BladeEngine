@@ -4,7 +4,7 @@
 #include <DirectX11Device.h>
 #include <DirectX11Context.h>
 #include <RHIBufferBase.h>
-#include <RHIDirectX11ShaderBase.h>
+#include <DirectX11ShaderBase.h>
 
 namespace BladeEngine
 {

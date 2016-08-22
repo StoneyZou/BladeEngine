@@ -58,6 +58,9 @@
     <Filter Include="头文件\Source\Serialization">
       <UniqueIdentifier>{ebfade99-a2f9-42b5-98bd-2d40bf57fb8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\CoreInterface">
+      <UniqueIdentifier>{6423ef1a-d6c6-4618-8b05-4f8824a69b16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Utility.h">
@@ -102,20 +105,11 @@
     <ClInclude Include="Source\Contains\TMap.h">
       <Filter>头文件\Source\Contains</Filter>
     </ClInclude>
-    <ClInclude Include="Source\RHI\RHITextureBase.h">
-      <Filter>头文件\Source\RHI</Filter>
-    </ClInclude>
     <ClInclude Include="Source\RHI\RHIShaderBase.h">
       <Filter>头文件\Source\RHI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Math\BMath.h">
       <Filter>头文件\Source\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\DirectX11\RHIDirectX11ShaderBase.h">
-      <Filter>头文件\Source\DirectX11</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\DirectX11\RHIDirectX11TextureBase.h">
-      <Filter>头文件\Source\DirectX11</Filter>
     </ClInclude>
     <ClInclude Include="Source\DirectX11\DirectX11Device.h">
       <Filter>头文件\Source\DirectX11</Filter>
@@ -140,9 +134,6 @@
     </ClInclude>
     <ClInclude Include="Source\FrameWork\BModule.h">
       <Filter>头文件\Source\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Platform\GeneralSystemAPI.h">
-      <Filter>头文件\Source\Platform</Filter>
     </ClInclude>
     <ClInclude Include="Source\FrameWork\GlobalConfig.h">
       <Filter>头文件\Source\Framework</Filter>
@@ -176,6 +167,21 @@
     </ClInclude>
     <ClInclude Include="Source\Platform\Windows\WindowsAPI.h">
       <Filter>头文件\Source\Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\RHITextureBase.h">
+      <Filter>头文件\Source\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DirectX11\DirectX11ShaderBase.h">
+      <Filter>头文件\Source\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DirectX11\DirectX11TextureBase.h">
+      <Filter>头文件\Source\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Platform\SystemAPI.h">
+      <Filter>头文件\Source\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="IConnectionManager.h">
+      <Filter>头文件\CoreInterface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

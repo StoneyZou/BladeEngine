@@ -1,15 +1,15 @@
 #include <DirectX11Device.h>
 #include <DirectX11Context.h>
 #include <DirectX11BufferBase.h>
-#include <RHIDirectX11ShaderBase.h>
-#include <RHIDirectX11TextureBase.h>
+#include <DirectX11ShaderBase.h>
+#include <DirectX11TextureBase.h>
 #include <DirectXEnumMapping.h>
 
 namespace BladeEngine
 {
     namespace RHI
     {
-        RHITextureBaseRef DirectX11Device::CreateTexture2D(const RHITextureCreateInfo& inCreateInfo)
+        RHITexture2DRef DirectX11Device::CreateTexture2D(const RHITextureCreateInfo& inCreateInfo)
         {
             D3D11_TEXTURE2D_DESC textureDesc = { 0 };
             //tDesc.BindFlags
@@ -146,8 +146,8 @@ namespace BladeEngine
             initInfo.RenderTargetView = pD3D11RenderTargetView;
             initInfo.DepthStencilView = pD3D11DepthStencilView;
             initInfo.ShaderResourceView = pD3D11ShaderResourceView;
-            initInfo.CanAsRenderTarget = inCreateInfo.Usage & ETEXTURE_USAGE_RENDER_TARGET;
-            initInfo.CanAsDepthStencil = inCreateInfo.Usage & ETEXTURE_USAGE_DEPTH_STENCIL;
+            initInfo.CanAsRenderTarget = (inCreateInfo.Usage & ETEXTURE_USAGE_RENDER_TARGET) != 0;
+            initInfo.CanAsDepthStencil = (inCreateInfo.Usage & ETEXTURE_USAGE_DEPTH_STENCIL) != 0;
             initInfo.Width = inCreateInfo.Width;;
             initInfo.Height = inCreateInfo.Height;
             initInfo.SampleCount = inCreateInfo.SampleCount;
@@ -156,8 +156,8 @@ namespace BladeEngine
             initInfo.BaseFormat = inCreateInfo.BaseFormat;
             initInfo.AccessMode = inCreateInfo.AccessMode;
 
-            RHIDirectX11Texture2D* texture2D = new RHIDirectX11Texture2D(this, initInfo);
-            return RHITextureBaseRef(texture2D);
+            DirectX11Texture2D* texture2D = new DirectX11Texture2D(this, initInfo);
+            return RHITexture2DRef(texture2D);
         }
 
         RHIVertexShaderRef DirectX11Device::CreateVextexShader(const RHIShaderCreateInfo& inCreateInfo)
@@ -455,24 +455,135 @@ namespace BladeEngine
             return RHIUniformBufferRef(uniformBuffer);
         }
 
-        RHITextureBaseRef DirectX11Device::CreateTexture2D(WindowsWindowRef inWindow)
+        RHISwapChainRef DirectX11Device::CreateSwapChain(const RHISwapChainCreateInfo& inCreateInfo)
         {
             DXGI_SWAP_CHAIN_DESC swapChainDesc = { 0 };
-            swapChainDesc.BufferCount = 2;
+            swapChainDesc.BufferCount = inCreateInfo.BufferNum;
             swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UINT;
-            swapChainDesc.BufferDesc.Height = inWindow->GetHeight();
-            swapChainDesc.BufferDesc.Width = inWindow->GetWidth();
-            swapChainDesc.BufferDesc.RefreshRate.Denominator = D3D11_REFRESH_RATE;
+            swapChainDesc.BufferDesc.Height = inCreateInfo.Window->GetHeight();
+            swapChainDesc.BufferDesc.Width = inCreateInfo.Window->GetWidth();
+            swapChainDesc.BufferDesc.RefreshRate.Denominator = 60;
             swapChainDesc.BufferDesc.RefreshRate.Numerator = 1;
             swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
             swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;		// ÔÊÐíÇÐ»»µ½È«ÆÁ
-            swapChainDesc.OutputWindow = inWindow->GetWindowHandle();
-            swapChainDesc.SampleDesc.Count = 1;
-            swapChainDesc.SampleDesc.Quality = 0;
+            swapChainDesc.OutputWindow = WindowsWindowRef(inCreateInfo.Window)->GetWindowHandle();
+            swapChainDesc.SampleDesc.Count = inCreateInfo.SampleCount;
+            swapChainDesc.SampleDesc.Quality = inCreateInfo.SampleQulity;
             swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-            swapChainDesc.Windowed = !inWindow->IsFullScreen();
+            swapChainDesc.Windowed = !inCreateInfo.Window->IsFullScreen();
 
+            IDXGISwapChain* dxgiSwapChain = NULL;
+            HRESULT hr = m_pDXGIFactory->CreateSwapChain(m_pDevice, &swapChainDesc, &dxgiSwapChain);
+            ComPtrGuard(dxgiSwapChain);
+            
+            if (FAILED(hr))
+            {
+                return NULL;
+            }
+            
+            ID3D11Texture2D* texture2D = NULL;
+            hr = dxgiSwapChain->GetBuffer(0, IID_ID3D11Texture2D, (void**)&texture2D);
+            ComPtrGuard(texture2D);
+            
+            if (FAILED(hr))
+            {
+                return NULL;
+            }
 
+            D3D11_SHADER_RESOURCE_VIEW_DESC shadowResourceViewDesc;
+            shadowResourceViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UINT;
+            shadowResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+            shadowResourceViewDesc.Texture2D.MipLevels = 0;
+            shadowResourceViewDesc.Texture2D.MostDetailedMip = 0;
+
+            ID3D11ShaderResourceView* shaderResourceView = NULL;
+            hr = m_pDevice->CreateShaderResourceView(texture2D, &shadowResourceViewDesc, &shaderResourceView);
+            ComPtrGuard(shaderResourceView);
+            
+            if (FAILED(hr))
+            {
+                //Logger::Log()
+                return NULL;
+            }
+
+            D3D11_SAMPLER_DESC samplerDesc;
+            samplerDesc.AddressU = DirectXEnumMapping::Get(inCreateInfo.Sampler.AddressU);
+            samplerDesc.AddressV = DirectXEnumMapping::Get(inCreateInfo.Sampler.AddressV);
+            samplerDesc.AddressW = DirectXEnumMapping::Get(inCreateInfo.Sampler.AddressW);
+            samplerDesc.Filter = DirectXEnumMapping::Get(inCreateInfo.Sampler.Filter);
+            samplerDesc.BorderColor[0] = inCreateInfo.Sampler.BorderColor[0];
+            samplerDesc.BorderColor[1] = inCreateInfo.Sampler.BorderColor[1];
+            samplerDesc.BorderColor[2] = inCreateInfo.Sampler.BorderColor[2];
+            samplerDesc.BorderColor[3] = inCreateInfo.Sampler.BorderColor[3];
+            samplerDesc.ComparisonFunc = DirectXEnumMapping::Get(inCreateInfo.Sampler.ComparisonFunc);
+            samplerDesc.MaxAnisotropy = inCreateInfo.Sampler.MaxAnisotropy;
+            samplerDesc.MaxLOD = inCreateInfo.Sampler.MaxLOD;
+            samplerDesc.MinLOD = inCreateInfo.Sampler.MinLOD;
+            samplerDesc.MipLODBias = inCreateInfo.Sampler.MipLODBias;
+
+            ID3D11SamplerState* samplerState = NULL;
+            if (!m_SamplerStateMap.TryGetValue(samplerDesc, &samplerState))
+            {
+                hr = m_pDevice->CreateSamplerState(&samplerDesc, &samplerState);
+                ComPtrGuard(samplerState);
+
+                if (FAILED(hr))
+                {
+                    //Logger::Log()
+                    return NULL;
+                }
+            }
+
+            D3D11_RENDER_TARGET_VIEW_DESC renderTargetDesc;
+            renderTargetDesc.Format = DXGI_FORMAT_R8G8B8A8_UINT;
+            renderTargetDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+            renderTargetDesc.Texture2D.MipSlice = 0;
+
+            ID3D11RenderTargetView* renderTargetView = NULL;
+            hr = m_pDevice->CreateRenderTargetView(texture2D, &renderTargetDesc, &renderTargetView);
+            ComPtrGuard(renderTargetView);
+
+            if (FAILED(hr))
+            {
+                //Logger::Log()
+                return NULL;
+            }
+
+            DirectX11Texture2DInitInfo textureInitInfo;
+            textureInitInfo.CanAsRenderTarget = true;
+            textureInitInfo.CanAsDepthStencil = false;
+            textureInitInfo.AccessMode = EGPU_READ_GPU_WRITE;
+            textureInitInfo.Width = inCreateInfo.Window->GetWidth();
+            textureInitInfo.Height = inCreateInfo.Window->GetHeight();
+            textureInitInfo.SampleCount = inCreateInfo.SampleCount;
+            textureInitInfo.SampleQulity = inCreateInfo.SampleQulity;
+            textureInitInfo.Usage = ETEXTURE_USAGE_RENDER_TARGET | ETEXTURE_USAGE_RENDER_TARGET;
+            textureInitInfo.DepthStencilView = NULL;
+            textureInitInfo.RenderTargetView = renderTargetView;
+            textureInitInfo.ShaderResourceView = shaderResourceView;
+            textureInitInfo.Texture = texture2D;
+
+            RHITexture2DRef rhiTexture2D(new DirectX11Texture2D(this, textureInitInfo));
+            if (rhiTexture2D == NULL)
+            {
+                //Logger::Log()
+                return NULL;
+            }
+
+            RHISwapChainInitInfo initInfo;
+            initInfo.Width = inCreateInfo.Window->GetWidth();
+            initInfo.Height = inCreateInfo.Window->GetHeight();
+            initInfo.BufferNum = inCreateInfo.BufferNum;
+            initInfo.RefreshRateDenominator = inCreateInfo.RefreshRateDenominator;
+            initInfo.RefreshRateNumerator = inCreateInfo.RefreshRateNumerator;
+            initInfo.SampleCount = inCreateInfo.SampleCount;
+            initInfo.SampleQulity = inCreateInfo.SampleQulity;
+            initInfo.Texture = rhiTexture2D;
+
+            RHISwapChainRef rhiSwapChain(new DirectX11SwapChain(this, dxgiSwapChain, initInfo));
+            m_SwapChainList.Add(rhiSwapChain);
+
+            return rhiSwapChain;
         }
 
         RHIImmediateContextRef DirectX11Device::GetImmediateContext()

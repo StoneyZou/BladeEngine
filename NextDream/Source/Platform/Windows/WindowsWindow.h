@@ -12,9 +12,6 @@ namespace BladeEngine
     class WindowsWindow : public PlatformWindow
     {
     private:
-        static TArray<WindowsWindow*> m_WindowsList;
-
-    private:
         HWND m_windowHandle;
 
     public:
@@ -48,25 +45,16 @@ namespace BladeEngine
             return WindowsWindowRef(new WindowsWindow(hWnd, inWidth, inHeight));
         }
 
-    private:
+    public:
         WindowsWindow(HWND inWindowHandle, uint32 inWidth, uint32 inHeight)
-            : PlatformWindow(inWidth, inHeight),
+            : PlatformWindow("", inWidth, inHeight, false),
             m_windowHandle(inWindowHandle)
         {
-            m_WindowsList.Add(this);
         }
 
     public:
         ~WindowsWindow()
         {
-            for (int i = 0; i < m_WindowsList.GetLength(); ++i)
-            {
-                if (m_WindowsList[i] == this)
-                {
-                    m_WindowsList.RemoveAt(i);
-                    break;
-                }
-            }
             CloseWindow(m_windowHandle);
         }
 

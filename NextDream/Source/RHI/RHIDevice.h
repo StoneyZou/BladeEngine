@@ -33,6 +33,10 @@ namespace BladeEngine
 
             virtual ~RHIResource() {}
 
+		public:
+			void InitRHI();
+			void ReleaseRHI();
+
         public:
             ECPU_GPU_ACCESS_MODE GetAccessMode() const { return m_AccessMode; }
             bool CanCpuRead()  const    { return ((m_AccessMode & ECPU_READ) != 0); }
@@ -82,6 +86,12 @@ namespace BladeEngine
 
         class RHITextureBase;
         typedef RefCountObject<RHITextureBase> RHITextureBaseRef;
+
+        class RHITexture2D;
+        typedef RefCountObject<RHITexture2D> RHITexture2DRef;
+
+        class RHISwapChain;
+        typedef RefCountObject<RHISwapChain> RHISwapChainRef;
 
         class RHIVertexBuffer;
         typedef RefCountObject<RHIVertexBuffer> RHIVertexBufferRef;
@@ -270,13 +280,36 @@ namespace BladeEngine
             ECPU_GPU_ACCESS_MODE AccessMode;
         };
 
+        struct RHISwapChainCreateInfo
+        {
+            RHITexuteSamplerInfo Sampler;
+            uint32 BufferNum;
+            uint32 SampleCount;
+            uint32 SampleQulity;
+            uint32 RefreshRateDenominator;
+            uint32 RefreshRateNumerator;
+            PlatformWindowRef Window;
+        };
+
+        struct RHISwapChainInitInfo
+        {
+            uint32 Width, Height;
+            uint32 BufferNum;
+            uint32 SampleCount;
+            uint32 SampleQulity;
+            uint32 RefreshRateDenominator;
+            uint32 RefreshRateNumerator;
+            PlatformWindowRef Window;
+            RHITexture2DRef Texture;
+        };
+
         class IRHIDevice : public IReferencable
         {
         protected:
             TArray<RHIResource*> m_DeleteResourceList;
 
         public:
-           virtual RHITextureBaseRef CreateTexture2D(const RHITextureCreateInfo& inCreateInfo) = 0;
+           virtual RHITexture2DRef CreateTexture2D(const RHITextureCreateInfo& inCreateInfo) = 0;
 
            virtual RHIVertexShaderRef CreateVextexShader(const RHIShaderCreateInfo&) = 0;
 
@@ -292,7 +325,9 @@ namespace BladeEngine
 
            virtual RHIShaderStateRef CreateShaderState(const RHIShaderStateCreateInfo&) = 0;
 
-           virtual RHIUniformBufferRef CreateUniformBuffer(const RHIUniformCreateInfo&) = 0;
+           virtual RHIUniformBufferRef CreateUniformBuffer(const RHIUniformCreateInfo&) = 0; 
+           
+           virtual RHISwapChainRef CreateSwapChain(PlatformWindow& inWindow);
 
         public:
             virtual RHIImmediateContextRef GetImmediateContext() = 0;
