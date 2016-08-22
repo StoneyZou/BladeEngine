@@ -1,8 +1,8 @@
 #include <DirectX11Device.h>
 #include <DirectX11Context.h>
 #include <DirectX11BufferBase.h>
-#include <RHIDirectX11ShaderBase.h>
-#include <RHIDirectX11TextureBase.h>
+#include <DirectX11ShaderBase.h>
+#include <DirectX11TextureBase.h>
 #include <DirectXEnumMapping.h>
 
 namespace BladeEngine
@@ -455,24 +455,65 @@ namespace BladeEngine
             return RHIUniformBufferRef(uniformBuffer);
         }
 
-        RHITextureBaseRef DirectX11Device::CreateTexture2D(WindowsWindowRef inWindow)
+        RHISwapChainRef DirectX11Device::CreateSwapChain(const RHISwapChainInfo& inCreateInfo)
         {
             DXGI_SWAP_CHAIN_DESC swapChainDesc = { 0 };
-            swapChainDesc.BufferCount = 2;
+            swapChainDesc.BufferCount = inCreateInfo.BufferNum;
             swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UINT;
-            swapChainDesc.BufferDesc.Height = inWindow->GetHeight();
-            swapChainDesc.BufferDesc.Width = inWindow->GetWidth();
-            swapChainDesc.BufferDesc.RefreshRate.Denominator = D3D11_REFRESH_RATE;
+            swapChainDesc.BufferDesc.Height = inCreateInfo.Window->GetHeight();
+            swapChainDesc.BufferDesc.Width = inCreateInfo.Window->GetWidth();
+            swapChainDesc.BufferDesc.RefreshRate.Denominator = 60;
             swapChainDesc.BufferDesc.RefreshRate.Numerator = 1;
             swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
             swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;		// ÔÊÐíÇÐ»»µ½È«ÆÁ
-            swapChainDesc.OutputWindow = inWindow->GetWindowHandle();
+            swapChainDesc.OutputWindow = inCreateInfo.Window->();
             swapChainDesc.SampleDesc.Count = 1;
             swapChainDesc.SampleDesc.Quality = 0;
             swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-            swapChainDesc.Windowed = !inWindow->IsFullScreen();
+            swapChainDesc.Windowed = !inCreateInfo.Window->IsFullScreen();
 
+            IDXGISwapChain* dxgiSwapChain = NULL;
+            HRESULT hr = m_pDXGIFactory->CreateSwapChain(m_pDevice, &swapChainDesc, &dxgiSwapChain);
+            ComPtrGuard(dxgiSwapChain);
+            
+            if (FAILED(hr))
+            {
+                return NULL;
+            }
+            
+            ID3D11Texture2D texture2D = NULL;
+            hr = dxgiSwapChain->GetBuffer(0, IID_ID3D11Texture2D, &texture2D);
+            ComPtrGuard(texture2D);
+            
+            if (FAILED(hr))
+            {
+                return NULL;
+            }
 
+            D3D11_SHADER_RESOURCE_VIEW_DESC desc;
+            desc.Format = DXGI_FORMAT_R8G8B8A8_UINT;
+            desc.ViewDimension = D3D10_DSV_DIMENSION_TEXTURE2D;
+            desc.Texture2D.MipLevels = 0;
+            desc.Texture2D.MostDetailedMip = 0;
+
+            ID3D11ShaderResourceView* shaderResourceView = NULL;
+            hr = m_pDevice->CreateShaderResourceView(texture2D, &desc, &shaderResourceView);
+            ComPtrGuard(shaderResourceView);
+            
+            if (FAILED(hr))
+            {
+                return NULL;
+            }
+
+            RHISwapChainInitInfo initInfo;
+            initInfo.Width = inCreateInfo.Window->GetWidth();
+            initInfo.Height = inCreateInfo.Window->GetHeight();
+            initInfo.BufferNum = inCreateInfo.BufferNum;
+            initInfo.RefreshRateDenominator = inCreateInfo.RefreshRateDenominator;
+            initInfo.RefreshRateNumerator = inCreateInfo.RefreshRateNumerator;
+            initInfo.SampleCount = inCreateInfo.SampleCount;
+            initInfo.SampleQulity = inCreateInfo.SampleQulity;
+            initInfo.
         }
 
         RHIImmediateContextRef DirectX11Device::GetImmediateContext()

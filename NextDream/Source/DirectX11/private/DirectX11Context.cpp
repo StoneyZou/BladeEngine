@@ -1,7 +1,7 @@
 #include <DirectX11Context.h>
 #include <DirectX11BufferBase.h>
-#include <RHIDirectX11ShaderBase.h>
-#include <RHIDirectX11TextureBase.h>
+#include <DirectX11ShaderBase.h>
+#include <DirectX11TextureBase.h>
 
 namespace BladeEngine
 {

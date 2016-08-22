@@ -33,8 +33,8 @@
     <ClInclude Include="Source\Core\Utility.h" />
     <ClInclude Include="Source\DirectX11\DirectX11Context.h" />
     <ClInclude Include="Source\DirectX11\DirectX11Device.h" />
-    <ClInclude Include="Source\DirectX11\RHIDirectX11ShaderBase.h" />
-    <ClInclude Include="Source\DirectX11\RHIDirectX11TextureBase.h" />
+    <ClInclude Include="Source\DirectX11\DirectX11ShaderBase.h" />
+    <ClInclude Include="Source\DirectX11\DirectX11TextureBase.h" />
     <ClInclude Include="Source\DirectX11\DirectX11BufferBase.h" />
     <ClInclude Include="Source\DirectX11\DirectXEnumMapping.h" />
     <ClInclude Include="Source\FrameWork\BFramework.h" />
@@ -44,7 +44,7 @@
     <ClInclude Include="Source\Math\BColor.h" />
     <ClInclude Include="Source\Math\BMath.h" />
     <ClInclude Include="Source\Math\BVector.h" />
-    <ClInclude Include="Source\Platform\GeneralSystemAPI.h" />
+    <ClInclude Include="Source\Platform\SystemAPI.h" />
     <ClInclude Include="Source\Platform\Windows\MacroDefine.h" />
     <ClInclude Include="Source\Platform\Windows\PlatformWindow.h" />
     <ClInclude Include="Source\Platform\Windows\WindowsPCH.h" />
@@ -56,8 +56,8 @@
     <ClInclude Include="Source\RHI\RHIDevice.h" />
     <ClInclude Include="Source\RHI\RHIEnum.h" />
     <ClInclude Include="Source\RHI\RHIShaderBase.h" />
-    <ClInclude Include="Source\RHI\RHITextureBase.h" />
     <ClInclude Include="Source\RHI\RHIBufferBase.h" />
+    <ClInclude Include="Source\RHI\RHITextureBase.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

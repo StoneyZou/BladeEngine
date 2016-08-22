@@ -12,9 +12,6 @@ namespace BladeEngine
     class WindowsWindow : public PlatformWindow
     {
     private:
-        static TArray<WindowsWindow*> m_WindowsList;
-
-    private:
         HWND m_windowHandle;
 
     public:

@@ -20,6 +20,18 @@ namespace BladeEngine
             ID3D11ShaderResourceView* ShaderResourceView;
         };
 
+        struct DirectX11SwapChainInitInfo : public RHISwapChainInitInfo
+        {
+            uint32 Width, Height;
+            uint32 BufferNum;
+            uint32 SampleCount;
+            uint32 SampleQulity;
+            uint32 RefreshRateDenominator;
+            uint32 RefreshRateNumerator;
+            PlatformWindowRef Window;
+            RHITexture2D Texture;
+        };
+
         class RHIDirectX11Texture2D : public RHITexture2D, public IDirectX11TextureInterface
         {
         private:
@@ -143,6 +155,25 @@ namespace BladeEngine
             ID3D11RenderTargetView* GetRenderTargetView() { return m_RenderTarget; }
             ID3D11DepthStencilView* GetDepthStencilView() { return m_DepthStencil; }
             ID3D11ShaderResourceView* GetShaderResourceView() { return m_ShaderResource; }
+        };
+
+        class DirectX11SwapChain : public RHISwapChain
+        {
+        private:
+            IDXGISwapChain* m_SwapChain;
+
+        public:
+            DirectX11SwapChain(DirectX11Device* inDevice, IDXGISwapChain* inSwapChain, const RHISwapChainInitInfo& inIntiInfo)
+                : RHISwapChain(inDevice, inIntiInfo),
+                m_SwapChain(inSwapChain)
+            {
+                BladeAssert(inSwapChain != NULL);
+            }
+
+            ~DirectX11SwapChain()
+            {
+                if (inSwapChain != NULL) { inSwapChain->Release(); inSwapChain = NULL; }
+            }
         };
 
     }
