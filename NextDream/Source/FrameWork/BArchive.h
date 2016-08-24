@@ -360,7 +360,7 @@ namespace BladeEngine
 
         int PreRead()
         {
-            m_ReadBufferSize = SystemAPI::ReadFile(m_FileHandle, m_ReadBuffer.TypePtr(), m_ReadBuffer.GetLength());
+            m_ReadBufferSize = SystemAPI::ReadFile(m_FileHandle, m_ReadBuffer.TypePtr(), m_ReadBuffer.Size());
             if (m_ReadBufferSize == -1)
             {
                 m_IsFailed = true;
@@ -706,7 +706,7 @@ namespace BladeEngine
 
         int32 WriteBuffer(const byte* inBuffer, uint32 inBufferSize)
         {
-            if (inBufferSize > m_WritetBuffer.GetLength() - m_BufferWrittenLen)
+            if (inBufferSize > m_WritetBuffer.Size() - m_BufferWrittenLen)
             {
                 m_IsFailed = true;
                 return -1;
@@ -768,7 +768,7 @@ namespace BladeEngine
                 break;
             }
 
-            if (pos < m_CurFilePos && pos >= m_CurFilePos + m_WritetBuffer.GetLength())
+            if (pos < m_CurFilePos && pos >= m_CurFilePos + m_WritetBuffer.Size())
             {
                 SeekFile(m_HFile, pos);
             }
@@ -787,7 +787,7 @@ namespace BladeEngine
                 return 0;
             
             int realSize = 0;
-            if (inBufferSize > m_WritetBuffer.GetLength() - m_BufferWrittenLen)
+            if (inBufferSize > m_WritetBuffer.Size() - m_BufferWrittenLen)
             {
                 realSize = WriteFile(m_HFile, inBuffer, inBufferSize);
             }

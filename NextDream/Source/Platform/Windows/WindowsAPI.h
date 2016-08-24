@@ -100,7 +100,7 @@ namespace BladeEngine
             }
 
             tempStr.Resize(length + 1);
-            length = WideCharToMultiByte(CP_ACP, 0, inSrc, wcslen(inSrc), tempStr.TypePtr(), tempStr.GetLength(), NULL, false);
+            length = WideCharToMultiByte(CP_ACP, 0, inSrc, wcslen(inSrc), tempStr.TypePtr(), tempStr.Size(), NULL, false);
             if (length == 0)
             {
                 return "";
@@ -120,7 +120,7 @@ namespace BladeEngine
             }
 
             tempStr.Resize(length + 1);
-            length = MultiByteToWideChar(CP_ACP, 0, inSrc, strlen(inSrc), tempStr.TypePtr(), tempStr.GetLength());
+            length = MultiByteToWideChar(CP_ACP, 0, inSrc, strlen(inSrc), tempStr.TypePtr(), tempStr.Size());
             if (length == 0)
             {
                 return L"";
@@ -225,29 +225,35 @@ namespace BladeEngine
             return result;
         }
 
-        static WindowsWindowRef CreatePlatformWindow(const TCHAR* inWindowName, uint32 inWidth, uint32 inHeight)
+        static WindowsWindowRef CreatePlatformWindow(const TCHAR* inWindowName, uint32 inLeft, uint32 inTop, uint32 inWidth, uint32 inHeight)
         {
             // 获取当前进程的实例句柄
             HINSTANCE hInstance = GetModuleHandle(0);
 
             WNDCLASS wndClass = { 0 };
-            wndClass.cbClsExtra = 0;	// 无class扩展
-            wndClass.cbWndExtra = 0;	// 无窗口扩展
-            wndClass.hbrBackground = (HBRUSH)(GetStockObject(WHITE_BRUSH));		// 取得白色画刷
-            wndClass.hCursor = LoadCursor(nullptr, IDI_APPLICATION);			// 取应用程序默认光标
-            wndClass.hIcon = LoadIcon(nullptr, IDC_ICON);						// 取默认图标
+            wndClass.cbClsExtra = 0;                                            // 无class扩展
+            wndClass.cbWndExtra = 0;                                            // 无窗口扩展
+            wndClass.hbrBackground = (HBRUSH)(GetStockObject(WHITE_BRUSH));	    // 取得白色画刷
+            wndClass.hCursor = LoadCursor(nullptr, IDI_APPLICATION);            // 取应用程序默认光标
+            wndClass.hIcon = LoadIcon(nullptr, IDC_ICON);                       // 取默认图标
             wndClass.hInstance = hInstance;
             wndClass.lpfnWndProc = ::DefWindowProc;
             wndClass.lpszClassName = "D3D11RenderWindow";
             wndClass.lpszMenuName = "";
-            wndClass.style = 0;		// 默认格式
-                                    // 注册窗口类
+            wndClass.style = 0;                                                 // 默认格式
+            
+            // 注册窗口类
             RegisterClass(&wndClass);
 
             HWND hWnd = CreateWindow("D3D11RenderWindow", inWindowName, WS_VISIBLE | WS_OVERLAPPEDWINDOW,
-                50, 50, inWidth, inHeight, nullptr, nullptr, hInstance, 0);
-            
-            return WindowsWindowRef(new WindowsWindow(hWnd, inWidth, inHeight));
+                inLeft, inTop, inWidth, inHeight, nullptr, nullptr, hInstance, 0);
+
+            if (hWnd == 0)
+            {
+                return WindowsWindowRef();
+            }
+
+            return WindowsWindowRef(new WindowsWindow(inWindowName, inLeft, inTop, inWidth, inHeight, hWnd));
         }
 
         static void ClosePlatformWindow(WindowHandle inWindowHandle)

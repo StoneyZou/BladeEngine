@@ -27,13 +27,15 @@ namespace BladeEngine
     protected:
         bool m_bFullScreen;
 
+        uint32 m_Left;
+        uint32 m_Top;
         uint32 m_width;
         uint32 m_height;
         //BString m_windowName;
 
     protected:
-        PlatformWindow(const TCHAR* inWindowName, uint32 inWidth, uint32 inHeight, bool inFullScreen) 
-            : m_width(inWidth), m_height(inHeight),
+        PlatformWindow(const TCHAR* inWindowName, uint32 inLeft, uint32 inTop, uint32 inWidth, uint32 inHeight, bool inFullScreen)
+            : m_Left(inLeft), m_Top(inTop), m_width(inWidth), m_height(inHeight),
             m_bFullScreen(inFullScreen)
         {
 			m_WindowsList.Add(this);
@@ -42,7 +44,7 @@ namespace BladeEngine
 	public:
 		virtual ~PlatformWindow()
 		{
-            for (uint32 i = 0; i < m_WindowsList.GetLength(); ++i)
+            for (uint32 i = 0; i < m_WindowsList.Size(); ++i)
             {
                 if (m_WindowsList[i] == this)
                 {

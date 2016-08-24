@@ -40,9 +40,6 @@
     <Filter Include="头文件\Source\Core\Private">
       <UniqueIdentifier>{50bec063-ebab-4d90-8f8c-6219131b719f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\Source\RHI\Private">
-      <UniqueIdentifier>{aaecbf73-f44f-4497-a77e-b5b858c43df4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="头文件\Source\Platform">
       <UniqueIdentifier>{5b205555-564d-4899-b367-12fddc14c8c6}</UniqueIdentifier>
     </Filter>
@@ -196,9 +193,6 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>头文件\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="RHIPrivate.cpp">
-      <Filter>头文件\Source\RHI\Private</Filter>
     </ClCompile>
     <ClCompile Include="Source\FrameWork\Private\GlobalConfig.cpp">
       <Filter>头文件\Source\Framework\Private</Filter>

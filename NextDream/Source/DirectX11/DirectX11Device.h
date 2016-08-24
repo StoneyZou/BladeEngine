@@ -42,15 +42,15 @@ namespace BladeEngine
             public:
                 static int32 Compare(const TArray<Type>& lh, const TArray<Type>& rh)
                 {
-                    if (lh.GetLength() < rh.GetLength())
+                    if (lh.Size() < rh.Size())
                     {
                         return 1;
                     }
-                    else if(lh.GetLength() > rh.GetLength())
+                    else if(lh.Size() > rh.Size())
                     {
                         return -1;
                     }
-                    return  MemUtil::Memcmp(lh.VoidPtr(), rh.VoidPtr(), lh.GetLength() * sizeof(Type));
+                    return  MemUtil::Memcmp(lh.VoidPtr(), rh.VoidPtr(), lh.Size() * sizeof(Type));
                 }
             };
 
@@ -74,7 +74,7 @@ namespace BladeEngine
             UniformBufferList m_UniformBufferList;
 
             TArray<D3D11_INPUT_ELEMENT_DESC> m_TempInputElementDescs;
-            TArray<RHISwapChainRef> m_SwapChainList;
+            TArray<DirectX11SwapChain> m_SwapChainList;
 
         public:
             DirectX11Device(IDXGIFactory* inFactory, ID3D11Device* inDevice, ID3D11DeviceContext* inContext) 
@@ -110,6 +110,8 @@ namespace BladeEngine
             virtual RHIUniformBufferRef CreateUniformBuffer(const RHIUniformCreateInfo& inCreateInfo);
 
             virtual RHISwapChainRef CreateSwapChain(const RHISwapChainCreateInfo& inCreateInfo);
+
+            virtual RHISwapChainRef GetSwapChain(PlatformWindowRef inWindow);
 
         public:
             virtual RHIImmediateContextRef GetImmediateContext();
@@ -217,7 +219,7 @@ namespace BladeEngine
             if (m_DXGIFactory != NULL) { m_DXGIFactory->Release(); }
             if (m_Device != NULL) { delete m_Device; }
 
-            for(uint32 i = 0; i < m_Adapters.GetLength(); ++i)
+            for(uint32 i = 0; i < m_Adapters.Size(); ++i)
             {
                 if(m_Adapters[i] != NULL)
                 {
@@ -240,7 +242,7 @@ namespace BladeEngine
 
         virtual bool InitDevice(uint32 inAdapterIndex)
         {
-            if(inAdapterIndex < 0 || inAdapterIndex >= m_Adapters.GetLength())
+            if(inAdapterIndex < 0 || inAdapterIndex >= m_Adapters.Size())
             {
                 //
                 return false;

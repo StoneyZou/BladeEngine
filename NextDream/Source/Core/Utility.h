@@ -225,8 +225,6 @@ namespace BladeEngine
 		ReferenceType* GetReferencePtr() { return m_pPtr; }
 		const ReferenceType* GetReferencePtr() const { return m_pPtr; }
 
-		bool IsNull() { return m_pPtr == NULL; }
-
         bool operator == (TYPE_OF_NULLPTR) const { return m_pPtr == NULL; }
 
         bool operator != (TYPE_OF_NULLPTR) const { return m_pPtr != NULL; }

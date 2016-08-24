@@ -356,11 +356,11 @@ namespace BladeEngine
         virtual bool InitDevice(uint32 inAdapterIndex) = 0;
 
     public:
-        uint32 GetAdapterNum() const { return m_AdapterNames.GetLength(); }
+        uint32 GetAdapterNum() const { return m_AdapterNames.Size(); }
         
         const BString& GetAdapterName(uint32 inIndex) const 
         { 
-            if(inIndex < 0 || inIndex >= m_AdapterNames.GetLength())
+            if(inIndex < 0 || inIndex >= m_AdapterNames.Size())
             {
                 return NullAdapterName;
             }

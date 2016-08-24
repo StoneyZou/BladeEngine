@@ -385,7 +385,7 @@ namespace BladeEngine
             SIZE_T packDataSize = ((inCreateInfo.DataSize >> 4) + 1) << 4;
 
             DirectX11UniformBuffer* uniformBuffer = NULL;
-            for (SIZE_T i = 0; i < m_UniformBufferList.GetLength(); ++i)
+            for (SIZE_T i = 0; i < m_UniformBufferList.Size(); ++i)
             {
                 if (m_UniformBufferList[i]->GetPackSize() > packDataSize && m_UniformBufferList[i]->IsUnique())
                 {
@@ -440,8 +440,8 @@ namespace BladeEngine
                 inCreateInfo);
 
             // keep a reference
-            SIZE_T insertIndex = m_UniformBufferList.GetLength() - 1;
-            for(SIZE_T i = 0; i < m_UniformBufferList.GetLength(); ++ i)
+            SIZE_T insertIndex = m_UniformBufferList.Size() - 1;
+            for(SIZE_T i = 0; i < m_UniformBufferList.Size(); ++ i)
             {
                 if(m_UniformBufferList[i]->GetPackSize() > packDataSize)
                 {
@@ -466,7 +466,7 @@ namespace BladeEngine
             swapChainDesc.BufferDesc.RefreshRate.Numerator = 1;
             swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
             swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;		// ÔÊÐíÇÐ»»µ½È«ÆÁ
-            swapChainDesc.OutputWindow = WindowsWindowRef(inCreateInfo.Window)->GetWindowHandle();
+            swapChainDesc.OutputWindow = ((WindowsWindow*)inCreateInfo.Window.GetReferencePtr())->GetWindowHandle();
             swapChainDesc.SampleDesc.Count = inCreateInfo.SampleCount;
             swapChainDesc.SampleDesc.Quality = inCreateInfo.SampleQulity;
             swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
@@ -584,6 +584,18 @@ namespace BladeEngine
             m_SwapChainList.Add(rhiSwapChain);
 
             return rhiSwapChain;
+        }
+
+        RHISwapChainRef DirectX11Device::GetSwapChain(PlatformWindowRef inWindow)
+        {
+            for(uint32 i = 0; i < m_SwapChainList.Size(); ++i)
+            {
+                if(m_SwapChainList[i]->GetBelongToWindow() == inWindow)
+                {
+                    return m_SwapChainList[i];
+                }
+            }
+            return NULL;
         }
 
         RHIImmediateContextRef DirectX11Device::GetImmediateContext()

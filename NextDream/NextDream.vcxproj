@@ -62,7 +62,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="RHIPrivate.cpp" />
     <ClCompile Include="Source\Core\Private\CoreMisc.cpp" />
     <ClCompile Include="Source\DirectX11\private\DirectX11Context.cpp" />
     <ClCompile Include="Source\DirectX11\private\DirectX11Device.cpp" />

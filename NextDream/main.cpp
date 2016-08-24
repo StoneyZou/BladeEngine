@@ -47,7 +47,7 @@ void main()
             info.VertexNum = 3;
 
             RHI::RHIVertexBufferRef vertexBuffer = device->CreateVertexBuffer(info);
-            if(!vertexBuffer.IsNull())
+            if(vertexBuffer != NULL)
             {
                 ::printf("InitVertexBuffer Success!");
                 vertexBuffer->AddVertexDeclaration(RHI::ESHADER_SEMANTIC_POSITION, 0, RHI::EDATA_FORMAT_R32G32B32A32_FLOAT, 0);

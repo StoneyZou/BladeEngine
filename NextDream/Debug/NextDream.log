@@ -1,21 +1,262 @@
 ﻿  DirectX11Device.cpp
-e:\bladeengine\nextdream\source\core\utility.h(174): error C2440: “初始化”: 无法从“const BladeEngine::PlatformWindow *”转换为“BladeEngine::WindowsWindow *”
-  e:\bladeengine\nextdream\source\core\utility.h(174): note: 从基类型到派生类型的强制转换需要 dynamic_cast 或 static_cast
-  e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(469): note: 参见对正在编译的函数 模板 实例化“BladeEngine::RefCountObject<BladeEngine::WindowsWindow>::RefCountObject<BladeEngine::PlatformWindow>(const BladeEngine::RefCountObject<BladeEngine::PlatformWindow> &)”的引用
-  e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(469): note: 参见对正在编译的函数 模板 实例化“BladeEngine::RefCountObject<BladeEngine::WindowsWindow>::RefCountObject<BladeEngine::PlatformWindow>(const BladeEngine::RefCountObject<BladeEngine::PlatformWindow> &)”的引用
-e:\bladeengine\nextdream\source\core\utility.h(174): error C2439: “BladeEngine::RefCountObject<BladeEngine::WindowsWindow>::m_pPtr”: 未能初始化成员
-  e:\bladeengine\nextdream\source\core\utility.h(156): note: 参见“BladeEngine::RefCountObject<BladeEngine::WindowsWindow>::m_pPtr”的声明
-e:\bladeengine\nextdream\source\core\utility.h(175): error C2248: “BladeEngine::RefCountObject<BladeEngine::PlatformWindow>::m_pPtr”: 无法访问 private 成员(在“BladeEngine::RefCountObject<BladeEngine::PlatformWindow>”类中声明)
-  e:\bladeengine\nextdream\source\core\utility.h(156): note: 参见“BladeEngine::RefCountObject<BladeEngine::PlatformWindow>::m_pPtr”的声明
-  e:\bladeengine\nextdream\source\platform\windows\platformwindow.h(11): note: 参见“BladeEngine::RefCountObject<BladeEngine::PlatformWindow>”的声明
-  RHIPrivate.cpp
-c1xx : fatal error C1083: 无法打开源文件: “RHIPrivate.cpp”: No such file or directory
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C2146: 语法错误: 缺少“)”(在标识符“inWidth”的前面)
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C3646: “inWidth”: 未知重写说明符
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C3646: “inHeight”: 未知重写说明符
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C2059: 语法错误:“,”
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C2059: 语法错误:“:”
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C2334: “:”的前面有意外标记；跳过明显的函数体
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(9): error C2143: 语法错误: 缺少“;”(在“namespace”的前面)
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(45): error C2661: “BladeEngine::WindowsWindow::WindowsWindow”: 没有重载函数接受 3 个参数
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(195): error C2039: “ESEEK_POS_BEGIN”: 不是“BladeEngine::BladeEngine”的成员
+  e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(9): note: 参见“BladeEngine::BladeEngine”的声明
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(198): error C2039: “ESEEK_POS_CUR”: 不是“BladeEngine::BladeEngine”的成员
+  e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(9): note: 参见“BladeEngine::BladeEngine”的声明
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(201): error C2039: “ESEEK_POS_END”: 不是“BladeEngine::BladeEngine”的成员
+  e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(9): note: 参见“BladeEngine::BladeEngine”的声明
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(250): error C2661: “BladeEngine::WindowsWindow::WindowsWindow”: 没有重载函数接受 3 个参数
+e:\bladeengine\nextdream\source\directx11\directx11device.h(77): error C2065: “DirectX11SwapChain”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\directx11device.h(77): error C2923: “BladeEngine::TArray”: 对于参数“Type”，“DirectX11SwapChain”不是有效的 模板 类型变量
+e:\bladeengine\nextdream\source\directx11\directx11device.h(82): error C2512: “BladeEngine::TArray”: 没有合适的默认构造函数可用
+  e:\bladeengine\nextdream\source\contains\tarray.h(10): note: 参见“BladeEngine::TArray”的声明
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(18): error C2039: “int8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(18): error C2873: “int8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(18): error C2039: “int16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(18): error C2873: “int16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(19): error C2039: “int32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(19): error C2873: “int32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(19): error C2039: “int64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(19): error C2873: “int64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(20): error C2039: “uint8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(20): error C2873: “uint8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(20): error C2039: “uint16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(20): error C2873: “uint16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(21): error C2039: “uint32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(21): error C2873: “uint32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(21): error C2039: “uint64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(21): error C2873: “uint64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(23): error C2039: “int_least8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(23): error C2873: “int_least8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(23): error C2039: “int_least16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(23): error C2873: “int_least16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(24): error C2039: “int_least32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(24): error C2873: “int_least32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(24): error C2039: “int_least64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(24): error C2873: “int_least64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(25): error C2039: “uint_least8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(25): error C2873: “uint_least8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(25): error C2039: “uint_least16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(25): error C2873: “uint_least16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(26): error C2039: “uint_least32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(26): error C2873: “uint_least32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(26): error C2039: “uint_least64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(26): error C2873: “uint_least64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(28): error C2039: “int_fast8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(28): error C2873: “int_fast8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(28): error C2039: “int_fast16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(28): error C2873: “int_fast16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(29): error C2039: “int_fast32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(29): error C2873: “int_fast32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(29): error C2039: “int_fast64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(29): error C2873: “int_fast64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(30): error C2039: “uint_fast8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(30): error C2873: “uint_fast8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(30): error C2039: “uint_fast16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(30): error C2873: “uint_fast16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(31): error C2039: “uint_fast32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(31): error C2873: “uint_fast32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(31): error C2039: “uint_fast64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(31): error C2873: “uint_fast64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(33): error C2039: “intmax_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(33): error C2873: “intmax_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(34): error C2039: “uintmax_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(34): error C2873: “uintmax_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(37): error C2039: “int8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(37): error C2873: “int8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(37): error C2039: “int16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(37): error C2873: “int16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(38): error C2039: “int32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(38): error C2873: “int32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(38): error C2039: “int64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(38): error C2873: “int64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(39): error C2039: “uint8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(39): error C2873: “uint8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(39): error C2039: “uint16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(39): error C2873: “uint16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(40): error C2039: “uint32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(40): error C2873: “uint32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(40): error C2039: “uint64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(40): error C2873: “uint64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(42): error C2039: “int_least8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(42): error C2873: “int_least8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(42): error C2039: “int_least16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(42): error C2873: “int_least16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(43): error C2039: “int_least32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(43): error C2873: “int_least32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(43): error C2039: “int_least64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(43): error C2873: “int_least64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(44): error C2039: “uint_least8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(44): error C2873: “uint_least8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(44): error C2039: “uint_least16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(44): error C2873: “uint_least16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(45): error C2039: “uint_least32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(45): error C2873: “uint_least32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(45): error C2039: “uint_least64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(45): error C2873: “uint_least64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(47): error C2039: “int_fast8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(47): error C2873: “int_fast8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(47): fatal error C1003: 错误计数超过 100；正在停止编译
+  DirectX11Context.cpp
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C2146: 语法错误: 缺少“)”(在标识符“inWidth”的前面)
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C3646: “inWidth”: 未知重写说明符
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C3646: “inHeight”: 未知重写说明符
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C2059: 语法错误:“,”
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C2059: 语法错误:“:”
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C2334: “:”的前面有意外标记；跳过明显的函数体
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(9): error C2143: 语法错误: 缺少“;”(在“namespace”的前面)
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(45): error C2661: “BladeEngine::WindowsWindow::WindowsWindow”: 没有重载函数接受 3 个参数
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(195): error C2039: “ESEEK_POS_BEGIN”: 不是“BladeEngine::BladeEngine”的成员
+  e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(9): note: 参见“BladeEngine::BladeEngine”的声明
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(198): error C2039: “ESEEK_POS_CUR”: 不是“BladeEngine::BladeEngine”的成员
+  e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(9): note: 参见“BladeEngine::BladeEngine”的声明
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(201): error C2039: “ESEEK_POS_END”: 不是“BladeEngine::BladeEngine”的成员
+  e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(9): note: 参见“BladeEngine::BladeEngine”的声明
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(250): error C2661: “BladeEngine::WindowsWindow::WindowsWindow”: 没有重载函数接受 3 个参数
+e:\bladeengine\nextdream\source\directx11\directx11device.h(77): error C2065: “DirectX11SwapChain”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\directx11device.h(77): error C2923: “BladeEngine::TArray”: 对于参数“Type”，“DirectX11SwapChain”不是有效的 模板 类型变量
+e:\bladeengine\nextdream\source\directx11\directx11device.h(82): error C2512: “BladeEngine::TArray”: 没有合适的默认构造函数可用
+  e:\bladeengine\nextdream\source\contains\tarray.h(10): note: 参见“BladeEngine::TArray”的声明
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(18): error C2039: “int8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(18): error C2873: “int8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(18): error C2039: “int16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(18): error C2873: “int16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(19): error C2039: “int32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(19): error C2873: “int32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(19): error C2039: “int64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(19): error C2873: “int64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(20): error C2039: “uint8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(20): error C2873: “uint8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(20): error C2039: “uint16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(20): error C2873: “uint16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(21): error C2039: “uint32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(21): error C2873: “uint32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(21): error C2039: “uint64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(21): error C2873: “uint64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(23): error C2039: “int_least8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(23): error C2873: “int_least8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(23): error C2039: “int_least16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(23): error C2873: “int_least16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(24): error C2039: “int_least32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(24): error C2873: “int_least32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(24): error C2039: “int_least64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(24): error C2873: “int_least64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(25): error C2039: “uint_least8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(25): error C2873: “uint_least8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(25): error C2039: “uint_least16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(25): error C2873: “uint_least16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(26): error C2039: “uint_least32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(26): error C2873: “uint_least32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(26): error C2039: “uint_least64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(26): error C2873: “uint_least64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(28): error C2039: “int_fast8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(28): error C2873: “int_fast8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(28): error C2039: “int_fast16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(28): error C2873: “int_fast16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(29): error C2039: “int_fast32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(29): error C2873: “int_fast32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(29): error C2039: “int_fast64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(29): error C2873: “int_fast64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(30): error C2039: “uint_fast8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(30): error C2873: “uint_fast8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(30): error C2039: “uint_fast16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(30): error C2873: “uint_fast16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(31): error C2039: “uint_fast32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(31): error C2873: “uint_fast32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(31): error C2039: “uint_fast64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(31): error C2873: “uint_fast64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(33): error C2039: “intmax_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(33): error C2873: “intmax_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(34): error C2039: “uintmax_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(34): error C2873: “uintmax_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(37): error C2039: “int8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(37): error C2873: “int8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(37): error C2039: “int16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(37): error C2873: “int16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(38): error C2039: “int32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(38): error C2873: “int32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(38): error C2039: “int64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(38): error C2873: “int64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(39): error C2039: “uint8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(39): error C2873: “uint8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(39): error C2039: “uint16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(39): error C2873: “uint16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(40): error C2039: “uint32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(40): error C2873: “uint32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(40): error C2039: “uint64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(40): error C2873: “uint64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(42): error C2039: “int_least8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(42): error C2873: “int_least8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(42): error C2039: “int_least16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(42): error C2873: “int_least16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(43): error C2039: “int_least32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(43): error C2873: “int_least32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(43): error C2039: “int_least64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(43): error C2873: “int_least64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(44): error C2039: “uint_least8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(44): error C2873: “uint_least8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(44): error C2039: “uint_least16_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(44): error C2873: “uint_least16_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(45): error C2039: “uint_least32_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(45): error C2873: “uint_least32_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(45): error C2039: “uint_least64_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(45): error C2873: “uint_least64_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(47): error C2039: “int_fast8_t”: 不是“`global namespace'”的成员
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(47): error C2873: “int_fast8_t”: 符号不能用在 using 声明中
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\cstdint(47): fatal error C1003: 错误计数超过 100；正在停止编译
   正在生成代码...
   正在编译...
-  CoreMisc.cpp
+  GlobalConfig.cpp
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C2146: 语法错误: 缺少“)”(在标识符“inWidth”的前面)
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C3646: “inWidth”: 未知重写说明符
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C3646: “inHeight”: 未知重写说明符
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C2059: 语法错误:“,”
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C2059: 语法错误:“:”
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C2334: “:”的前面有意外标记；跳过明显的函数体
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(9): error C2143: 语法错误: 缺少“;”(在“namespace”的前面)
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(45): error C2661: “BladeEngine::WindowsWindow::WindowsWindow”: 没有重载函数接受 3 个参数
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(195): error C2039: “ESEEK_POS_BEGIN”: 不是“BladeEngine::BladeEngine”的成员
+  e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(9): note: 参见“BladeEngine::BladeEngine”的声明
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(198): error C2039: “ESEEK_POS_CUR”: 不是“BladeEngine::BladeEngine”的成员
+  e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(9): note: 参见“BladeEngine::BladeEngine”的声明
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(201): error C2039: “ESEEK_POS_END”: 不是“BladeEngine::BladeEngine”的成员
+  e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(9): note: 参见“BladeEngine::BladeEngine”的声明
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(250): error C2661: “BladeEngine::WindowsWindow::WindowsWindow”: 没有重载函数接受 3 个参数
+e:\bladeengine\nextdream\source\framework\private\globalconfig.cpp(10): fatal error C1004: 发现意外的文件尾
   正在生成代码...
   正在编译...
   main.cpp
-  GlobalConfig.cpp
-  DirectX11Context.cpp
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C2146: 语法错误: 缺少“)”(在标识符“inWidth”的前面)
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C3646: “inWidth”: 未知重写说明符
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C3646: “inHeight”: 未知重写说明符
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C2059: 语法错误:“,”
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C2059: 语法错误:“:”
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(49): error C2334: “:”的前面有意外标记；跳过明显的函数体
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(9): error C2143: 语法错误: 缺少“;”(在“namespace”的前面)
+e:\bladeengine\nextdream\source\platform\windows\windowswindow.h(45): error C2661: “BladeEngine::WindowsWindow::WindowsWindow”: 没有重载函数接受 3 个参数
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(195): error C2039: “ESEEK_POS_BEGIN”: 不是“BladeEngine::BladeEngine”的成员
+  e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(9): note: 参见“BladeEngine::BladeEngine”的声明
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(198): error C2039: “ESEEK_POS_CUR”: 不是“BladeEngine::BladeEngine”的成员
+  e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(9): note: 参见“BladeEngine::BladeEngine”的声明
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(201): error C2039: “ESEEK_POS_END”: 不是“BladeEngine::BladeEngine”的成员
+  e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(9): note: 参见“BladeEngine::BladeEngine”的声明
+e:\bladeengine\nextdream\source\platform\windows\windowsapi.h(250): error C2661: “BladeEngine::WindowsWindow::WindowsWindow”: 没有重载函数接受 3 个参数
+e:\bladeengine\nextdream\source\directx11\directx11device.h(77): error C2065: “DirectX11SwapChain”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\directx11device.h(77): error C2923: “BladeEngine::TArray”: 对于参数“Type”，“DirectX11SwapChain”不是有效的 模板 类型变量
+e:\bladeengine\nextdream\source\directx11\directx11device.h(82): error C2512: “BladeEngine::TArray”: 没有合适的默认构造函数可用
+  e:\bladeengine\nextdream\source\contains\tarray.h(10): note: 参见“BladeEngine::TArray”的声明
+e:\bladeengine\nextdream\main.cpp(25): error C2039: “printf”: 不是“`global namespace'”的成员
+e:\bladeengine\nextdream\main.cpp(28): error C2039: “scanf_s”: 不是“`global namespace'”的成员
+e:\bladeengine\nextdream\main.cpp(32): error C2039: “printf”: 不是“`global namespace'”的成员
+e:\bladeengine\nextdream\main.cpp(52): error C2039: “printf”: 不是“`global namespace'”的成员
+e:\bladeengine\nextdream\main.cpp(58): error C2039: “printf”: 不是“`global namespace'”的成员
+e:\bladeengine\nextdream\main.cpp(66): fatal error C1004: 发现意外的文件尾
   正在生成代码...

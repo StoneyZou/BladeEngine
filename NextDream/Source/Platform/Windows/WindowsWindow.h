@@ -15,7 +15,7 @@ namespace BladeEngine
         HWND m_windowHandle;
 
     public:
-        static WindowsWindowRef Create(const TCHAR* inWindowName, uint32 inWidth, uint32 inHeight)
+        static WindowsWindowRef Create(const TCHAR* inWindowName, uint32 inLeft, uint32 inTop, uint32 inWidth, uint32 inHeight)
         {
             // 获取当前进程的实例句柄
             HINSTANCE hInstance = GetModuleHandle(0);
@@ -35,19 +35,19 @@ namespace BladeEngine
             RegisterClass(&wndClass);
 
             HWND hWnd = CreateWindow("D3D11RenderWindow", inWindowName, WS_VISIBLE | WS_OVERLAPPEDWINDOW,
-                50, 50, inWidth, inHeight, nullptr, nullptr, hInstance, 0);
+                inLeft, inTop, inWidth, inHeight, nullptr, nullptr, hInstance, 0);
 
             if (hWnd == 0)
             {
                 return WindowsWindowRef();
             }
 
-            return WindowsWindowRef(new WindowsWindow(hWnd, inWidth, inHeight));
+            return WindowsWindowRef(new WindowsWindow(inWindowName, inLeft, inTop, inWidth, inHeight, hWnd));
         }
 
     public:
-        WindowsWindow(HWND inWindowHandle, uint32 inWidth, uint32 inHeight)
-            : PlatformWindow("", inWidth, inHeight, false),
+        WindowsWindow(const TCHAR* inWindowName, uint32 inLeft, uint32 inTop, uint32 inWidth, uint32 inHeight, HWND inWindowHandle)
+            : PlatformWindow(inWindowName, inLeft, inTop, inWidth, inHeight, false),
             m_windowHandle(inWindowHandle)
         {
         }

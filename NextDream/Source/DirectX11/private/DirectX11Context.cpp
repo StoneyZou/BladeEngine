@@ -196,12 +196,12 @@ namespace BladeEngine
             const RHIVertexBuffer::DeclarationTable& declarationTable = m_StateCahce.VertexBuffer->GetDeclarationTable();
 
             uint32 inputElementDescIndex = 0;
-            m_InputElementDescs.Resize(inputTable.GetLength());
+            m_InputElementDescs.Resize(inputTable.Size());
 
-            for (SIZE_T iTableIndex = 0; iTableIndex < inputTable.GetLength(); ++iTableIndex)
+            for (SIZE_T iTableIndex = 0; iTableIndex < inputTable.Size(); ++iTableIndex)
             {
                 bool foundSemantic = false;
-                for (SIZE_T dTableIndex = 0; dTableIndex < declarationTable.GetLength(); ++dTableIndex)
+                for (SIZE_T dTableIndex = 0; dTableIndex < declarationTable.Size(); ++dTableIndex)
                 {
                     if (declarationTable[dTableIndex].Semantic == inputTable[iTableIndex].Semantic ||
                         declarationTable[dTableIndex].Index == declarationTable[dTableIndex].Index)

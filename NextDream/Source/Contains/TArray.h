@@ -189,7 +189,7 @@ namespace BladeEngine
         Type* TypePtr() { return m_pData; }
         const Type* TypePtr() const { return m_pData; }
 
-        SIZE_T GetLength() const { return m_Length; }
+        SIZE_T Size() const { return m_Length; }
     };
 }
 
