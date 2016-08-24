@@ -3,6 +3,9 @@
 #include <BVector.h>
 #include <RHIBufferBase.h>
 #include <d3d11.h>
+#include <SystemAPI.h>
+#include <RHITextureBase.h>
+#include <RHIShaderBase.h>
 
 using namespace BladeEngine;
 void main()
@@ -49,9 +52,37 @@ void main()
             RHI::RHIVertexBufferRef vertexBuffer = device->CreateVertexBuffer(info);
             if(vertexBuffer != NULL)
             {
-                ::printf("InitVertexBuffer Success!");
+                ::printf("Create VertexBuffer Success!");
                 vertexBuffer->AddVertexDeclaration(RHI::ESHADER_SEMANTIC_POSITION, 0, RHI::EDATA_FORMAT_R32G32B32A32_FLOAT, 0);
             }
+
+            PlatformWindowRef window = SystemAPI::CreatePlatformWindow("Test", 0, 0, 800, 600);
+            if (window != NULL)
+            {
+                ::printf("Create Window Success!");
+            }
+
+            RHI::RHISwapChainCreateInfo swapChainCreateInfo;
+            swapChainCreateInfo.BufferNum = 2;
+            swapChainCreateInfo.RefreshRateDenominator = 60;
+            swapChainCreateInfo.RefreshRateNumerator = 1;
+            swapChainCreateInfo.SampleCount = 1;
+            swapChainCreateInfo.SampleQulity = 0;
+            swapChainCreateInfo.Window = window;
+
+            RHI::RHISwapChainRef swapChain = device->CreateSwapChain(swapChainCreateInfo);
+            if (swapChain != NULL)
+            {
+                ::printf("Create SwapChain Success!");
+            }
+
+            RHI::RHIImmediateContextRef immediateContext = device->GetImmediateContext();
+            if (immediateContext != NULL)
+            {
+                ::printf("Create immediateContext Success!");
+            }
+
+            immediateContext->SetRenderTarget(swapChain->AsTexture());
         }
         else
         {

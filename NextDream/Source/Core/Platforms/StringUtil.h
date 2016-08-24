@@ -44,23 +44,6 @@ namespace BladeEngine
         {
             return inStr == NULL || Strlen(inStr) == 0;
         }
-
-        static const TCHAR* WideCahrToTChar(const WIDECHAR* inSrc)
-        {
-#ifdef _UNICODE    
-            return inSrc;
-#else
-            return SystemAPI::WideCahrToAnsiChar(inSrc);
-#endif
-        }
-
-        static const TCHAR* AnsiCahrToTChar(const ANSICHAR* inSrc)
-        {
-#ifdef _UNICODE   
-            return SystemAPI::AnsiCahrToWideChar(inSrc);
-#endif
-            return inSrc;
-        }
     };
 }
 

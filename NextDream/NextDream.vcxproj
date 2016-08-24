@@ -66,6 +66,7 @@
     <ClCompile Include="Source\DirectX11\private\DirectX11Context.cpp" />
     <ClCompile Include="Source\DirectX11\private\DirectX11Device.cpp" />
     <ClCompile Include="Source\FrameWork\Private\GlobalConfig.cpp" />
+    <ClCompile Include="Source\Platform\Private\SystemAPI.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C8A5591A-0BD7-4617-820A-E1844B8D9DDC}</ProjectGuid>

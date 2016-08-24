@@ -58,6 +58,9 @@
     <Filter Include="头文件\CoreInterface">
       <UniqueIdentifier>{6423ef1a-d6c6-4618-8b05-4f8824a69b16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Source\Platform\Private">
+      <UniqueIdentifier>{5fcb5209-c8bf-4e2d-97ac-da9409ab277f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Utility.h">
@@ -196,6 +199,9 @@
     </ClCompile>
     <ClCompile Include="Source\FrameWork\Private\GlobalConfig.cpp">
       <Filter>头文件\Source\Framework\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Platform\Private\SystemAPI.cpp">
+      <Filter>头文件\Source\Platform\Private</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

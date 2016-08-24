@@ -161,44 +161,30 @@ namespace BladeEngine
 
         RefCountObject(ReferenceType* inPtr) : m_pPtr(inPtr)
         {
-            m_pPtr->AddRef();
+            if (m_pPtr != NULL) { m_pPtr->AddRef(); }
         }
 
-        RefCountObject(const RefCountObject& rl) : m_pPtr(rl.m_pPtr)
-		{
-			rl.m_pPtr->AddRef();
-		}
-
-        template<typename Other>
-        RefCountObject(const RefCountObject<Other>& rl) : m_pPtr(rl.GetReferencePtr())
+        ~RefCountObject()
         {
-            rl.m_pPtr->AddRef();
+            if (m_pPtr != NULL) { m_pPtr->Release(); }
         }
 
-		~RefCountObject()
-		{
-			if (m_pPtr != NULL)
-			{
-				m_pPtr->Release();
-			}
-		}
+        RefCountObject& operator = (const RefCountObject& rl)
+        {
+            if (rl.m_pPtr == m_pPtr)
+            {
+                return *this;
+            }
 
-		RefCountObject& operator = (const RefCountObject& rl)
-		{
-			if (rl.m_pPtr == m_pPtr)
-			{
-				return *this;
-			}
+            if (m_pPtr != NULL)
+            {
+                m_pPtr->Release();
+            }
+            rl.m_pPtr->AddRef();
 
-			if (m_pPtr != NULL)
-			{
-				m_pPtr->Release();
-			}
-			rl.m_pPtr->AddRef();
-
-			m_pPtr = rl.m_pPtr;
+            m_pPtr = rl.m_pPtr;
             return *this;
-		}
+        }
 
         RefCountObject& operator = (TYPE_OF_NULLPTR) { m_pPtr = NULL; return *this; }
 
@@ -224,6 +210,10 @@ namespace BladeEngine
 
 		ReferenceType* GetReferencePtr() { return m_pPtr; }
 		const ReferenceType* GetReferencePtr() const { return m_pPtr; }
+
+        bool operator == (const RefCountObject& rh) const { return m_pPtr == rh.m_pPtr; }
+
+        bool operator != (const RefCountObject& rh) const { return m_pPtr != rh.m_pPtr; }
 
         bool operator == (TYPE_OF_NULLPTR) const { return m_pPtr == NULL; }
 

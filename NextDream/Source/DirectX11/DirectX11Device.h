@@ -74,20 +74,22 @@ namespace BladeEngine
             UniformBufferList m_UniformBufferList;
 
             TArray<D3D11_INPUT_ELEMENT_DESC> m_TempInputElementDescs;
-            TArray<DirectX11SwapChain> m_SwapChainList;
+            TArray<RHISwapChainRef> m_SwapChainList;
 
         public:
             DirectX11Device(IDXGIFactory* inFactory, ID3D11Device* inDevice, ID3D11DeviceContext* inContext) 
-				: m_pDevice(inDevice), m_pImmediateContext(inContext)
+				: m_pDXGIFactory(inFactory), m_pDevice(inDevice), m_pImmediateContext(inContext)
             {
-                m_pDevice->AddRef();
-                m_pImmediateContext->AddRef();
+                if (m_pDXGIFactory != NULL)         { m_pDXGIFactory->AddRef(); }
+                if (m_pDevice != NULL)              { m_pDevice->AddRef(); }
+                if (m_pImmediateContext != NULL)    { m_pImmediateContext->AddRef(); }
             }
 
             virtual ~DirectX11Device()
             {
-                m_pDevice->Release();
-                m_pImmediateContext->Release();
+                if (m_pDXGIFactory != NULL)         { m_pDXGIFactory->Release(); }
+                if (m_pDevice != NULL)              { m_pDevice->Release(); }
+                if (m_pImmediateContext != NULL)    { m_pImmediateContext->Release(); }
             }
 
         public:
@@ -207,7 +209,7 @@ namespace BladeEngine
                 ++index;
                 adapter->AddRef();
                 m_Adapters.Add(adapter);
-                m_AdapterNames.Add(StringUtil::WideCahrToTChar(desc.Description));
+                m_AdapterNames.Add(SystemAPI::WideCahrToAnsiChar(desc.Description));
             }
 
             m_DXGIFactory->AddRef();
@@ -264,7 +266,7 @@ namespace BladeEngine
                 &device, &feature, &context
             );
 
-            if (hr == E_INVALIDARG)
+            if (FAILED(hr))
             {
                 const D3D_FEATURE_LEVEL featureLevels[] = {
                     D3D_FEATURE_LEVEL_11_0,

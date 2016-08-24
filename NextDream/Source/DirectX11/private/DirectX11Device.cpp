@@ -459,7 +459,7 @@ namespace BladeEngine
         {
             DXGI_SWAP_CHAIN_DESC swapChainDesc = { 0 };
             swapChainDesc.BufferCount = inCreateInfo.BufferNum;
-            swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UINT;
+            swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
             swapChainDesc.BufferDesc.Height = inCreateInfo.Window->GetHeight();
             swapChainDesc.BufferDesc.Width = inCreateInfo.Window->GetWidth();
             swapChainDesc.BufferDesc.RefreshRate.Denominator = 60;
@@ -491,9 +491,9 @@ namespace BladeEngine
             }
 
             D3D11_SHADER_RESOURCE_VIEW_DESC shadowResourceViewDesc;
-            shadowResourceViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UINT;
+            shadowResourceViewDesc.Format = swapChainDesc.BufferDesc.Format;
             shadowResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-            shadowResourceViewDesc.Texture2D.MipLevels = 0;
+            shadowResourceViewDesc.Texture2D.MipLevels = 1;
             shadowResourceViewDesc.Texture2D.MostDetailedMip = 0;
 
             ID3D11ShaderResourceView* shaderResourceView = NULL;
@@ -506,7 +506,7 @@ namespace BladeEngine
                 return NULL;
             }
 
-            D3D11_SAMPLER_DESC samplerDesc;
+            /*D3D11_SAMPLER_DESC samplerDesc;
             samplerDesc.AddressU = DirectXEnumMapping::Get(inCreateInfo.Sampler.AddressU);
             samplerDesc.AddressV = DirectXEnumMapping::Get(inCreateInfo.Sampler.AddressV);
             samplerDesc.AddressW = DirectXEnumMapping::Get(inCreateInfo.Sampler.AddressW);
@@ -532,7 +532,7 @@ namespace BladeEngine
                     //Logger::Log()
                     return NULL;
                 }
-            }
+            }*/
 
             D3D11_RENDER_TARGET_VIEW_DESC renderTargetDesc;
             renderTargetDesc.Format = DXGI_FORMAT_R8G8B8A8_UINT;

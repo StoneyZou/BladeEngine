@@ -326,8 +326,10 @@ namespace BladeEngine
            virtual RHIShaderStateRef CreateShaderState(const RHIShaderStateCreateInfo&) = 0;
 
            virtual RHIUniformBufferRef CreateUniformBuffer(const RHIUniformCreateInfo&) = 0; 
-           
-           virtual RHISwapChainRef CreateSwapChain(PlatformWindow& inWindow);
+
+           virtual RHISwapChainRef CreateSwapChain(const RHISwapChainCreateInfo& inCreateInfo) = 0;
+
+           virtual RHISwapChainRef GetSwapChain(PlatformWindowRef inWindow) = 0;
 
         public:
             virtual RHIImmediateContextRef GetImmediateContext() = 0;
@@ -358,11 +360,11 @@ namespace BladeEngine
     public:
         uint32 GetAdapterNum() const { return m_AdapterNames.Size(); }
         
-        const BString& GetAdapterName(uint32 inIndex) const 
+        BString GetAdapterName(uint32 inIndex) const 
         { 
             if(inIndex < 0 || inIndex >= m_AdapterNames.Size())
             {
-                return NullAdapterName;
+                return "";
             }
             return m_AdapterNames[inIndex]; 
         }

@@ -176,7 +176,7 @@ namespace BladeEngine
         {
             for (SIZE_T i = 0; i < m_Length - 1; ++i)
             {
-                Type* element = &m_pData[m_Length];
+                Type* element = &m_pData[i];
                 BladeDestruct(element, Type);
             }
             m_Length = 0;
