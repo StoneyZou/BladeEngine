@@ -63,7 +63,7 @@ void main()
             }
 
             RHI::RHISwapChainCreateInfo swapChainCreateInfo;
-            swapChainCreateInfo.BufferNum = 2;
+            swapChainCreateInfo.BufferNum = 1;
             swapChainCreateInfo.RefreshRateDenominator = 60;
             swapChainCreateInfo.RefreshRateNumerator = 1;
             swapChainCreateInfo.SampleCount = 1;
@@ -82,13 +82,13 @@ void main()
                 ::printf("Create immediateContext Success!");
             }
 
-            immediateContext->SetRenderTarget(swapChain->AsTexture());
-
-            BColor color(1.0f, 0.0f, 0.0f, 0.0f);
-            immediateContext->ClearRenderTarget(color);
-
             while (!window->IsClosed())
             {
+                immediateContext->SetRenderTarget(swapChain->AsTexture());
+
+                BColor color(1.0f, 0.0f, 0.0f, 1.0f);
+                immediateContext->ClearRenderTarget(color);
+
                 window->Update();
             }
             int i = 0;
