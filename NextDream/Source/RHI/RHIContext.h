@@ -2,6 +2,7 @@
 #define __BLADE_RHI_RHI_CONTEXT_H__
 
 #include <RHIDevice.h>
+#include <BColor.h>
 
 namespace BladeEngine
 {
@@ -165,21 +166,6 @@ namespace BladeEngine
             {
                 m_Impl->Draw(inVertexNum, inVertexOffset);
                 m_ResourcesInContext.Clear();
-            }
-
-            void* Lock(IResourceLockableRef& inResource, ERES_LOCK_TYPE inType, const SIZE_T inIndex = 0)
-            {
-                return inResource->Lock(this, inType, inIndex);
-            }
-
-            void Unlock(IResourceLockableRef& inResource, const SIZE_T inIndex = 0)
-            {
-                return inResource->Unlock(this, inIndex);
-            }
-
-            RHIResourceRef Copy(IResourceCopyableRef& inResource, ECPU_GPU_ACCESS_MODE inMode)
-            {
-                return inResource->Copy(this, inMode);
             }
         };
 

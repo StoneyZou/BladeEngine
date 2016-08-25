@@ -237,7 +237,7 @@ namespace BladeEngine
             wndClass.hCursor = LoadCursor(nullptr, IDI_APPLICATION);            // 取应用程序默认光标
             wndClass.hIcon = LoadIcon(nullptr, IDC_ICON);                       // 取默认图标
             wndClass.hInstance = hInstance;
-            wndClass.lpfnWndProc = ::DefWindowProc;
+            wndClass.lpfnWndProc = WindowsWindow::WindowProc;
             wndClass.lpszClassName = "D3D11RenderWindow";
             wndClass.lpszMenuName = "";
             wndClass.style = 0;                                                 // 默认格式

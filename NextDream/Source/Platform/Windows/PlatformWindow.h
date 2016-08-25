@@ -18,7 +18,7 @@ namespace BladeEngine
 			virtual void OnWindowClose(PlatformWindow* inWindow) {};
 		};
 
-	private:
+    public:
 		static TArray<PlatformWindow*> m_WindowsList;
 
 	private:
@@ -53,6 +53,10 @@ namespace BladeEngine
                 }
             }
 		}
+
+        virtual void Update() = 0;
+
+        virtual bool IsClosed() const = 0;
 
     public:
         uint32 GetWidth() const { return m_width; };

@@ -8,7 +8,10 @@ namespace BladeEngine
     public:
         union
         {
-            float r, g, b, a;
+            struct
+            {
+                float r, g, b, a;
+            };
             float _data[4];
         };
 

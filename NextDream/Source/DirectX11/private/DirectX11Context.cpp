@@ -132,7 +132,7 @@ namespace BladeEngine
                 return;
             }
 
-            ID3D11RenderTargetView* renderTargetViewView = ((IDirectX11TextureInterface*)inTex)->GetRenderTargetView();
+            ID3D11RenderTargetView* renderTargetViewView = ((IDirectX11TextureInterface*)((DirectX11Texture2D*)inTex))->GetRenderTargetView();
             m_StateCahce.RenderTargetViews[inIndex] = renderTargetViewView;
             m_Context->OMSetRenderTargets(MAX_RENDER_TARGET_NUM, m_StateCahce.RenderTargetViews, m_StateCahce.DepthStencilView);
         }

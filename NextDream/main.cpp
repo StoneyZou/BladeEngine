@@ -83,6 +83,15 @@ void main()
             }
 
             immediateContext->SetRenderTarget(swapChain->AsTexture());
+
+            BColor color(1.0f, 0.0f, 0.0f, 0.0f);
+            immediateContext->ClearRenderTarget(color);
+
+            while (!window->IsClosed())
+            {
+                window->Update();
+            }
+            int i = 0;
         }
         else
         {

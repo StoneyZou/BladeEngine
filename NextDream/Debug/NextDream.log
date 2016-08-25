@@ -1,11 +1,2 @@
 ﻿  main.cpp
-  正在生成代码...
-  正在编译...
-  DirectX11Device.cpp
-  DirectX11Context.cpp
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhicontext.h(36): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhicontext.h(36): error C2143: 语法错误: 缺少“,”(在“&”的前面)
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhicontext.h(142): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhicontext.h(142): error C2143: 语法错误: 缺少“,”(在“&”的前面)
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhicontext.h(144): error C2065: “inColor”: 未声明的标识符
-  正在生成代码...
+  NextDream.vcxproj -> E:\BladeEngine\Debug\BladeEngine.exe

@@ -12,6 +12,7 @@ namespace BladeEngine
     class WindowsWindow : public PlatformWindow
     {
     private:
+        bool m_isClosed;
         HWND m_windowHandle;
 
     public:
@@ -45,18 +46,63 @@ namespace BladeEngine
             return WindowsWindowRef(new WindowsWindow(inWindowName, inLeft, inTop, inWidth, inHeight, hWnd));
         }
 
+        static LRESULT WINAPI WindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
+        {
+            for (uint32 i = 0; i < m_WindowsList.Size(); ++i)
+            {
+                WindowsWindow* window = static_cast<WindowsWindow*>(m_WindowsList[i]);
+                if (window != NULL && window->GetWindowHandle() == hWnd)
+                {
+                    return window->ProcessMsg(Msg, wParam, lParam);
+                }
+            }
+            return ::DefWindowProc(hWnd, Msg, wParam, lParam);
+        }
+
+    private:
+        LRESULT ProcessMsg(UINT Msg, WPARAM wParam, LPARAM lParam)
+        {
+            switch(Msg)
+            {
+            case WM_CLOSE:
+                break;
+            case WM_DESTROY:
+                m_isClosed = true;
+                break;
+            }
+            return ::DefWindowProc(m_windowHandle, Msg, wParam, lParam);
+        }
+
     public:
         WindowsWindow(const TCHAR* inWindowName, uint32 inLeft, uint32 inTop, uint32 inWidth, uint32 inHeight, HWND inWindowHandle)
             : PlatformWindow(inWindowName, inLeft, inTop, inWidth, inHeight, false),
-            m_windowHandle(inWindowHandle)
+            m_windowHandle(inWindowHandle),
+            m_isClosed(false)
         {
         }
 
     public:
         ~WindowsWindow()
         {
+            UnregisterClass(TEXT("D3D11RenderWindow"), GetModuleHandle(0));
             CloseWindow(m_windowHandle);
+            DestroyWindow(m_windowHandle);
         }
+
+        void Update()
+        {
+            MSG msg = { 0 };
+            while (GetMessage(&msg, NULL, 0, 0))
+            {
+                if (!TranslateAccelerator(msg.hwnd, 0, &msg))
+                {
+                    TranslateMessage(&msg);
+                    DispatchMessage(&msg);
+                }
+            }
+        }
+
+        bool IsClosed() const { return m_isClosed;  }
 
     public:
         HWND GetWindowHandle() { return m_windowHandle; }

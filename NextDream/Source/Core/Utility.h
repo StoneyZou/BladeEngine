@@ -152,7 +152,7 @@ namespace BladeEngine
     public:
     typedef T ReferenceType;
 
-    private:
+    protected:
         ReferenceType* m_pPtr;
 
     public:
@@ -164,7 +164,18 @@ namespace BladeEngine
             if (m_pPtr != NULL) { m_pPtr->AddRef(); }
         }
 
-        ~RefCountObject()
+        RefCountObject(const RefCountObject& rh) : m_pPtr(const_cast<ReferenceType*>(rh.m_pPtr))
+        {
+            if (m_pPtr != NULL) { m_pPtr->AddRef(); }
+        }
+
+        template<typename Other>
+        RefCountObject(const RefCountObject<Other>& rh) : m_pPtr(const_cast<ReferenceType*>((const ReferenceType*)rh.GetReferencePtr()))
+        {
+            if (m_pPtr != NULL) { m_pPtr->AddRef(); }
+        }
+
+        virtual ~RefCountObject()
         {
             if (m_pPtr != NULL) { m_pPtr->Release(); }
         }
@@ -192,12 +203,6 @@ namespace BladeEngine
 
         template<typename Other>
         operator RefCountObject<Other>()
-        {
-            return RefCountObject<Other>(static_cast<Other*>(m_pPtr));
-        }
-
-        template<typename Other>
-        operator RefCountObject<Other>() const
         {
             return RefCountObject<Other>(static_cast<Other*>(m_pPtr));
         }
