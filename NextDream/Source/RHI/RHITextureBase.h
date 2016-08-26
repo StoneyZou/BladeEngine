@@ -75,6 +75,9 @@ namespace BladeEngine
                     m_texture2D = NULL; 
             }
 
+        public:
+            virtual void Present() = 0;
+
 		public:
 			uint32 GetWidth() const { return m_texture2D->GetWidth(); }
 			uint32 GetHeight() const { return m_texture2D->GetHeight(); }

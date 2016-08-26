@@ -162,6 +162,12 @@ namespace BladeEngine
             {
                 if (m_SwapChain != NULL) { m_SwapChain->Release(); m_SwapChain = NULL; }
             }
+
+        public:
+            void Present()
+            {
+                m_SwapChain->Present(0, 0);
+            }
         };
 
     }

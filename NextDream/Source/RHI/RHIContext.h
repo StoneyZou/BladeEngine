@@ -46,6 +46,9 @@ namespace BladeEngine
 
             virtual void Flush() = 0;
 
+            virtual void SetViewport(SIZE_T inIndex, float inLeft, float inTop, float inWidth, float inHeight,
+                float inMinDepth, float inMaxDepth) = 0;
+
             //virtual bool SetUniformBuffer(RHIShaderState* inRHIShader) = 0;
         };
 
@@ -166,6 +169,12 @@ namespace BladeEngine
             {
                 m_Impl->Draw(inVertexNum, inVertexOffset);
                 m_ResourcesInContext.Clear();
+            }
+
+            void SetViewport(SIZE_T inIndex, float inLeft, float inTop, float inWidth, float inHeight,
+                float inMinDepth, float inMaxDepth)
+            {
+                m_Impl->SetViewport(inIndex, inLeft, inTop, inWidth, inHeight, inMinDepth, inMaxDepth);
             }
         };
 

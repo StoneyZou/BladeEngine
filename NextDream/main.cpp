@@ -86,8 +86,12 @@ void main()
             {
                 immediateContext->SetRenderTarget(swapChain->AsTexture());
 
-                BColor color(1.0f, 0.0f, 0.0f, 1.0f);
+                immediateContext->SetViewport(0, 0.0f, 0.0f, window->GetWidth(), window->GetHeight(), 0.0f, 1.0f);
+
+                BColor color(1.0f, 1.0f, 1.0f, 1.0f);
                 immediateContext->ClearRenderTarget(color);
+
+                swapChain->Present();
 
                 window->Update();
             }

@@ -68,9 +68,11 @@ namespace BladeEngine
                 break;
             case WM_DESTROY:
                 m_isClosed = true;
+                PostQuitMessage(0);
                 break;
             }
-            return ::DefWindowProc(m_windowHandle, Msg, wParam, lParam);
+            LRESULT hr = ::DefWindowProc(m_windowHandle, Msg, wParam, lParam);
+            return hr;
         }
 
     public:
@@ -100,6 +102,7 @@ namespace BladeEngine
                     DispatchMessage(&msg);
                 }
             }
+            int i = 0;
         }
 
         bool IsClosed() const { return m_isClosed;  }

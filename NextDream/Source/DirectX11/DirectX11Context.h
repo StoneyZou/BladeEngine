@@ -43,6 +43,7 @@ namespace BladeEngine
 
                 ID3D11DepthStencilView* DepthStencilView;
                 ID3D11RenderTargetView* RenderTargetViews[MAX_RENDER_TARGET_NUM];
+                D3D11_VIEWPORT Viewports[MAX_RENDER_TARGET_NUM];
 
                 ID3D11Buffer* UniformBuffers[MAX_SHADER_RESOURCE_CACHE_NUM];
                 ID3D11ShaderResourceView* Textures[MAX_SHADER_RESOURCE_CACHE_NUM];
@@ -95,6 +96,9 @@ namespace BladeEngine
             virtual void DrawAuto();
 
             virtual void Draw(uint32 inVertexNum, uint32 inVertexOffset);
+
+            virtual void SetViewport(SIZE_T inIndex, float inLeft, float inTop, float inWidth, float inHeight,
+                float inMinDepth, float inMaxDepth);
 
         public:
             void* LockGpuResource(ID3D11Resource* inResource, uint32 inIndex, D3D11_MAP inMapType, bool inWaitForGPU)

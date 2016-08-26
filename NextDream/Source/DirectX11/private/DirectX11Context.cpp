@@ -134,7 +134,7 @@ namespace BladeEngine
 
             ID3D11RenderTargetView* renderTargetViewView = ((IDirectX11TextureInterface*)((DirectX11Texture2D*)inTex))->GetRenderTargetView();
             m_StateCahce.RenderTargetViews[inIndex] = renderTargetViewView;
-            m_Context->OMSetRenderTargets(MAX_RENDER_TARGET_NUM, m_StateCahce.RenderTargetViews, m_StateCahce.DepthStencilView);
+            m_Context->OMSetRenderTargets(1, &m_StateCahce.RenderTargetViews[0], m_StateCahce.DepthStencilView);
         }
 
         void DirectX11ContextBaseImpl::SetDepthStencil(RHITextureBase* inTex)
@@ -158,7 +158,8 @@ namespace BladeEngine
                 {
                     if (m_StateCahce.RenderTargetViews[i] != NULL)
                     {
-                        m_Context->ClearRenderTargetView(m_StateCahce.RenderTargetViews[i], inColor._data);
+                        const FLOAT color[] = { 1.0f, 1.0f, 0.0f, 1.0f };
+                        m_Context->ClearRenderTargetView(m_StateCahce.RenderTargetViews[i], color);
                     }
                 }
             }
@@ -239,6 +240,28 @@ namespace BladeEngine
             }
 
             m_Context->Draw(inVertexNum, inVertexOffset);
+        }
+
+        void DirectX11ContextBaseImpl::SetViewport(SIZE_T inIndex, float inLeft, float inTop, float inWidth, float inHeight, 
+            float inMinDepth, float inMaxDepth)
+        {
+            if (inIndex < 0 || inIndex >= MAX_RENDER_TARGET_NUM)
+            {
+                //log
+                return;
+            }
+
+            D3D11_VIEWPORT viewport = { 0 };
+            FLOAT TopLeftX = inLeft;
+            FLOAT TopLeftY = inTop;
+            FLOAT Width = inWidth;
+            FLOAT Height = inHeight;
+            FLOAT MinDepth = inMinDepth;
+            FLOAT MaxDepth = inMaxDepth;
+
+            m_StateCahce.Viewports[inIndex] = viewport;
+
+            m_Context->RSSetViewports(1, &m_StateCahce.Viewports[0]);
         }
     };
 }
