@@ -1,2 +1,4 @@
-﻿  DirectX11Context.cpp
-  NextDream.vcxproj -> E:\BladeEngine\Debug\BladeEngine.exe
+﻿  main.cpp
+c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\main.cpp(89): warning C4244: “参数”: 从“BladeEngine::uint32”转换到“float”，可能丢失数据
+  NextDream.vcxproj -> C:\Users\rockzou\Documents\Visual Studio 2015\Projects\NextDream\Debug\BladeEngine.exe
+  NextDream.vcxproj -> C:\Users\rockzou\Documents\Visual Studio 2015\Projects\NextDream\Debug\BladeEngine.pdb (Full PDB)

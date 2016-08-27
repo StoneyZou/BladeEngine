@@ -158,8 +158,7 @@ namespace BladeEngine
                 {
                     if (m_StateCahce.RenderTargetViews[i] != NULL)
                     {
-                        const FLOAT color[] = { 1.0f, 1.0f, 0.0f, 1.0f };
-                        m_Context->ClearRenderTargetView(m_StateCahce.RenderTargetViews[i], color);
+                        m_Context->ClearRenderTargetView(m_StateCahce.RenderTargetViews[i], inColor._data);
                     }
                 }
             }
