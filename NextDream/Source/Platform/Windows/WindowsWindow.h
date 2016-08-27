@@ -102,7 +102,6 @@ namespace BladeEngine
                     DispatchMessage(&msg);
                 }
             }
-            int i = 0;
         }
 
         bool IsClosed() const { return m_isClosed;  }

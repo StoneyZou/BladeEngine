@@ -95,7 +95,6 @@ void main()
 
                 window->Update();
             }
-            int i = 0;
         }
         else
         {

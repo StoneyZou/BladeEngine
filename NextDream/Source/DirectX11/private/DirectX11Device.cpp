@@ -535,7 +535,7 @@ namespace BladeEngine
             }*/
 
             D3D11_RENDER_TARGET_VIEW_DESC renderTargetDesc;
-            renderTargetDesc.Format = DXGI_FORMAT_R8G8B8A8_UINT;
+            renderTargetDesc.Format = swapChainDesc.BufferDesc.Format;
             renderTargetDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
             renderTargetDesc.Texture2D.MipSlice = 0;
 
