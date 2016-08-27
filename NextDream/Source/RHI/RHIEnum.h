@@ -233,6 +233,14 @@ namespace BladeEngine
             ESHADER_GEOMETRY,
             ESHADER_PIXEL,
         };
+
+        enum ESHADER_MODEL
+        {
+            ESHADER_MODEL_5_0,
+            ESHADER_MODEL_4_0,
+            ESHADER_MODEL_3_0,
+            ESHADER_MODEL_2_0,
+        };
     }
 }
 
