@@ -70,6 +70,7 @@ namespace BladeEngine
                 m_TotalSize = 0;
                 for(SIZE_T i = 0; i < m_UniformBufferArray.Size(); ++i)
                 {
+                    m_UniformBufferArray[i].Offset = m_TotalSize;
                     m_TotalSize += m_UniformBufferArray[i].PackSize;
                 }
                 

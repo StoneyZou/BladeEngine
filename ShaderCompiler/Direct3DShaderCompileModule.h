@@ -171,11 +171,22 @@ namespace BladeEngine
 
                                         if (variable->GetDesc(&variableDesc) == S_OK && type != NULL && type->GetDesc(&typeDesc) == S_OK)
                                         {
-                                            resourceTable.AddAttributionDesc(
-                                                variableDesc.Name, 
-                                                uniformBufferIndex, 
-                                                variableDesc.StartOffset, 
-                                                variableDesc.Size, )
+                                            if (typeDesc.Elements != 0)
+                                            {
+                                                PlatformAPI::PrintToConsole("Not Support Array Variable!!!");
+                                                continue;
+                                            }
+                                            else if (typeDesc.Members != 0)
+                                            {
+                                                PlatformAPI::PrintToConsole("Not Support Struct Variable");
+                                                continue;
+                                            }
+
+                                            //resourceTable.AddAttributionDesc(
+                                            //    variableDesc.Name, 
+                                            //    uniformBufferIndex, 
+                                            //    variableDesc.StartOffset, 
+                                            //    variableDesc.Size, )
                                         }
                                     }
                                 }

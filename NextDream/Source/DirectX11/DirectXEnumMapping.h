@@ -328,6 +328,8 @@ namespace BladeEngine
                 }
                 return ESHADER_SEMANTIC_UNKNOWN;
             }
+
+            static ES
         };
     }
 }
