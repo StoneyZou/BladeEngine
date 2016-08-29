@@ -9,6 +9,7 @@ namespace BladeEngine
     enum EMODULE_TYPE
     {
         EMODULE_RHI,
+        EMODULE_SHADER_COMPILE,
     };
 
     enum EMODULE_RHI_SUBTYPE

@@ -2,6 +2,8 @@
 #define __BLADE_RHI_RHI_DIRECTX_ENUM_MAP_H__
 
 #include <RHIEnum.h>
+#include <TypeDefine.h>
+#include <StringUtil.h>
 
 namespace BladeEngine
 {
@@ -9,6 +11,33 @@ namespace BladeEngine
     {   
         class DirectXEnumMapping
         {
+        private:
+            const ANSICHAR* SemanticStrs[] = {
+                "BINORMAL",
+                "BLENDINDICES",
+                "BLENDWEIGHT",
+                "COLOR",
+                "NORMAL",
+                "POSITION",
+                "POSITIONT",
+                "PSIZE",
+                "TANGENT",
+                "TEXCOORD",
+            };
+
+            const ESHADER_SEMANTIC_TYPE SemanticTypes[] = {
+                ESHADER_SEMANTIC_BINORMAL,
+                ESHADER_SEMANTIC_BLENDINDICES,
+                ESHADER_SEMANTIC_BLENDWEIGHT,
+                ESHADER_SEMANTIC_COLOR,
+                ESHADER_SEMANTIC_NORMAL,
+                ESHADER_SEMANTIC_POSITION,
+                ESHADER_SEMANTIC_POSITIONT,
+                ESHADER_SEMANTIC_PSIZE,
+                ESHADER_SEMANTIC_TANGENT,
+                ESHADER_SEMANTIC_TEXCOORD,
+            };
+
         public:
             static DXGI_FORMAT Get(EDATA_FORMAT inFormat)
             {
@@ -285,6 +314,19 @@ namespace BladeEngine
 
                 //log
                 return D3D11_INPUT_PER_VERTEX_DATA;
+            }
+
+        public:
+            static ESHADER_SEMANTIC_TYPE GetSematicType(const ANSICHAR* inSemanticStr)
+            {
+                for (uint32 i = 0; i < countof(SemanticStrs); ++i)
+                {
+                    if (StringUtil::Strcmp(inSemanticStr, SemanticStrs[i]) == 0)
+                    {
+                        return SemanticTypes[i];
+                    }
+                }
+                return ESHADER_SEMANTIC_UNKNOWN;
             }
         };
     }

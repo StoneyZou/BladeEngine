@@ -1,7 +1,6 @@
 #ifndef __BLADE_CORE_PLATFORMS_STRING_H__
 #define __BLADE_CORE_PLATFORMS_STRING_H__
 
-#include <SystemAPI.h>
 #include <CharDefine.h>
 #include <TypeDefine.h>
 

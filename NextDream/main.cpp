@@ -3,7 +3,7 @@
 #include <BVector.h>
 #include <RHIBufferBase.h>
 #include <d3d11.h>
-#include <SystemAPI.h>
+#include <PlatformAPI.h>
 #include <RHITextureBase.h>
 #include <RHIShaderBase.h>
 
@@ -56,7 +56,7 @@ void main()
                 vertexBuffer->AddVertexDeclaration(RHI::ESHADER_SEMANTIC_POSITION, 0, RHI::EDATA_FORMAT_R32G32B32A32_FLOAT, 0);
             }
 
-            PlatformWindowRef window = SystemAPI::CreatePlatformWindow("Test", 0, 0, 800, 600);
+            PlatformWindowRef window = PlatformAPI::CreatePlatformWindow("Test", 0, 0, 800, 600);
             if (window != NULL)
             {
                 ::printf("Create Window Success!");

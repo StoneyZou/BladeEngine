@@ -27,6 +27,7 @@
     <ClInclude Include="Source\Core\EnumDefine.h" />
     <ClInclude Include="Source\Core\Guid.h" />
     <ClInclude Include="Source\Core\Logger.h" />
+    <ClInclude Include="Source\Core\MacroDefine.h" />
     <ClInclude Include="Source\Core\Memory.h" />
     <ClInclude Include="Source\Core\Platforms\MemUtil.h" />
     <ClInclude Include="Source\Core\Platforms\StringUtil.h" />
@@ -45,8 +46,8 @@
     <ClInclude Include="Source\Math\BColor.h" />
     <ClInclude Include="Source\Math\BMath.h" />
     <ClInclude Include="Source\Math\BVector.h" />
-    <ClInclude Include="Source\Platform\SystemAPI.h" />
-    <ClInclude Include="Source\Platform\Windows\MacroDefine.h" />
+    <ClInclude Include="Source\Platform\PlatformEnum.h" />
+    <ClInclude Include="Source\Platform\PlatformAPI.h" />
     <ClInclude Include="Source\Platform\Windows\PlatformWindow.h" />
     <ClInclude Include="Source\Platform\Windows\WindowsPCH.h" />
     <ClInclude Include="Source\Platform\Windows\WindowsAPI.h" />
@@ -66,7 +67,7 @@
     <ClCompile Include="Source\DirectX11\private\DirectX11Context.cpp" />
     <ClCompile Include="Source\DirectX11\private\DirectX11Device.cpp" />
     <ClCompile Include="Source\FrameWork\Private\GlobalConfig.cpp" />
-    <ClCompile Include="Source\Platform\Private\SystemAPI.cpp" />
+    <ClCompile Include="Source\Platform\Private\PlatformAPI.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C8A5591A-0BD7-4617-820A-E1844B8D9DDC}</ProjectGuid>

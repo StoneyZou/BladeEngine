@@ -15,6 +15,14 @@ namespace BladeEngine
         E3D_GRAPHIC_API_DIRECT3D,
         E3D_GRAPHIC_API_OPENGL,
     };
+
+    enum ESHADER_MODEL
+    {
+        ESHADER_MODEL_5_0,
+        ESHADER_MODEL_4_0,
+        ESHADER_MODEL_3_0,
+        ESHADER_MODEL_2_0,
+    };
 }
 
 #endif // !__BLADE_CODE_ENUM_DEFINE_H__

@@ -7,7 +7,7 @@
 #include <TMap.h>
 #include <BMath.h>
 #include <BModule.h>
-#include <SystemAPI.h>
+#include <PlatformAPI.h>
 #include <GlobalConfig.h>
 
 namespace BladeEngine
@@ -139,14 +139,14 @@ namespace BladeEngine
     public:
         virtual bool Load(const BString& inFileName)
         {
-            m_Module = SystemAPI::LoadBaseModule(inFileName);
-            if (!SystemAPI::CheckModuleHandleValid(m_Module))
+            m_Module = PlatformAPI::LoadBaseModule(inFileName);
+            if (!PlatformAPI::CheckModuleHandleValid(m_Module))
             {
                 //log
                 return false;
             }
 
-            m_FuncD3D11CreateDevice = (PFN_D3D11_CREATE_DEVICE)SystemAPI::GetProcAddress(m_Module, "D3D11CreateDevice");
+            m_FuncD3D11CreateDevice = (PFN_D3D11_CREATE_DEVICE)PlatformAPI::GetProcAddress(m_Module, "D3D11CreateDevice");
             if (m_FuncD3D11CreateDevice == NULL)
             {
                 //log
@@ -209,7 +209,7 @@ namespace BladeEngine
                 ++index;
                 adapter->AddRef();
                 m_Adapters.Add(adapter);
-                m_AdapterNames.Add(SystemAPI::WideCahrToAnsiChar(desc.Description));
+                m_AdapterNames.Add(PlatformAPI::WideCahrToAnsiChar(desc.Description));
             }
 
             m_DXGIFactory->AddRef();
@@ -236,7 +236,7 @@ namespace BladeEngine
 
         virtual void Unload()
         {
-            SystemAPI::FreeBaseModule(m_Module);
+            PlatformAPI::FreeBaseModule(m_Module);
 
             m_FuncD3D11CreateDevice = NULL;
             m_Module = 0;

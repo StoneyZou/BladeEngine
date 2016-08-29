@@ -8,9 +8,6 @@
 
 namespace BladeEngine
 {
-    class IReader;
-    class IWritter;
-
     class BString
     {
     private:
@@ -147,10 +144,6 @@ namespace BladeEngine
         {
             return m_Length;
         }
-
-    public:
-        friend IReader& operator >> (IReader& inReader, BString& inStr);
-        friend IWritter& operator << (IWritter& inReader, BString& inStr);
     };
 }
 

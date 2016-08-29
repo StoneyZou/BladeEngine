@@ -5,6 +5,8 @@
 #include <TArray.h>
 #include <EnumDefine.h>
 #include <WindowsWindow.h>
+#include <PlatformEnum.h>
+#include <TypeDefine.h>
 
 namespace BladeEngine
 {
@@ -33,26 +35,6 @@ namespace BladeEngine
                 m_Ptr->Release();
             }
         }
-    };
-
-    enum EFILE_ACCESS_MODE
-    {
-        EFILE_READ = 0x0001,
-        EFILE_WRITE = 0x0002,
-    };
-
-    enum EFILE_SHARE_MODE
-    {
-        EFILE_SHARE_READ = 0x0001,
-        EFILE_SHARE_WRITE = 0x0002,
-        EFILE_SHARE_DELETE = 0x0004,
-    };
-
-    enum EFILE_OPEN_MODE
-    {
-        EFIlE_CREATE,
-        EFIlE_CREATE_NEW,
-        EFILE_OPEN_EXISTING,
     };
 
     #define ComPtrGuard(ptr) _ComPtrGuard ptr##Guard(ptr)
@@ -167,7 +149,7 @@ namespace BladeEngine
             return inFileHandle != 0;
         }
 
-        static int32 ReadFile(FileHandle inFileHandle, byte* inBuf, uint32 inBufSize)
+        static SIZE_T ReadFile(FileHandle inFileHandle, byte* inBuf, uint32 inBufSize)
         {
             DWORD readSize = 0;
             if (!::ReadFile(inFileHandle, inBuf, inBufSize, &readSize, NULL))
@@ -177,7 +159,7 @@ namespace BladeEngine
             return readSize;
         }
 
-        static int32 WriteFile(FileHandle inFileHandle, const byte* inBuf, uint32 inBufSize)
+        static SIZE_T WriteFile(FileHandle inFileHandle, const byte* inBuf, uint32 inBufSize)
         {
             DWORD writeSize = 0;
             if (!::WriteFile(inFileHandle, inBuf, inBufSize, &writeSize, NULL))
@@ -187,7 +169,7 @@ namespace BladeEngine
             return writeSize;
         }
 
-        static int64 SeekFile(FileHandle inFileHandle, uint64 inOffset, ESEEK_POS inSeekPos)
+        static SIZE_T SeekFile(FileHandle inFileHandle, SIZE_T inOffset, ESEEK_POS inSeekPos)
         {
             DWORD seekPos = FILE_BEGIN;
             switch (inSeekPos)
@@ -210,18 +192,18 @@ namespace BladeEngine
 
             low32Bits = SetFilePointer(inFileHandle, low32Bits, &high32Bits, seekPos);
 
-            uint64 result = low32Bits + ((uint64)high32Bits << 32);
+            SIZE_T result = low32Bits;// +((SIZE_T)high32Bits << 32);
             return result;
         }
         
-        static uint64 GetFileSize(FileHandle inFileHandle)
+        static SIZE_T GetFileSize(FileHandle inFileHandle)
         {
             DWORD low32Bits = 0;
             DWORD high32Bits = 0;
 
             low32Bits =::GetFileSize(inFileHandle, &high32Bits);
 
-            uint64 result = low32Bits + ((uint64)high32Bits << 32);
+            SIZE_T result = low32Bits;// +((SIZE_T)high32Bits << 32);
             return result;
         }
 
@@ -259,6 +241,29 @@ namespace BladeEngine
         static void ClosePlatformWindow(WindowHandle inWindowHandle)
         {
             CloseWindow(inWindowHandle);
+        }
+
+        static uint32 PrintToConsole(const TCHAR* inBuffer, SIZE_T inBufferSize)
+        {
+            static bool hasAllocConsole = false;
+            static HANDLE stdOutHandle = NULL;
+
+            if (!hasAllocConsole)
+            {
+                hasAllocConsole = (AllocConsole() == TRUE);
+            }
+
+            if (hasAllocConsole && stdOutHandle == NULL)
+            {
+                stdOutHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+            }
+
+            DWORD writeSize = 0;
+            if (!WriteConsole(stdOutHandle, inBuffer, inBufferSize, &writeSize, NULL))
+            {
+                return -1;
+            }
+            return writeSize;
         }
     };
 }

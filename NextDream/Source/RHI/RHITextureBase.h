@@ -1,7 +1,7 @@
 #ifndef __BLADE_RHI_TEXTURE_BASE_H__
 #define __BLADE_RHI_TEXTURE_BASE_H__
 
-#include <SystemAPI.h>
+#include <PlatformAPI.h>
 #include <RHIDevice.h>
 #include <RHIContext.h>
 

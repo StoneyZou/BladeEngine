@@ -13,7 +13,7 @@ namespace BladeEngine
 {
     namespace RHI
     {
-        class RHIShaderResourceTable : public RHIResource
+        class RHIShaderResourceTable : public IReferencable
         {
         public:
             struct AttributionDesc
@@ -140,6 +140,34 @@ namespace BladeEngine
             }
         };
 
+        class RHIShaderInputTable
+        {
+        public:
+            struct InputElementDesc
+            {
+                uint32 Index;
+                uint32 Slot;
+                ESHADER_SEMANTIC_TYPE Semantic;
+            };
+
+        public:
+            typedef TArray<InputElementDesc> InputTable;
+
+        public:
+            InputTable m_InputTable;
+            
+        public:
+            void AddInputBindDesc(ESHADER_SEMANTIC_TYPE inSemantic, SIZE_T inIndex, uint32 inSlot)
+            {
+                InputElementDesc desc;
+                desc.Semantic = inSemantic;
+                desc.Slot = inSlot;
+                desc.Index = inIndex;
+
+                m_InputTable.Add(desc);
+            }
+        };
+
         class RHIShaderState : public RHIResource
         {
         private:
@@ -184,35 +212,19 @@ namespace BladeEngine
 
         class RHIVertexShader : public RHIShaderBase 
         {
-        public:
-            struct InputElementDesc
-            {
-                uint32 Index;
-                uint32 Slot;
-                ESHADER_SEMANTIC_TYPE Semantic;
-            };
-
-        public:
-            typedef TArray<InputElementDesc> InputTable;
-
         private:
-            InputTable m_InputTable;
+            RHIShaderInputTable m_InputTable;
 
         public:
             RHIVertexShader(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inDevice, inCreateInfo)
             {}
 
-            void AddInputBindDesc(const BString& inResourceName, ESHADER_SEMANTIC_TYPE inSemantic, uint32 inSlot, SIZE_T inIndex)
+            void AddInputBindDesc(ESHADER_SEMANTIC_TYPE inSemantic, uint32 inSlot, SIZE_T inIndex)
             {
-                InputElementDesc desc;
-                desc.Semantic = inSemantic;
-                desc.Slot = inSlot;
-                desc.Index = inIndex;
-
-                m_InputTable.Add(desc);
+                m_InputTable.AddInputBindDesc(inSemantic, inSlot, inIndex);
             }
 
-            const InputTable& GetInputTable() const { return m_InputTable; }
+            RHIShaderInputTable& InputTable() { return m_InputTable; }
         };
 
         class RHIHullShader : public RHIShaderBase 

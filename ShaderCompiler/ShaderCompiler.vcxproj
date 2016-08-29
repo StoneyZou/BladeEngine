@@ -29,7 +29,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\NextDream\Source\Core;$(IncludePath)</IncludePath>
+    <IncludePath>..\NextDream\Source\DirectX11;..\NextDream\Source\RHI;..\ShaderCompiler;..\NextDream\Source\FrameWork;..\NextDream\Source\Core\Private;..\NextDream\Source\Platform\Windows;..\NextDream\Source\Platform;C:\Users\rockzou\Documents\Visual Studio 2015\Projects\NextDream\NextDream\Source\Core\Platforms;..\NextDream\Source\Contains;..\NextDream\Source\Core;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -147,7 +147,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\NextDream\Source\Core\Private\CoreMisc.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Direct3DShaderCompileModule.h" />
+    <ClInclude Include="ShaderCompileModule.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

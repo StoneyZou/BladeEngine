@@ -162,9 +162,6 @@
     <ClInclude Include="Source\Platform\Windows\WindowsPCH.h">
       <Filter>头文件\Source\Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Platform\Windows\MacroDefine.h">
-      <Filter>头文件\Source\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Platform\Windows\WindowsAPI.h">
       <Filter>头文件\Source\Platform\Windows</Filter>
     </ClInclude>
@@ -177,11 +174,17 @@
     <ClInclude Include="Source\DirectX11\DirectX11TextureBase.h">
       <Filter>头文件\Source\DirectX11</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Platform\SystemAPI.h">
-      <Filter>头文件\Source\Platform</Filter>
-    </ClInclude>
     <ClInclude Include="IConnectionManager.h">
       <Filter>头文件\CoreInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\MacroDefine.h">
+      <Filter>头文件\Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Platform\PlatformEnum.h">
+      <Filter>头文件\Source\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Platform\PlatformAPI.h">
+      <Filter>头文件\Source\Platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -200,7 +203,7 @@
     <ClCompile Include="Source\FrameWork\Private\GlobalConfig.cpp">
       <Filter>头文件\Source\Framework\Private</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Platform\Private\SystemAPI.cpp">
+    <ClCompile Include="Source\Platform\Private\PlatformAPI.cpp">
       <Filter>头文件\Source\Platform\Private</Filter>
     </ClCompile>
   </ItemGroup>

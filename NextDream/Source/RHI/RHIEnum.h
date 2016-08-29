@@ -88,10 +88,15 @@ namespace BladeEngine
         enum ESHADER_SEMANTIC_TYPE
         {
             ESHADER_SEMANTIC_UNKNOWN = -1,
-            ESHADER_SEMANTIC_POSITION = 0,
-            ESHADER_SEMANTIC_NORMAL,
+            ESHADER_SEMANTIC_BINORMAL = 0,
+            ESHADER_SEMANTIC_BLENDINDICES,
+            ESHADER_SEMANTIC_BLENDWEIGHT,
             ESHADER_SEMANTIC_COLOR,
-            ESHADER_SEMANTIC_TANGNET,
+            ESHADER_SEMANTIC_NORMAL,
+            ESHADER_SEMANTIC_POSITION,
+            ESHADER_SEMANTIC_POSITIONT,
+            ESHADER_SEMANTIC_PSIZE,
+            ESHADER_SEMANTIC_TANGENT,
             ESHADER_SEMANTIC_TEXCOORD,
         };
 
@@ -232,14 +237,6 @@ namespace BladeEngine
             ESHADER_DOMAIN,
             ESHADER_GEOMETRY,
             ESHADER_PIXEL,
-        };
-
-        enum ESHADER_MODEL
-        {
-            ESHADER_MODEL_5_0,
-            ESHADER_MODEL_4_0,
-            ESHADER_MODEL_3_0,
-            ESHADER_MODEL_2_0,
         };
     }
 }
