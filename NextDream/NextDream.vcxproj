@@ -23,6 +23,7 @@
     <ClInclude Include="Source\Contains\BString.h" />
     <ClInclude Include="Source\Contains\TArray.h" />
     <ClInclude Include="Source\Contains\TMap.h" />
+    <ClInclude Include="Source\Core\BArchiveBase.h" />
     <ClInclude Include="Source\Core\CharDefine.h" />
     <ClInclude Include="Source\Core\EnumDefine.h" />
     <ClInclude Include="Source\Core\Guid.h" />
@@ -42,7 +43,6 @@
     <ClInclude Include="Source\FrameWork\BFramework.h" />
     <ClInclude Include="Source\FrameWork\BModule.h" />
     <ClInclude Include="Source\FrameWork\GlobalConfig.h" />
-    <ClInclude Include="Source\FrameWork\BArchive.h" />
     <ClInclude Include="Source\Math\BColor.h" />
     <ClInclude Include="Source\Math\BMath.h" />
     <ClInclude Include="Source\Math\BVector.h" />
@@ -60,6 +60,7 @@
     <ClInclude Include="Source\RHI\RHIShaderBase.h" />
     <ClInclude Include="Source\RHI\RHIBufferBase.h" />
     <ClInclude Include="Source\RHI\RHITextureBase.h" />
+    <ClInclude Include="Source\Serialization\BArchive.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
