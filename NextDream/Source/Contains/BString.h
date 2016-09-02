@@ -2,7 +2,7 @@
 #define __BLADE_CONTAINS_STRING_H__
 
 #include <CharDefine.h>
-#include <TypeDefine.h>
+#include <BArchiveBase.h>
 #include <StringUtil.h>
 #include <Memory.h>
 
@@ -10,6 +10,9 @@ namespace BladeEngine
 {
     class BString
     {
+        friend class IReader;
+        friend class IWritter;
+
     private:
         const TCHAR* s_NIL = "";
 
@@ -129,6 +132,22 @@ namespace BladeEngine
         }
 
     public:
+        void Reserve(uint32 inNewCapacity)
+        {
+            if (m_Capacity < inNewCapacity)
+            {
+                TCHAR* newBuffer = (TCHAR*)Malloc::Realloc(m_Buffer, inNewCapacity);
+                if (newBuffer != m_Buffer)
+                {
+                    StringUtil::Strcpy(newBuffer, m_Length, m_Buffer);
+                    Malloc::Free(m_Buffer);
+                }
+                m_Buffer = newBuffer;
+                m_Capacity = inNewCapacity;
+            }
+        }
+
+    public:
         int32 Compare(const BString& rh) const
         {
             return StringUtil::Strcmp(m_Buffer, rh.m_Buffer, m_Length < rh.m_Length ? m_Length : rh.m_Length);
@@ -144,6 +163,9 @@ namespace BladeEngine
         {
             return m_Length;
         }
+
+    public:
+
     };
 }
 

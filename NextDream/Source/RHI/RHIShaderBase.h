@@ -8,6 +8,7 @@
 #include <Utility.h>
 #include <MemUtil.h>
 #include <RHIDevice.h>
+#include <BArchive.h>
 
 namespace BladeEngine
 {
@@ -143,6 +144,39 @@ namespace BladeEngine
                 {
                     *outDesc = m_AttributionDescArr[ite.Value()];
                 }
+            }
+
+        public:
+            friend IWriter& operator << (IWriter& inWriter, const RHIShaderResourceTable& inResourceTable)
+            {
+                inWriter << m_TotalSize;
+                inWriter.Write(m_TotalData, m_TotalSize);
+
+                inWriter << m_UniformBufferArray.Size();
+                for (uint32 i = 0; i < m_UniformBufferArray.Size(); ++i)
+                {
+                    inWriter << m_UniformBufferArray[i].Offset;
+                    inWriter << m_UniformBufferArray[i].PackSize;
+                    inWriter << m_UniformBufferArray[i].Slot;
+                }
+
+                inWriter << m_AttributionDescArr.Size();
+                for (uint32 i = 0; i < m_AttributionDescArr.Size(); ++i)
+                {
+                    inWriter << m_AttributionDescArr[i].Offset;
+                    inWriter << m_AttributionDescArr[i].Size();
+                    inWriter << m_AttributionDescArr[i].Type;
+                    inWriter << m_AttributionDescArr[i].UnifromIndex;
+                }
+
+                inWriter << m_AttributionDescMap.Size();
+                BStringToIntMap::Iterator ite = m_AttributionDescMap.Begin();
+                while (ite != m_AttributionDescMap.End())
+                {
+                    inWriter << ite->Key();
+                }
+
+                return inWriter;
             }
         };
 
