@@ -22,6 +22,8 @@ namespace BladeEngine
                 SIZE_T Offset;
                 SIZE_T Size;
                 ESHADER_ATTRIB_TYPE Type;
+                SIZE_T Rows;
+                SIZE_T Cols;
             };
 
             struct UniformBufferDesc
@@ -78,7 +80,8 @@ namespace BladeEngine
                 MemUtil::Memset(m_TotalData, 0, m_TotalSize);
             }
 
-            void AddAttributionDesc(const BString& inAttrName, SIZE_T inUniformIndex, SIZE_T inOffset, SIZE_T inSize, ESHADER_ATTRIB_TYPE inType, void* inDefault)
+            void AddAttributionDesc(const BString& inAttrName, SIZE_T inUniformIndex, SIZE_T inOffset, SIZE_T inSize, 
+                ESHADER_ATTRIB_TYPE inType, SIZE_T inRows, SIZE_T inCols, void* inDefault)
             {
                 BladeAssert(inUniformIndex >= 0 && inUniformIndex < m_UniformBufferArray.Size());
 
@@ -87,6 +90,8 @@ namespace BladeEngine
                 desc.Offset = inOffset;
                 desc.Size = inSize;
                 desc.Type = inType;
+                desc.Rows = inRows;
+                desc.Cols = inCols;
 
                 m_AttributionDescMap.Insert(inAttrName, m_AttributionDescArr.Size());
                 m_AttributionDescArr.Add(desc);

@@ -7,6 +7,7 @@
 #include <BModule.h>
 #include <RHIEnum.h>
 #include <TArray.h>
+#include <PlatformWindow.h>
 
 namespace BladeEngine
 {

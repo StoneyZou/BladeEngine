@@ -93,9 +93,6 @@
     <ClInclude Include="Source\RHI\RHI.h">
       <Filter>头文件\Source\RHI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\RHI\RHIContext.h">
-      <Filter>头文件\Source\RHI</Filter>
-    </ClInclude>
     <ClInclude Include="Source\RHI\RHIDevice.h">
       <Filter>头文件\Source\RHI</Filter>
     </ClInclude>
@@ -186,6 +183,12 @@
     <ClInclude Include="Source\Platform\PlatformAPI.h">
       <Filter>头文件\Source\Platform</Filter>
     </ClInclude>
+    <ClInclude Include="Source\RHI\RHIConstant.h">
+      <Filter>头文件\Source\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FrameWork\ConstantDefine.h">
+      <Filter>头文件\Source\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\DirectX11\private\DirectX11Device.cpp">
@@ -205,6 +208,9 @@
     </ClCompile>
     <ClCompile Include="Source\Platform\Private\PlatformAPI.cpp">
       <Filter>头文件\Source\Platform\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DirectX11\private\DirectXEnumMapping.cpp">
+      <Filter>头文件\Source\DirectX11\private</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

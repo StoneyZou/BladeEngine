@@ -41,6 +41,7 @@
     <ClInclude Include="Source\DirectX11\DirectXEnumMapping.h" />
     <ClInclude Include="Source\FrameWork\BFramework.h" />
     <ClInclude Include="Source\FrameWork\BModule.h" />
+    <ClInclude Include="Source\FrameWork\ConstantDefine.h" />
     <ClInclude Include="Source\FrameWork\GlobalConfig.h" />
     <ClInclude Include="Source\FrameWork\BArchive.h" />
     <ClInclude Include="Source\Math\BColor.h" />
@@ -53,7 +54,7 @@
     <ClInclude Include="Source\Platform\Windows\WindowsAPI.h" />
     <ClInclude Include="Source\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="Source\RHI\RHI.h" />
-    <ClInclude Include="Source\RHI\RHIContext.h" />
+    <ClInclude Include="Source\RHI\RHIConstant.h" />
     <ClInclude Include="Source\RHI\RHIDataFormat.h" />
     <ClInclude Include="Source\RHI\RHIDevice.h" />
     <ClInclude Include="Source\RHI\RHIEnum.h" />
@@ -66,6 +67,7 @@
     <ClCompile Include="Source\Core\Private\CoreMisc.cpp" />
     <ClCompile Include="Source\DirectX11\private\DirectX11Context.cpp" />
     <ClCompile Include="Source\DirectX11\private\DirectX11Device.cpp" />
+    <ClCompile Include="Source\DirectX11\private\DirectXEnumMapping.cpp" />
     <ClCompile Include="Source\FrameWork\Private\GlobalConfig.cpp" />
     <ClCompile Include="Source\Platform\Private\PlatformAPI.cpp" />
   </ItemGroup>

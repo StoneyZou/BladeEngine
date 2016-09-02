@@ -1,4 +1,27 @@
-﻿  main.cpp
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\main.cpp(89): warning C4244: “参数”: 从“BladeEngine::uint32”转换到“float”，可能丢失数据
-  NextDream.vcxproj -> C:\Users\rockzou\Documents\Visual Studio 2015\Projects\NextDream\Debug\BladeEngine.exe
-  NextDream.vcxproj -> C:\Users\rockzou\Documents\Visual Studio 2015\Projects\NextDream\Debug\BladeEngine.pdb (Full PDB)
+﻿  GlobalConfig.cpp
+  DirectXEnumMapping.cpp
+e:\bladeengine\nextdream\source\directx11\private\directxenummapping.cpp(38): error C2661: “BladeEngine::StringUtil::Strcmp”: 没有重载函数接受 2 个参数
+  DirectX11Context.cpp
+e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(195): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(195): error C2143: 语法错误: 缺少“;”(在“&”的前面)
+e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(195): error C2761: “BladeEngine::RHI::RHIShaderInputTable &BladeEngine::RHI::RHIVertexShader::InputTable(void)”: 不允许成员函数重新声明
+e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(195): error C2065: “inputTable”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(195): error C2039: “GetInputTable”: 不是“BladeEngine::RHI::RHIVertexShader”的成员
+  e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(214): note: 参见“BladeEngine::RHI::RHIVertexShader”的声明
+e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(199): error C2065: “inputTable”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(199): error C2228: “.Size”的左边必须有类/结构/联合
+  e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(199): note: 类型是“unknown-type”
+e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(201): error C2065: “inputTable”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(201): error C2228: “.Size”的左边必须有类/结构/联合
+  e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(201): note: 类型是“unknown-type”
+e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(206): error C2065: “inputTable”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(206): error C2228: “.Semantic”的左边必须有类/结构/联合
+e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(212): error C2065: “inputTable”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(212): error C2228: “.Slot”的左边必须有类/结构/联合
+  正在生成代码...
+  正在编译...
+  main.cpp
+e:\bladeengine\nextdream\main.cpp(89): warning C4244: “参数”: 从“BladeEngine::uint32”转换到“float”，可能丢失数据
+  PlatformAPI.cpp
+  DirectX11Device.cpp
+  正在生成代码...

@@ -146,6 +146,13 @@ namespace BladeEngine
                     D3D11_SHADER_INPUT_BIND_DESC resourceDesc = { 0 };
                     RHI::RHIShaderResourceTable resourceTable;
 
+                    struct _cbuffer_index
+                    {
+                        ID3D11ShaderReflectionConstantBuffer* cbuffer;
+                        SIZE_T index;
+                    };
+                    TArray<_cbuffer_index> cbuffer_indexs;
+
                     while (reflection->GetResourceBindingDesc(resourceIndex++, &resourceDesc) == S_OK)
                     {
                         switch (resourceDesc.Type)
@@ -159,41 +166,66 @@ namespace BladeEngine
                                 if (cbuffer->GetDesc(&cbufferDesc) == S_OK)
                                 {
                                     SIZE_T uniformBufferIndex = resourceTable.AddUniformBufferDesc(resourceDesc.Name, resourceDesc.BindPoint, cbufferDesc.Size);
-                                    
-                                    uint32 varIndex = 0;
-                                    ID3D11ShaderReflectionVariable* variable = NULL;
+                                    _cbuffer_index cbuffer_index = { cbuffer,uniformBufferIndex };
 
-                                    while ((variable = cbuffer->GetVariableByIndex(varIndex++)) != NULL)
-                                    {
-                                        D3D11_SHADER_VARIABLE_DESC variableDesc = { 0 };
-                                        ID3D11ShaderReflectionType* type = variable->GetType();
-                                        D3D11_SHADER_TYPE_DESC typeDesc;
-
-                                        if (variable->GetDesc(&variableDesc) == S_OK && type != NULL && type->GetDesc(&typeDesc) == S_OK)
-                                        {
-                                            if (typeDesc.Elements != 0)
-                                            {
-                                                PlatformAPI::PrintToConsole("Not Support Array Variable!!!");
-                                                continue;
-                                            }
-                                            else if (typeDesc.Members != 0)
-                                            {
-                                                PlatformAPI::PrintToConsole("Not Support Struct Variable");
-                                                continue;
-                                            }
-
-                                            //resourceTable.AddAttributionDesc(
-                                            //    variableDesc.Name, 
-                                            //    uniformBufferIndex, 
-                                            //    variableDesc.StartOffset, 
-                                            //    variableDesc.Size, )
-                                        }
-                                    }
+                                    cbuffer_indexs.Add(cbuffer_index);
                                 }
                             }
                             break;
+                        case D3D_SIT_TEXTURE:
+                            resourceTable.AddResourceBindDesc(resourceDesc.Name, resourceDesc.BindPoint, resourceDesc.BindCount, RHI::ESHADER_RESOURCE_TEXTURE);
+                            break;
+                        case D3D_SIT_SAMPLER:
+                            resourceTable.AddResourceBindDesc(resourceDesc.Name, resourceDesc.BindPoint, resourceDesc.BindCount, RHI::ESHADER_RESOURCE_SAMPLER);
+                            break;
                         default:
                             break;
+                        }
+                    }
+
+                    resourceTable.BuildUniformBuffers();
+                    for (uint32 i = 0; i < cbuffer_indexs.Size(); ++i)
+                    {
+                        _cbuffer_index cbuffer_index = cbuffer_indexs[i];
+
+                        uint32 varIndex = 0;
+                        ID3D11ShaderReflectionVariable* variable = NULL;
+
+                        while ((variable = cbuffer_index.cbuffer->GetVariableByIndex(varIndex++)) != NULL)
+                        {
+                            D3D11_SHADER_VARIABLE_DESC variableDesc = { 0 };
+                            ID3D11ShaderReflectionType* type = variable->GetType();
+                            D3D11_SHADER_TYPE_DESC typeDesc;
+
+                            if (variable->GetDesc(&variableDesc) == S_OK && type != NULL && type->GetDesc(&typeDesc) == S_OK)
+                            {
+                                if (typeDesc.Elements != 0)
+                                {
+                                    PlatformAPI::PrintToConsole("Not Support Array Variable!!!");
+                                    continue;
+                                }
+                                else if (typeDesc.Members != 0)
+                                {
+                                    PlatformAPI::PrintToConsole("Not Support Struct Variable");
+                                    continue;
+                                }
+
+                                if (typeDesc.Type != D3D_SVT_INT &&
+                                    typeDesc.Type != D3D_SVT_FLOAT)
+                                {
+                                    PlatformAPI::PrintToConsole("Not Support Types);
+                                }
+
+                                resourceTable.AddAttributionDesc(
+                                    variableDesc.Name,
+                                    cbuffer_index.index,
+                                    variableDesc.StartOffset,
+                                    variableDesc.Size,
+                                    RHI::DirectXEnumMapping::GetAttrType(typeDesc.Type),
+                                    typeDesc.Rows,
+                                    typeDesc.Columns,
+                                    variableDesc.DefaultValue);
+                            }
                         }
                     }
                 }

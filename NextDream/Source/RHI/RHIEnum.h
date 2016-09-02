@@ -60,6 +60,7 @@ namespace BladeEngine
 
         enum ESHADER_ATTRIB_TYPE
         {
+            ESHADER_ATTRIB_BOOL,
             ESHADER_ATTRIB_FLOAT,
             ESHADER_ATTRIB_INT,
         };
@@ -67,7 +68,7 @@ namespace BladeEngine
         enum ESHADER_RESOURCE_TYPE
         {
             ESHADER_RESOURCE_UNKNOWN = -1,
-            ESHADER_RESOURCE_TEXTURE2D = 0,
+            ESHADER_RESOURCE_TEXTURE = 0,
             ESHADER_RESOURCE_SAMPLER,
         };
 

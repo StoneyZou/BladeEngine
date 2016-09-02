@@ -1,6 +1,9 @@
 #ifndef __BLADE_RHI_RHI_DIRECTX_ENUM_MAP_H__
 #define __BLADE_RHI_RHI_DIRECTX_ENUM_MAP_H__
 
+#include <dxgi.h>
+#include <d3d11.h>
+
 #include <RHIEnum.h>
 #include <TypeDefine.h>
 #include <StringUtil.h>
@@ -11,33 +14,6 @@ namespace BladeEngine
     {   
         class DirectXEnumMapping
         {
-        private:
-            const ANSICHAR* SemanticStrs[] = {
-                "BINORMAL",
-                "BLENDINDICES",
-                "BLENDWEIGHT",
-                "COLOR",
-                "NORMAL",
-                "POSITION",
-                "POSITIONT",
-                "PSIZE",
-                "TANGENT",
-                "TEXCOORD",
-            };
-
-            const ESHADER_SEMANTIC_TYPE SemanticTypes[] = {
-                ESHADER_SEMANTIC_BINORMAL,
-                ESHADER_SEMANTIC_BLENDINDICES,
-                ESHADER_SEMANTIC_BLENDWEIGHT,
-                ESHADER_SEMANTIC_COLOR,
-                ESHADER_SEMANTIC_NORMAL,
-                ESHADER_SEMANTIC_POSITION,
-                ESHADER_SEMANTIC_POSITIONT,
-                ESHADER_SEMANTIC_PSIZE,
-                ESHADER_SEMANTIC_TANGENT,
-                ESHADER_SEMANTIC_TEXCOORD,
-            };
-
         public:
             static DXGI_FORMAT Get(EDATA_FORMAT inFormat)
             {
@@ -317,19 +293,25 @@ namespace BladeEngine
             }
 
         public:
-            static ESHADER_SEMANTIC_TYPE GetSematicType(const ANSICHAR* inSemanticStr)
-            {
-                for (uint32 i = 0; i < countof(SemanticStrs); ++i)
-                {
-                    if (StringUtil::Strcmp(inSemanticStr, SemanticStrs[i]) == 0)
-                    {
-                        return SemanticTypes[i];
-                    }
-                }
-                return ESHADER_SEMANTIC_UNKNOWN;
-            }
+            static ESHADER_SEMANTIC_TYPE GetSematicType(const ANSICHAR* inSemanticStr);
 
-            static ES
+            static ESHADER_ATTRIB_TYPE GetAttrType(D3D_SHADER_VARIABLE_TYPE inD3DType)
+            {
+                ESHADER_ATTRIB_TYPE result = ESHADER_ATTRIB_FLOAT;
+                switch(inD3DType)
+                {
+                case D3D_SVT_INT:
+                    result = ESHADER_ATTRIB_INT;
+                    break;
+                case D3D_SVT_FLOAT:
+                    result = ESHADER_ATTRIB_FLOAT;
+                    break;
+                default:
+                    break;
+                    // log
+                }
+                return result;
+            }
         };
     }
 }
