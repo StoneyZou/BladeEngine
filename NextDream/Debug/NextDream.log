@@ -1,13 +1,43 @@
-﻿  GlobalConfig.cpp
-  DirectXEnumMapping.cpp
-e:\bladeengine\nextdream\source\directx11\private\directxenummapping.cpp(38): error C2661: “BladeEngine::StringUtil::Strcmp”: 没有重载函数接受 2 个参数
+﻿  main.cpp
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(167): error C2064: 项不会计算为接受 0 个参数的函数
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(172): error C2039: “Size”: 不是“BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>”的成员
+  e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(44): note: 参见“BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>”的声明
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(173): error C2228: “.Begin”的左边必须有类/结构/联合
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(173): error C2512: “BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>::Iterator”: 没有合适的默认构造函数可用
+  e:\bladeengine\nextdream\source\contains\tmap.h(50): note: 参见“BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>::Iterator”的声明
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(176): error C2819: “BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>::Iterator”类型没有重载成员“operator ->”
+  e:\bladeengine\nextdream\source\contains\tmap.h(50): note: 参见“BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>::Iterator”的声明
+  e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(176): note: 是否改用“.”?
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(176): error C2232: “->BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>::Iterator::Key”: 左操作数有“class”类型，使用“.”
+e:\bladeengine\nextdream\main.cpp(89): warning C4244: “参数”: 从“BladeEngine::uint32”转换到“float”，可能丢失数据
+  DirectX11Device.cpp
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(167): error C2064: 项不会计算为接受 0 个参数的函数
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(172): error C2039: “Size”: 不是“BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>”的成员
+  e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(44): note: 参见“BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>”的声明
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(173): error C2228: “.Begin”的左边必须有类/结构/联合
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(173): error C2512: “BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>::Iterator”: 没有合适的默认构造函数可用
+  e:\bladeengine\nextdream\source\contains\tmap.h(50): note: 参见“BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>::Iterator”的声明
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(176): error C2819: “BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>::Iterator”类型没有重载成员“operator ->”
+  e:\bladeengine\nextdream\source\contains\tmap.h(50): note: 参见“BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>::Iterator”的声明
+  e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(176): note: 是否改用“.”?
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(176): error C2232: “->BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>::Iterator::Key”: 左操作数有“class”类型，使用“.”
   DirectX11Context.cpp
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(167): error C2064: 项不会计算为接受 0 个参数的函数
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(172): error C2039: “Size”: 不是“BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>”的成员
+  e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(44): note: 参见“BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>”的声明
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(173): error C2228: “.Begin”的左边必须有类/结构/联合
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(173): error C2512: “BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>::Iterator”: 没有合适的默认构造函数可用
+  e:\bladeengine\nextdream\source\contains\tmap.h(50): note: 参见“BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>::Iterator”的声明
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(176): error C2819: “BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>::Iterator”类型没有重载成员“operator ->”
+  e:\bladeengine\nextdream\source\contains\tmap.h(50): note: 参见“BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>::Iterator”的声明
+  e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(176): note: 是否改用“.”?
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(176): error C2232: “->BladeEngine::TMap<BladeEngine::BString,BladeEngine::int32,BladeEngine::Contains::DefaultCompareFunc<BladeEngine::BString>>::Iterator::Key”: 左操作数有“class”类型，使用“.”
 e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(195): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
 e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(195): error C2143: 语法错误: 缺少“;”(在“&”的前面)
 e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(195): error C2761: “BladeEngine::RHI::RHIShaderInputTable &BladeEngine::RHI::RHIVertexShader::InputTable(void)”: 不允许成员函数重新声明
 e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(195): error C2065: “inputTable”: 未声明的标识符
 e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(195): error C2039: “GetInputTable”: 不是“BladeEngine::RHI::RHIVertexShader”的成员
-  e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(214): note: 参见“BladeEngine::RHI::RHIVertexShader”的声明
+  e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(253): note: 参见“BladeEngine::RHI::RHIVertexShader”的声明
 e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(199): error C2065: “inputTable”: 未声明的标识符
 e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(199): error C2228: “.Size”的左边必须有类/结构/联合
   e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(199): note: 类型是“unknown-type”
@@ -18,10 +48,4 @@ e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(206): err
 e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(206): error C2228: “.Semantic”的左边必须有类/结构/联合
 e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(212): error C2065: “inputTable”: 未声明的标识符
 e:\bladeengine\nextdream\source\directx11\private\directx11context.cpp(212): error C2228: “.Slot”的左边必须有类/结构/联合
-  正在生成代码...
-  正在编译...
-  main.cpp
-e:\bladeengine\nextdream\main.cpp(89): warning C4244: “参数”: 从“BladeEngine::uint32”转换到“float”，可能丢失数据
-  PlatformAPI.cpp
-  DirectX11Device.cpp
   正在生成代码...

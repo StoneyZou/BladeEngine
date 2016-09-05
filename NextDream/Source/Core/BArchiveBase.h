@@ -2,6 +2,7 @@
 #define __BLADE_CORE_ARCHIVE_BASE_H__
 
 #include <TypeDefine.h>
+#include <EnumDefine.h>
 
 namespace BladeEngine
 {
@@ -23,6 +24,16 @@ namespace BladeEngine
 
         WIDECHAR*& StrBuf;
         SIZE_T MaxStrLen;
+    };
+
+    struct OutputAnsiStr
+    {
+        typedef ANSICHAR CharType;
+        OutputAnsiStr(const ANSICHAR*& inStrBuf, SIZE_T inStrLen) : StrBuf(inStrBuf), StrLen(inStrLen)
+        {}
+
+        const ANSICHAR*& StrBuf;
+        SIZE_T StrLen;
     };
 
     struct OutputAnsiStr

@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\NextDream\Source\DirectX11;..\NextDream\Source\RHI;..\ShaderCompiler;..\NextDream\Source\FrameWork;..\NextDream\Source\Core\Private;..\NextDream\Source\Platform\Windows;..\NextDream\Source\Platform;C:\Users\rockzou\Documents\Visual Studio 2015\Projects\NextDream\NextDream\Source\Core\Platforms;..\NextDream\Source\Contains;..\NextDream\Source\Core;$(IncludePath)</IncludePath>
+    <IncludePath>..\NextDream\Source\Serialization;..\NextDream\Source\Core\Platforms;..\NextDream\Source\DirectX11;..\NextDream\Source\RHI;..\ShaderCompiler;..\NextDream\Source\FrameWork;..\NextDream\Source\Core\Private;..\NextDream\Source\Platform\Windows;..\NextDream\Source\Platform;C:\Users\rockzou\Documents\Visual Studio 2015\Projects\NextDream\NextDream\Source\Core\Platforms;..\NextDream\Source\Contains;..\NextDream\Source\Core;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>

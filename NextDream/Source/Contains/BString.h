@@ -10,8 +10,8 @@ namespace BladeEngine
 {
     class BString
     {
-        friend class IReader;
-        friend class IWritter;
+        friend struct IReader;
+        friend struct IWritter;
 
     private:
         const TCHAR* s_NIL = "";
@@ -165,7 +165,10 @@ namespace BladeEngine
         }
 
     public:
-
+        friend IWriter& operator << (IWriter& inWriter, const BString& inStr)
+        {
+            inWriter << inStr;
+        }
     };
 }
 

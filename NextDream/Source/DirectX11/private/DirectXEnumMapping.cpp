@@ -35,7 +35,10 @@ namespace BladeEngine
         {
             for (uint32 i = 0; i < countof(SemanticStrs); ++i)
             {
-                if (StringUtil::Strcmp(inSemanticStr, SemanticStrs[i]) == 0)
+                SIZE_T len1 = StringUtil::Strlen(inSemanticStr);
+                SIZE_T len2 = StringUtil::Strlen(SemanticStrs[i]);
+
+                if (StringUtil::Strcmp(inSemanticStr, SemanticStrs[i], len1 < len2 ? len1 : len2) == 0)
                 {
                     return SemanticTypes[i];
                 }

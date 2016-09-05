@@ -8,7 +8,7 @@
 #include <Utility.h>
 #include <MemUtil.h>
 #include <RHIDevice.h>
-#include <BArchive.h>
+#include <BArchiveBase.h>
 
 namespace BladeEngine
 {
@@ -149,31 +149,30 @@ namespace BladeEngine
         public:
             friend IWriter& operator << (IWriter& inWriter, const RHIShaderResourceTable& inResourceTable)
             {
-                inWriter << m_TotalSize;
-                inWriter.Write(m_TotalData, m_TotalSize);
+                inWriter << inResourceTable.m_TotalSize;
+                inWriter.Write(inResourceTable.m_TotalData, inResourceTable.m_TotalSize);
 
-                inWriter << m_UniformBufferArray.Size();
-                for (uint32 i = 0; i < m_UniformBufferArray.Size(); ++i)
+                inWriter << inResourceTable.m_UniformBufferArray.Size();
+                for (uint32 i = 0; i < inResourceTable.m_UniformBufferArray.Size(); ++i)
                 {
-                    inWriter << m_UniformBufferArray[i].Offset;
-                    inWriter << m_UniformBufferArray[i].PackSize;
-                    inWriter << m_UniformBufferArray[i].Slot;
+                    inWriter << inResourceTable.m_UniformBufferArray[i].Offset;
+                    inWriter << inResourceTable.m_UniformBufferArray[i].PackSize;
+                    inWriter << inResourceTable.m_UniformBufferArray[i].Slot;
                 }
 
-                inWriter << m_AttributionDescArr.Size();
-                for (uint32 i = 0; i < m_AttributionDescArr.Size(); ++i)
+                inWriter << inResourceTable.m_AttributionDescArr.Size();
+                for (uint32 i = 0; i < inResourceTable.m_AttributionDescArr.Size(); ++i)
                 {
-                    inWriter << m_AttributionDescArr[i].Offset;
-                    inWriter << m_AttributionDescArr[i].Size();
-                    inWriter << m_AttributionDescArr[i].Type;
-                    inWriter << m_AttributionDescArr[i].UnifromIndex;
+                    inWriter << inResourceTable.m_AttributionDescArr[i].Offset;
+                    inWriter << inResourceTable.m_AttributionDescArr[i].Size;
+                    inWriter << inResourceTable.m_AttributionDescArr[i].Type;
+                    inWriter << inResourceTable.m_AttributionDescArr[i].UnifromIndex;
                 }
 
-                inWriter << m_AttributionDescMap.Size();
-                BStringToIntMap::Iterator ite = m_AttributionDescMap.Begin();
-                while (ite != m_AttributionDescMap.End())
+                BStringToIntMap::Iterator ite = inResourceTable.m_AttributionDescMap.Begin();
+                while (ite != inResourceTable.m_AttributionDescMap.End())
                 {
-                    inWriter << ite->Key();
+                    inWriter << ite.Key();
                 }
 
                 return inWriter;
