@@ -98,9 +98,9 @@ namespace BladeEngine
                 const void* content = fileReader.ReadAll();
                 if (content != NULL)
                 {
-                    if (!CompileVS(content, fileReader.GetFileSize(), inFilename))
+                    if (!CompileVS(inShaderModel, content, fileReader.GetFileSize(), inFilename))
                         return false;
-                    if (!CompilePS(content, fileReader.GetFileSize(), inFilename))
+                    if (!CompilePS(inShaderModel, content, fileReader.GetFileSize(), inFilename))
                         return false;
                     if (!ReflectDescriptionTable())
                         return false;
@@ -193,7 +193,7 @@ namespace BladeEngine
         bool ReflectDescriptionTable()
         {
             ID3D11ShaderReflection* reflection = NULL;
-            HRESULT hr = m_D3DReflectFunc(data->GetBufferPointer(), data->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&reflection);
+            HRESULT hr = m_D3DReflectFunc(m_VSData->GetBufferPointer(), m_VSData->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&reflection);
             ComPtrGuard(reflection);
 
             if (FAILED(hr))
@@ -260,14 +260,12 @@ namespace BladeEngine
 
                 uint32 varIndex = 0;
                 ID3D11ShaderReflectionVariable* variable = NULL;
-                ComPtrGuard(variable);
 
                 while ((variable = cbuffer_index.cbuffer->GetVariableByIndex(varIndex++)) != NULL)
                 {
                     D3D11_SHADER_VARIABLE_DESC variableDesc = { 0 };
                     D3D11_SHADER_TYPE_DESC typeDesc;
                     ID3D11ShaderReflectionType* type = variable->GetType();
-                    ComPtrGuard(type);
 
                     if (variable->GetDesc(&variableDesc) == S_OK && type != NULL && type->GetDesc(&typeDesc) == S_OK)
                     {

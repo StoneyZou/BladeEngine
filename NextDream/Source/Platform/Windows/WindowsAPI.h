@@ -243,6 +243,11 @@ namespace BladeEngine
             CloseWindow(inWindowHandle);
         }
 
+        static uint32 PrintToConsole(const TCHAR* inBuffer)
+        {
+            PrintToConsole(inBuffer, StringUtil:s(inBuffer))
+        }
+
         static uint32 PrintToConsole(const TCHAR* inBuffer, SIZE_T inBufferSize)
         {
             static bool hasAllocConsole = false;

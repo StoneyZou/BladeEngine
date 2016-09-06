@@ -26,20 +26,20 @@ namespace BladeEngine
         SIZE_T MaxStrLen;
     };
 
-    struct OutputAnsiStr
+    struct OutputStr
     {
-        typedef ANSICHAR CharType;
-        OutputAnsiStr(const ANSICHAR*& inStrBuf, SIZE_T inStrLen) : StrBuf(inStrBuf), StrLen(inStrLen)
+        typedef TCHAR CharType;
+        OutputStr(const TCHAR* inStrBuf, SIZE_T inStrLen) : StrBuf(inStrBuf), StrLen(inStrLen)
         {}
 
-        const ANSICHAR*& StrBuf;
+        const TCHAR* StrBuf;
         SIZE_T StrLen;
     };
 
     struct OutputAnsiStr
     {
         typedef ANSICHAR CharType;
-        OutputAnsiStr(const ANSICHAR*& inStrBuf, SIZE_T inStrLen) : StrBuf(inStrBuf), StrLen(inStrLen)
+        OutputAnsiStr(const ANSICHAR* inStrBuf, SIZE_T inStrLen) : StrBuf(inStrBuf), StrLen(inStrLen)
         {}
 
         const ANSICHAR*& StrBuf;
@@ -49,10 +49,10 @@ namespace BladeEngine
     struct OutputWideStr
     {
         typedef WIDECHAR CharType;
-        OutputWideStr(const WIDECHAR*& inStrBuf, SIZE_T inStrLen) : StrBuf(inStrBuf), StrLen(inStrLen)
+        OutputWideStr(const WIDECHAR* inStrBuf, SIZE_T inStrLen) : StrBuf(inStrBuf), StrLen(inStrLen)
         {}
 
-        const WIDECHAR*& StrBuf;
+        const WIDECHAR* StrBuf;
         SIZE_T StrLen;
     };
 
