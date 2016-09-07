@@ -56,6 +56,22 @@ namespace BladeEngine
             BStringToIntMap m_ResourceDescMap;
 
         public:
+            ~RHIShaderResourceTable()
+            {
+                if(m_TotalData != NULL)
+                {
+                    Malloc::Free(m_TotalData);
+                    m_TotalData = NULL;
+                }
+
+                m_UniformBufferArray.Clear();
+                m_AttributionDescArr.Clear();
+                m_AttributionDescMap.Clear();
+                m_ResourceDescArr.Clear();
+                m_ResourceDescMap.Clear();
+            }
+
+        public:
             SIZE_T AddUniformBufferDesc(const BString& inBufferName, SIZE_T inSlot, SIZE_T inPackSize)
             {
                 UniformBufferDesc desc;
@@ -163,19 +179,98 @@ namespace BladeEngine
                 inWriter << inResourceTable.m_AttributionDescArr.Size();
                 for (uint32 i = 0; i < inResourceTable.m_AttributionDescArr.Size(); ++i)
                 {
+                    inWriter << inResourceTable.m_AttributionDescArr[i].UnifromIndex;
                     inWriter << inResourceTable.m_AttributionDescArr[i].Offset;
                     inWriter << inResourceTable.m_AttributionDescArr[i].Size;
                     inWriter << inResourceTable.m_AttributionDescArr[i].Type;
-                    inWriter << inResourceTable.m_AttributionDescArr[i].UnifromIndex;
+                    inWriter << inResourceTable.m_AttributionDescArr[i].Rows;
+                    inWriter << inResourceTable.m_AttributionDescArr[i].Cols;
                 }
 
+                inWriter << inResourceTable.m_AttributionDescMap.Size();
                 BStringToIntMap::Iterator ite = inResourceTable.m_AttributionDescMap.Begin();
                 while (ite != inResourceTable.m_AttributionDescMap.End())
                 {
                     inWriter << ite.Key();
+                    inWriter << ite.Value();
+                }
+
+                inWriter << inResourceTable.m_ResourceDescArr.Size();
+                for (uint32 i = 0; i < inResourceTable.m_ResourceDescArr.Size(); ++i)
+                {
+                    inWriter << inResourceTable.m_ResourceDescArr[i].Slot;
+                    inWriter << inResourceTable.m_ResourceDescArr[i].Count;
+                    inWriter << inResourceTable.m_ResourceDescArr[i].Type;
+                }
+
+                inWriter << inResourceTable.m_ResourceDescMap.Size();
+                BStringToIntMap::Iterator ite = inResourceTable.m_ResourceDescMap.Begin();
+                while (ite != inResourceTable.m_ResourceDescMap.End())
+                {
+                    inWriter << ite.Key();
+                    inWriter << ite.Value();
                 }
 
                 return inWriter;
+            }
+
+            friend IReader& operator >> (IReader& inReader, RHIShaderResourceTable& inResourceTable)
+            {
+                inReader >> inResourceTable.m_TotalSize;
+
+                inResourceTable.m_TotalData = (byte*)Malloc::Alloc(inResourceTable.m_TotalSize);
+                inReader.Read(inResourceTable.m_TotalData, inResourceTable.m_TotalSize);
+
+                SIZE_T uniformBufferArraySize = 0;
+                inReader >> uniformBufferArraySize;
+                for (uint32 i = 0; i < uniformBufferArraySize; ++i)
+                {
+                    UniformBufferDesc desc;
+                    inReader >> desc.Offset;
+                    inReader >> desc.PackSize;
+                    inReader >> desc.Slot;
+
+                    m_UniformBufferArray.Add(desc);
+                }
+
+                SIZE_T attributionDescArrSize = 0;
+                inReader >> attributionDescArrSize;
+                for (uint32 i = 0; i < attributionDescArrSize; ++i)
+                {
+                    AttributionDesc desc;
+                    inReader >> desc.UnifromIndex;
+                    inReader >> desc.Offset;
+                    inReader >> desc.Size;
+                    inReader >> desc.Type;
+                    inReader >> desc.Rows;
+                    inReader >> desc.Cols;
+
+                    m_AttributionDescArr.Add(desc);
+                }
+
+                SIZE_T attributionDescMapSize = 0;
+                inReader >> attributionDescMapSize;
+                BStringToIntMap::Iterator ite = inResourceTable.m_AttributionDescMap.Begin();
+                while (ite != inResourceTable.m_AttributionDescMap.End())
+                {
+                    inWriter << ite.Key();
+                    inWriter << ite.Value();
+                }
+
+                inWriter << inResourceTable.m_ResourceDescArr.Size();
+                for (uint32 i = 0; i < inResourceTable.m_ResourceDescArr.Size(); ++i)
+                {
+                    inWriter << inResourceTable.m_ResourceDescArr[i].Slot;
+                    inWriter << inResourceTable.m_ResourceDescArr[i].Count;
+                    inWriter << inResourceTable.m_ResourceDescArr[i].Type;
+                }
+
+                BStringToIntMap::Iterator ite = inResourceTable.m_ResourceDescMap.Begin();
+                while (ite != inResourceTable.m_ResourceDescMap.End())
+                {
+                    inWriter << ite.Key();
+                    inWriter << ite.Value();
+                }
             }
         };
 

@@ -7,6 +7,7 @@
 #include <WindowsWindow.h>
 #include <PlatformEnum.h>
 #include <TypeDefine.h>
+#include <StringUtil.h>
 
 namespace BladeEngine
 {
@@ -245,7 +246,7 @@ namespace BladeEngine
 
         static uint32 PrintToConsole(const TCHAR* inBuffer)
         {
-            PrintToConsole(inBuffer, StringUtil:s(inBuffer))
+            PrintToConsole(inBuffer, StringUtil::Strlen(inBuffer));
         }
 
         static uint32 PrintToConsole(const TCHAR* inBuffer, SIZE_T inBufferSize)

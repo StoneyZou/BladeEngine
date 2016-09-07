@@ -223,13 +223,14 @@ namespace BladeEngine
             };
             TArray<_cbuffer_index> cbuffer_indexs;
 
+            ID3D11ShaderReflectionConstantBuffer* cbuffer = NULL;
             while (reflection->GetResourceBindingDesc(resourceIndex++, &resourceDesc) == S_OK)
             {
                 switch (resourceDesc.Type)
                 {
                 case D3D_SIT_CBUFFER:
                 case D3D_SIT_TBUFFER:
-                    ID3D11ShaderReflectionConstantBuffer* cbuffer = reflection->GetConstantBufferByName(resourceDesc.Name);
+                    cbuffer = reflection->GetConstantBufferByName(resourceDesc.Name);
                     if (cbuffer != NULL)
                     {
                         D3D11_SHADER_BUFFER_DESC cbufferDesc = { 0 };
