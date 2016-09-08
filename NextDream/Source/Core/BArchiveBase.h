@@ -71,6 +71,7 @@ namespace BladeEngine
 
         virtual bool IsEOF() const = 0;
         bool IsFailed() const { return m_IsFailed; }
+        void MarkFailed() { m_IsFailed = true; }
 
         operator bool() const { return !IsFailed() && !IsEOF(); };
 
@@ -79,6 +80,10 @@ namespace BladeEngine
 
         virtual SIZE_T Seek(ESEEK_POS inPos, SIZE_T inOffset) = 0;
         virtual SIZE_T Read(byte* inBuffer, SIZE_T inBufferSize) = 0;
+        // 利用预读功能测试当前应该读入的字符串长度
+        virtual bool TestStrLen(SIZE_T* outPreReadLen) {
+            if (outPreReadLen != NULL) { *outPreReadLen = 0; } return true;
+        }
 
         virtual IReader& operator >> (uint8& outoutValue) = 0;
         virtual IReader& operator >> (uint16& outoutValue) = 0;

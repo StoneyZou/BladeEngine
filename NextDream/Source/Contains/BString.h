@@ -131,6 +131,17 @@ namespace BladeEngine
             return !(*this == other);
         }
 
+        BString operator + (const BString& rh) const
+        {
+            BString newStr;
+            newStr.Reserve(m_Length + rh.m_Length);
+
+            StringUtil::Strncpy(newStr.m_Buffer, m_Length, m_Buffer, m_Length);
+            StringUtil::Strncpy(newStr.m_Buffer + m_Length, rh.m_Length, rh,m_Buffer, rh.m_Length);
+
+            newStr.m_Length = m_Length + rh.m_Length;
+        }
+
     public:
         void Reserve(uint32 inNewCapacity)
         {
@@ -153,9 +164,21 @@ namespace BladeEngine
             return StringUtil::Strcmp(m_Buffer, rh.m_Buffer, m_Length < rh.m_Length ? m_Length : rh.m_Length);
         }
 
-        void Append(const TCHAR* inStr)
+        int32 IndexOf(TCHAR ch) const
         {
+            for (int32 i = m_Length - 1; i >= 0; --i)
+            {
+                if (m_Buffer[i] == ch)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
 
+        BString SubStr(uint32 inStart, uint32 inEnd) const
+        {
+            return BString(m_Buffer + inStart, inEnd - inStart + 1);
         }
 
     public:
@@ -167,7 +190,38 @@ namespace BladeEngine
     public:
         friend IWriter& operator << (IWriter& inWriter, const BString& inStr)
         {
-            inWriter << inStr;
+            inWriter.Write((const byte*)inStr.m_Buffer, inStr.m_Length);
+            return inWriter;
+        }
+
+        friend IReader& operator >> (IReader& inReader, BString& inStr)
+        {
+            if (!inReader)
+            {
+                return inReader;
+            }
+
+            byte* buffer = (byte*)inStr.m_Buffer;
+            SIZE_T length = inStr.m_Length * sizeof(TCHAR);
+
+            SIZE_T preReadLen = 0;
+            while (!inReader.TestStrLen(&preReadLen))
+            {
+                if (length + preReadLen > inStr.m_Capacity * sizeof(TCHAR))
+                {
+                    inStr.Reserve(length + preReadLen + 1);
+                }
+
+                inReader.Read(buffer + length - 1, preReadLen);
+                length = length + preReadLen;
+            }
+
+            if (length % sizeof(TCHAR) != 0)
+            {
+                inReader.MarkFailed();
+            }
+
+            return inReader;
         }
     };
 }

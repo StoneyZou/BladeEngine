@@ -114,6 +114,11 @@ namespace BladeEngine
 
         static const FileHandle OpenFile(const TCHAR* inFileName, EFILE_ACCESS_MODE inAccessMode, EFILE_SHARE_MODE inShareMode, EFILE_OPEN_MODE inOpenMode)
         {
+            return OpenFileA(inFileName, inAccessMode, inShareMode, inOpenMode);
+        }
+
+        static const FileHandle OpenFileA(const ANSICHAR* inFileName, EFILE_ACCESS_MODE inAccessMode, EFILE_SHARE_MODE inShareMode, EFILE_OPEN_MODE inOpenMode)
+        {
             DWORD accessMode =
                 ((inAccessMode & EFILE_READ) != 0 ? GENERIC_READ : 0) |
                 ((inAccessMode & EFILE_WRITE) != 0 ? GENERIC_WRITE : 0);
@@ -137,7 +142,35 @@ namespace BladeEngine
                 break;
             }
 
-            return CreateFile(inFileName, accessMode, shareMode, NULL, openMode, FILE_ATTRIBUTE_NORMAL, 0);
+            return CreateFileA(inFileName, accessMode, shareMode, NULL, openMode, FILE_ATTRIBUTE_NORMAL, 0);
+        }
+
+        static const FileHandle OpenFileW(const WIDECHAR* inFileName, EFILE_ACCESS_MODE inAccessMode, EFILE_SHARE_MODE inShareMode, EFILE_OPEN_MODE inOpenMode)
+        {
+            DWORD accessMode =
+                ((inAccessMode & EFILE_READ) != 0 ? GENERIC_READ : 0) |
+                ((inAccessMode & EFILE_WRITE) != 0 ? GENERIC_WRITE : 0);
+
+            DWORD shareMode =
+                ((inShareMode & EFILE_SHARE_READ) != 0 ? FILE_SHARE_READ : 0) |
+                ((inShareMode & EFILE_SHARE_WRITE) != 0 ? FILE_SHARE_WRITE : 0) |
+                ((inShareMode & EFILE_SHARE_DELETE) != 0 ? FILE_SHARE_DELETE : 0);
+
+            DWORD openMode = EFILE_OPEN_EXISTING;
+            switch (inOpenMode)
+            {
+            case BladeEngine::EFIlE_CREATE:
+                openMode = OPEN_ALWAYS;
+                break;
+            case BladeEngine::EFIlE_CREATE_NEW:
+                openMode = CREATE_NEW;
+                break;
+            case BladeEngine::EFILE_OPEN_EXISTING:
+                openMode = OPEN_EXISTING;
+                break;
+            }
+
+            return CreateFileW(inFileName, accessMode, shareMode, NULL, openMode, FILE_ATTRIBUTE_NORMAL, 0);
         }
 
         static void CloseFile(FileHandle inFileHandle)

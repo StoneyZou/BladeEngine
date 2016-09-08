@@ -8,6 +8,7 @@
 #include <d3d11.h>
 #include <RHIShaderBase.h>
 #include <DirectXEnumMapping.h>
+#include <BPath.h>
 
 namespace BladeEngine
 {
@@ -93,7 +94,7 @@ namespace BladeEngine
             FileHandle fileHandle = PlatformAPI::OpenFile(inFilename, EFILE_READ, EFILE_SHARE_READ_WRITE, EFILE_OPEN_EXISTING);
             if (PlatformAPI::CheckFileHandleValid(fileHandle))
             {
-                FileReader fileReader(fileHandle, 0);
+                FileReader fileReader(fileHandle);
 
                 const void* content = fileReader.ReadAll();
                 if (content != NULL)
@@ -104,11 +105,12 @@ namespace BladeEngine
                         return false;
                     if (!ReflectDescriptionTable())
                         return false;
+                    if (!OutputToFile(inFilename))
+                        return false;
                 }
-                    
             }
-
             PlatformAPI::CloseFile(fileHandle);
+            return true;
         }
 
     private:
@@ -301,9 +303,26 @@ namespace BladeEngine
             }
         }
 
-        bool OutputToFile()
+        bool OutputToFile(const ANSICHAR* inFilename)
         {
-            FileHandle fileHandle = PlatformAPI::OpenFile(inFilename, EFILE_READ, EFILE_SHARE_READ_WRITE, EFILE_OPEN_EXISTING);
+            BString outFilename = BPath::Combine(BPath::GetFilenameWithoutExt(inFilename), TEXT(".shader"));
+            FileHandle outFileHandle = PlatformAPI::OpenFileA(outFilename, EFILE_READ, EFILE_SHARE_READ_WRITE, EFILE_OPEN_EXISTING);
+
+            if (!PlatformAPI::CheckFileHandleValid(outFileHandle))
+            {
+                return false;
+            }
+
+            FileWriter fileWriter(outFileHandle);
+            fileWriter << m_InputTable;
+            fileWriter << m_ResourceTable;
+            fileWriter << (SIZE_T)m_VSData->GetBufferSize();
+            fileWriter.Write(m_VSData->GetBufferPointer(), m_VSData->GetBufferSize());
+            fileWriter << (SIZE_T)m_PSData->GetBufferSize();
+            fileWriter.Write(m_PSData->GetBufferPointer(), m_PSData->GetBufferSize());
+
+            PlatformAPI::CloseFile(outFileHandle);
+            return true;
         }
 
         bool ClearData()

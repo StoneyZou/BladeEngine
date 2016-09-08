@@ -31,6 +31,16 @@ namespace BladeEngine
             return wcscpy_s(inDest, inDestLen, inSrc);
         }
 
+        static SIZE_T Strncpy(ANSICHAR* inDest, SIZE_T inDestLen, const ANSICHAR* inSrc, SIZE_T inSrcLen)
+        {
+            return strncpy_s(inDest, inDestLen, inSrc, inSrcLen);
+        }
+
+        static SIZE_T Strncpy(WIDECHAR* inDest, SIZE_T inDestLen, const WIDECHAR* inSrc, SIZE_T inSrcLen)
+        {
+            return wcsncpy_s(inDest, inDestLen, inSrc, inSrcLen);
+        }
+
         static SIZE_T Strcmp(const ANSICHAR* inSrc1, const ANSICHAR* inSrc2, SIZE_T inMaxLen)
         {
             return strncmp(inSrc1, inSrc2, inMaxLen);

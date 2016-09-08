@@ -166,7 +166,7 @@ namespace BladeEngine
         SIZE_T m_CurFilePos;
 
     public:
-        FileReader(FileHandle inHFile, uint32 inReadBufSize) 
+        FileReader(FileHandle inHFile, uint32 inReadBufSize = 1024) 
             : IReader(), 
             m_FileHandle(inHFile),
             m_FileSize(0), 

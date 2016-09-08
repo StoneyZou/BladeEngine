@@ -182,7 +182,9 @@ namespace BladeEngine
                     inWriter << inResourceTable.m_AttributionDescArr[i].UnifromIndex;
                     inWriter << inResourceTable.m_AttributionDescArr[i].Offset;
                     inWriter << inResourceTable.m_AttributionDescArr[i].Size;
-                    inWriter << inResourceTable.m_AttributionDescArr[i].Type;
+
+                    inWriter << (SIZE_T)inResourceTable.m_AttributionDescArr[i].Type;
+
                     inWriter << inResourceTable.m_AttributionDescArr[i].Rows;
                     inWriter << inResourceTable.m_AttributionDescArr[i].Cols;
                 }
@@ -200,7 +202,8 @@ namespace BladeEngine
                 {
                     inWriter << inResourceTable.m_ResourceDescArr[i].Slot;
                     inWriter << inResourceTable.m_ResourceDescArr[i].Count;
-                    inWriter << inResourceTable.m_ResourceDescArr[i].Type;
+
+                    inWriter << (SIZE_T)inResourceTable.m_ResourceDescArr[i].Type;
                 }
 
                 inWriter << inResourceTable.m_ResourceDescMap.Size();
@@ -230,7 +233,7 @@ namespace BladeEngine
                     inReader >> desc.PackSize;
                     inReader >> desc.Slot;
 
-                    m_UniformBufferArray.Add(desc);
+                    inResourceTable.m_UniformBufferArray.Add(desc);
                 }
 
                 SIZE_T attributionDescArrSize = 0;
@@ -241,11 +244,15 @@ namespace BladeEngine
                     inReader >> desc.UnifromIndex;
                     inReader >> desc.Offset;
                     inReader >> desc.Size;
-                    inReader >> desc.Type;
+
+                    SIZE_T type = 0;
+                    inReader >> type;
+                    desc.Type = (ESHADER_ATTRIB_TYPE)type;
+
                     inReader >> desc.Rows;
                     inReader >> desc.Cols;
 
-                    m_AttributionDescArr.Add(desc);
+                    inResourceTable.m_AttributionDescArr.Add(desc);
                 }
 
                 SIZE_T attributionDescMapSize = 0;
@@ -258,7 +265,7 @@ namespace BladeEngine
                     inReader >> key;
                     inReader >> value;
 
-                    m_AttributionDescMap.Insert(key, value)£»
+                    inResourceTable.m_AttributionDescMap.Insert(key, value);
                 }
 
                 SIZE_T resourceDescArrSize = 0;
@@ -268,9 +275,12 @@ namespace BladeEngine
                     ResourceBindDesc desc;
                     inReader >> desc.Slot;
                     inReader >> desc.Count;
-                    inReader >> desc.Type;
 
-                    m_ResourceDescArr.Add(desc);
+                    SIZE_T type = 0;
+                    inReader >> type;
+                    desc.Type = (ESHADER_RESOURCE_TYPE)type;
+
+                    inResourceTable.m_ResourceDescArr.Add(desc);
                 }
 
                 SIZE_T resourceDescMapSize = 0;
@@ -283,7 +293,7 @@ namespace BladeEngine
                     inReader >> key;
                     inReader >> value;
 
-                    m_ResourceDescMap.Insert(key, value)£»
+                    inResourceTable.m_ResourceDescMap.Insert(key, value);
                 }
 
                 return inReader;
@@ -325,7 +335,7 @@ namespace BladeEngine
                 {
                     inWriter << inInpuTable.m_InputTable[i].Index;
                     inWriter << inInpuTable.m_InputTable[i].Slot;
-                    inWriter << inInpuTable.m_InputTable[i].Semantic;
+                    inWriter << (SIZE_T)inInpuTable.m_InputTable[i].Semantic;
                 }
 
                 return inWriter;
@@ -340,7 +350,10 @@ namespace BladeEngine
                     InputElementDesc desc;
                     inReader >> desc.Index;
                     inReader >> desc.Slot;
-                    inReader >> desc.Semantic;
+
+                    SIZE_T semantic = 0;
+                    inReader >> semantic;
+                    desc.Semantic = (ESHADER_SEMANTIC_TYPE)semantic;
 
                     inInpuTable.m_InputTable.Add(desc);
                 }
