@@ -301,6 +301,11 @@ namespace BladeEngine
             }
         }
 
+        bool OutputToFile()
+        {
+            FileHandle fileHandle = PlatformAPI::OpenFile(inFilename, EFILE_READ, EFILE_SHARE_READ_WRITE, EFILE_OPEN_EXISTING);
+        }
+
         bool ClearData()
         {
             if (m_VSData != NULL) { m_VSData->Release(); m_VSData = NULL; }

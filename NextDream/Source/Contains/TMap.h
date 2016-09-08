@@ -128,19 +128,19 @@ namespace BladeEngine
 
     private:
         _RBTree_Node* m_Root;
+        TArray<_RBTree_Node> m_Data;
 
     private:
         _RBTree_Node* _RBTreeCreateNode(const KeyType& inKey, const ValueType& inValue)
         {
-            _RBTree_Node* node = (_RBTree_Node*)Malloc::Alloc(sizeof(_RBTree_Node));
-            BladeConstruct(node, _RBTree_Node);
-
+            _RBTree_Node node;
             node->Color = Red;
             node->LeftNode = NULL;
             node->RightNode = NULL;
             node->ParentNode = NULL;
 
-            return node;
+            m_Data.Add(node);
+            return m_Data[m_Data.Size() - 1];
         }
 
         void _RBTreeDestoryNode(_RBTree_Node* inNode)
@@ -653,6 +653,8 @@ namespace BladeEngine
         TMap() : m_Root(NULL)
         {}
 
+        ~TMap() { Clear(); }
+
         bool TryGetValue(const KeyType& inKey, ValueType* outValue) const
         {
             _RBTree_Node* node = const_cast<_RBTree_Node*>(_RBTreeSreachNode(inKey, m_Root));
@@ -678,6 +680,13 @@ namespace BladeEngine
             _RBTreeErase(inKey, &m_Root);
         }
 
+        void Clear()
+        {
+            m_Data.Clear();
+            m_Root = NULL;
+        }
+
+        SIZE_T Size() const { m_Data.Size(); }
     public:
         Iterator Begin()
         {

@@ -188,11 +188,11 @@ namespace BladeEngine
                 }
 
                 inWriter << inResourceTable.m_AttributionDescMap.Size();
-                BStringToIntMap::Iterator ite = inResourceTable.m_AttributionDescMap.Begin();
-                while (ite != inResourceTable.m_AttributionDescMap.End())
+                BStringToIntMap::Iterator attributionDescIte = inResourceTable.m_AttributionDescMap.Begin();
+                while (attributionDescIte != inResourceTable.m_AttributionDescMap.End())
                 {
-                    inWriter << ite.Key();
-                    inWriter << ite.Value();
+                    inWriter << attributionDescIte.Key();
+                    inWriter << attributionDescIte.Value();
                 }
 
                 inWriter << inResourceTable.m_ResourceDescArr.Size();
@@ -204,11 +204,11 @@ namespace BladeEngine
                 }
 
                 inWriter << inResourceTable.m_ResourceDescMap.Size();
-                BStringToIntMap::Iterator ite = inResourceTable.m_ResourceDescMap.Begin();
-                while (ite != inResourceTable.m_ResourceDescMap.End())
+                BStringToIntMap::Iterator resourceDescMapIte = inResourceTable.m_ResourceDescMap.Begin();
+                while (resourceDescMapIte != inResourceTable.m_ResourceDescMap.End())
                 {
-                    inWriter << ite.Key();
-                    inWriter << ite.Value();
+                    inWriter << resourceDescMapIte.Key();
+                    inWriter << resourceDescMapIte.Value();
                 }
 
                 return inWriter;
@@ -250,27 +250,43 @@ namespace BladeEngine
 
                 SIZE_T attributionDescMapSize = 0;
                 inReader >> attributionDescMapSize;
-                BStringToIntMap::Iterator ite = inResourceTable.m_AttributionDescMap.Begin();
-                while (ite != inResourceTable.m_AttributionDescMap.End())
+                for (uint32 i = 0; i < attributionDescMapSize; ++i)
                 {
-                    inWriter << ite.Key();
-                    inWriter << ite.Value();
+                    BString key;
+                    uint32 value;
+
+                    inReader >> key;
+                    inReader >> value;
+
+                    m_AttributionDescMap.Insert(key, value)£»
                 }
 
-                inWriter << inResourceTable.m_ResourceDescArr.Size();
-                for (uint32 i = 0; i < inResourceTable.m_ResourceDescArr.Size(); ++i)
+                SIZE_T resourceDescArrSize = 0;
+                inReader >> resourceDescArrSize;
+                for (uint32 i = 0; i < resourceDescArrSize; ++i)
                 {
-                    inWriter << inResourceTable.m_ResourceDescArr[i].Slot;
-                    inWriter << inResourceTable.m_ResourceDescArr[i].Count;
-                    inWriter << inResourceTable.m_ResourceDescArr[i].Type;
+                    ResourceBindDesc desc;
+                    inReader >> desc.Slot;
+                    inReader >> desc.Count;
+                    inReader >> desc.Type;
+
+                    m_ResourceDescArr.Add(desc);
                 }
 
-                BStringToIntMap::Iterator ite = inResourceTable.m_ResourceDescMap.Begin();
-                while (ite != inResourceTable.m_ResourceDescMap.End())
+                SIZE_T resourceDescMapSize = 0;
+                inReader >> resourceDescMapSize;
+                for (uint32 i = 0; i < resourceDescMapSize; ++i)
                 {
-                    inWriter << ite.Key();
-                    inWriter << ite.Value();
+                    BString key;
+                    uint32 value;
+
+                    inReader >> key;
+                    inReader >> value;
+
+                    m_ResourceDescMap.Insert(key, value)£»
                 }
+
+                return inReader;
             }
         };
 
@@ -299,6 +315,37 @@ namespace BladeEngine
                 desc.Index = inIndex;
 
                 m_InputTable.Add(desc);
+            }
+
+        public:
+            friend IWriter& operator << (IWriter& inWriter, const RHIShaderInputTable& inInpuTable)
+            {
+                inWriter << inInpuTable.m_InputTable.Size();
+                for (uint32 i = 0; i < inInpuTable.m_InputTable.Size(); ++i)
+                {
+                    inWriter << inInpuTable.m_InputTable[i].Index;
+                    inWriter << inInpuTable.m_InputTable[i].Slot;
+                    inWriter << inInpuTable.m_InputTable[i].Semantic;
+                }
+
+                return inWriter;
+            }
+
+            friend IReader& operator >> (IReader& inReader, RHIShaderInputTable& inInpuTable)
+            {
+                SIZE_T inputTableSize = 0;
+                inReader >> inputTableSize;
+                for (uint32 i = 0; i < inputTableSize; ++i)
+                {
+                    InputElementDesc desc;
+                    inReader >> desc.Index;
+                    inReader >> desc.Slot;
+                    inReader >> desc.Semantic;
+
+                    inInpuTable.m_InputTable.Add(desc);
+                }
+                
+                return inReader;
             }
         };
 
@@ -330,6 +377,8 @@ namespace BladeEngine
             {
                 return MemUtil::Memcmp(&m_CreateInfo, &rh.m_CreateInfo, sizeof(m_CreateInfo));
             }
+
+        public:
         };
 
         class RHIShaderBase : public RHIResource
