@@ -71,7 +71,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\NextDream\Source\Serialization;..\NextDream\Source\Core\Platforms;..\NextDream\Source\DirectX11;..\NextDream\Source\RHI;..\ShaderCompiler;..\NextDream\Source\FrameWork;..\NextDream\Source\Core\Private;..\NextDream\Source\Platform\Windows;..\NextDream\Source\Platform;C:\Users\rockzou\Documents\Visual Studio 2015\Projects\NextDream\NextDream\Source\Core\Platforms;..\NextDream\Source\Contains;..\NextDream\Source\Core;$(IncludePath)</IncludePath>
+    <IncludePath>..\NextDream\Source\Math;..\NextDream\Source\Serialization;..\NextDream\Source\Core\Platforms;..\NextDream\Source\DirectX11;..\NextDream\Source\RHI;..\ShaderCompiler;..\NextDream\Source\FrameWork;..\NextDream\Source\Core\Private;..\NextDream\Source\Platform\Windows;..\NextDream\Source\Platform;C:\Users\rockzou\Documents\Visual Studio 2015\Projects\NextDream\NextDream\Source\Core\Platforms;..\NextDream\Source\Contains;..\NextDream\Source\Core;$(IncludePath)</IncludePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
+    <SourcePath>..\NextDream\Source\Core\Private;..\NextDream\Source\DirectX11\private;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -94,6 +96,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3dCompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -147,6 +150,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\NextDream\Source\Core\Private\CoreMisc.cpp" />
+    <ClCompile Include="..\NextDream\Source\DirectX11\private\DirectXEnumMapping.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>

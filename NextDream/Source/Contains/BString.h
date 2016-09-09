@@ -137,9 +137,10 @@ namespace BladeEngine
             newStr.Reserve(m_Length + rh.m_Length);
 
             StringUtil::Strncpy(newStr.m_Buffer, m_Length, m_Buffer, m_Length);
-            StringUtil::Strncpy(newStr.m_Buffer + m_Length, rh.m_Length, rh,m_Buffer, rh.m_Length);
+            StringUtil::Strncpy(newStr.m_Buffer + m_Length, rh.m_Length, rh.m_Buffer, rh.m_Length);
 
             newStr.m_Length = m_Length + rh.m_Length;
+            return newStr;
         }
 
     public:

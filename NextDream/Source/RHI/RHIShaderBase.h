@@ -79,6 +79,7 @@ namespace BladeEngine
                 desc.PackSize = inPackSize;
 
                 m_UniformBufferArray.Add(desc);
+                return m_UniformBufferArray.Size() - 1;
             }
 
             void BuildUniformBuffers()

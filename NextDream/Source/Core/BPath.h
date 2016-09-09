@@ -12,7 +12,7 @@ namespace BladeEngine
         static BString GetFilenameWithoutExt(const BString& inFilename)
         {
             SIZE_T index = 0;
-            if ((index = inFilename.IndexOf(TEXT('.')) != -1)
+            if ((index = inFilename.IndexOf(TEXT('.')) != -1))
             {
                 return inFilename.SubStr(0, index);
             }

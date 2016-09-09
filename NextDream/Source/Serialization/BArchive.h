@@ -575,7 +575,7 @@ namespace BladeEngine
         SIZE_T m_CurFilePos;
 
     public:
-        FileWriter(FileHandle inHFile, uint32 inWriteBufSize)
+        FileWriter(FileHandle inHFile, uint32 inWriteBufSize = 1024)
             : IWriter(),
             m_HFile(inHFile),
             m_BufferWrittenLen(0),
@@ -679,6 +679,7 @@ namespace BladeEngine
             {
                 m_CurLocalPos = pos;
             }
+            return m_CurLocalPos;
         }
 
         virtual SIZE_T Write(const byte* inBuffer, SIZE_T inBufferSize)

@@ -301,6 +301,7 @@ namespace BladeEngine
                     }
                 }
             }
+            return true;
         }
 
         bool OutputToFile(const ANSICHAR* inFilename)
@@ -317,9 +318,9 @@ namespace BladeEngine
             fileWriter << m_InputTable;
             fileWriter << m_ResourceTable;
             fileWriter << (SIZE_T)m_VSData->GetBufferSize();
-            fileWriter.Write(m_VSData->GetBufferPointer(), m_VSData->GetBufferSize());
+            fileWriter.Write((byte*)m_VSData->GetBufferPointer(), m_VSData->GetBufferSize());
             fileWriter << (SIZE_T)m_PSData->GetBufferSize();
-            fileWriter.Write(m_PSData->GetBufferPointer(), m_PSData->GetBufferSize());
+            fileWriter.Write((byte*)m_PSData->GetBufferPointer(), m_PSData->GetBufferSize());
 
             PlatformAPI::CloseFile(outFileHandle);
             return true;

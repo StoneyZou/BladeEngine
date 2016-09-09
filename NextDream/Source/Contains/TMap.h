@@ -134,13 +134,13 @@ namespace BladeEngine
         _RBTree_Node* _RBTreeCreateNode(const KeyType& inKey, const ValueType& inValue)
         {
             _RBTree_Node node;
-            node->Color = Red;
-            node->LeftNode = NULL;
-            node->RightNode = NULL;
-            node->ParentNode = NULL;
+            node.Color = Red;
+            node.LeftNode = NULL;
+            node.RightNode = NULL;
+            node.ParentNode = NULL;
 
             m_Data.Add(node);
-            return m_Data[m_Data.Size() - 1];
+            return &m_Data[m_Data.Size() - 1];
         }
 
         void _RBTreeDestoryNode(_RBTree_Node* inNode)
@@ -686,7 +686,7 @@ namespace BladeEngine
             m_Root = NULL;
         }
 
-        SIZE_T Size() const { m_Data.Size(); }
+        SIZE_T Size() const { return m_Data.Size(); }
     public:
         Iterator Begin()
         {

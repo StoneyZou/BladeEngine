@@ -57,7 +57,18 @@ namespace BladeEngine
             shaderModel = ESHADER_MODEL_2_0;
         }
 
-        
+        ShaderCompileModule* module = new Direct3DShaderCompileModule();
+        if (module->Load("C:/Windows/System32/D3DCompiler_43.dll"))
+        {
+            if (module->StartUp())
+            {
+                module->Compile(argv[2], shaderModel);
+            }
+            module->ShutDown();
+        }
+        module->Unload();
+
+        delete module;
         return 0;
     }
 }

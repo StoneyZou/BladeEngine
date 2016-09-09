@@ -257,52 +257,10 @@ namespace BladeEngine
         /**
         * @Desc Structure contains all infomations to create a texture
         */
-        struct RHITextureCreateInfo
-        {
-            RHITexuteSamplerInfo Sampler;
-            uint32 Width, Height, Depth;
-            uint32 SampleCount, SampleQulity;
-            uint32 Usage;
-            EDATA_FORMAT BaseFormat;
-            EDATA_FORMAT RenderTargetFormat;
-            EDATA_FORMAT DepthStencilFormat;
-            ECPU_GPU_ACCESS_MODE AccessMode;
-            uint32 DataSize;
-            void* Data;
-        };
-
-        struct RHITextureInitInfo
-        {
-            bool CanAsRenderTarget, CanAsDepthStencil;
-            uint32 Width, Height;
-            uint32 SampleCount, SampleQulity;
-            uint32 Usage;
-            EDATA_FORMAT BaseFormat;
-            ECPU_GPU_ACCESS_MODE AccessMode;
-        };
-
-        struct RHISwapChainCreateInfo
-        {
-            RHITexuteSamplerInfo Sampler;
-            uint32 BufferNum;
-            uint32 SampleCount;
-            uint32 SampleQulity;
-            uint32 RefreshRateDenominator;
-            uint32 RefreshRateNumerator;
-            PlatformWindowRef Window;
-        };
-
-        struct RHISwapChainInitInfo
-        {
-            uint32 Width, Height;
-            uint32 BufferNum;
-            uint32 SampleCount;
-            uint32 SampleQulity;
-            uint32 RefreshRateDenominator;
-            uint32 RefreshRateNumerator;
-            PlatformWindowRef Window;
-            RHITexture2DRef Texture;
-        };
+        struct RHITextureCreateInfo;
+        struct RHITextureInitInfo;
+        struct RHISwapChainCreateInfo;
+        struct RHISwapChainInitInfo;
 
         class IRHIDevice : public IReferencable
         {

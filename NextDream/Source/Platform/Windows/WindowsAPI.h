@@ -279,7 +279,7 @@ namespace BladeEngine
 
         static uint32 PrintToConsole(const TCHAR* inBuffer)
         {
-            PrintToConsole(inBuffer, StringUtil::Strlen(inBuffer));
+            return PrintToConsole(inBuffer, StringUtil::Strlen(inBuffer));
         }
 
         static uint32 PrintToConsole(const TCHAR* inBuffer, SIZE_T inBufferSize)
