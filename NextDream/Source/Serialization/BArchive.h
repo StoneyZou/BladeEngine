@@ -272,6 +272,8 @@ namespace BladeEngine
         }
 
     public:
+        virtual int32 Tell() { if (m_IsFailed) { return -1; } return m_CurLocalPos; }
+
         virtual SIZE_T Seek(ESEEK_POS inRelativePos, SIZE_T inOffset)
         {
             SIZE_T pos = 0;

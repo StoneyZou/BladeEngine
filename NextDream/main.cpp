@@ -6,6 +6,10 @@
 #include <PlatformAPI.h>
 #include <RHITextureBase.h>
 #include <RHIShaderBase.h>
+#include <BArchive.h>
+
+
+const TCHAR* s_ShaderFileName = "E:/BladeEngine/Media/Shader/VertexShader.shader";
 
 using namespace BladeEngine;
 void main()
@@ -81,6 +85,26 @@ void main()
             {
                 ::printf("Create immediateContext Success!");
             }
+
+            RHI::RHIShaderInputTable inputTable;
+            RHI::RHIShaderResourceTable resoureceTable;
+
+            FileHandle fileHandle = PlatformAPI::OpenFile(s_ShaderFileName, EFILE_READ, EFILE_SHARE_READ_WRITE, EFILE_OPEN_EXISTING);
+            if (PlatformAPI::CheckFileHandleValid(fileHandle))
+            {
+                FileReader fileReader(fileHandle);
+                const byte* content = (const byte*)fileReader.ReadAll();
+                if (content != NULL)
+                {
+                    fileReader >> inputTable >> resoureceTable;
+                    if(fileReader)
+                    {
+                        RHI::RHIShaderCreateInfo createInfo;
+                        //createInfo.Data = content
+                    }
+                }
+            }
+            PlatformAPI::CloseFile(fileHandle);
 
             while (!window->IsClosed())
             {

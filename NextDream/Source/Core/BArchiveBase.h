@@ -78,6 +78,7 @@ namespace BladeEngine
         bool operator == (_EOF _flag) const { return IsEOF(); }
         bool operator == (_FAILED _flag) const { return IsFailed(); }
 
+        virtual int32 Tell() = 0;
         virtual SIZE_T Seek(ESEEK_POS inPos, SIZE_T inOffset) = 0;
         virtual SIZE_T Read(byte* inBuffer, SIZE_T inBufferSize) = 0;
         // 利用预读功能测试当前应该读入的字符串长度

@@ -192,24 +192,24 @@ namespace BladeEngine
                 return;
             }
 
-            const RHIVertexShader::InputTable& inputTable = m_StateCahce.VS->GetInputTable();
+            const RHIShaderInputTable* inputTable = m_StateCahce.VS->GetInputTable();
             const RHIVertexBuffer::DeclarationTable& declarationTable = m_StateCahce.VertexBuffer->GetDeclarationTable();
 
             uint32 inputElementDescIndex = 0;
-            m_InputElementDescs.Resize(inputTable.Size());
+            m_InputElementDescs.Resize(inputTable->m_InputTable.Size());
 
-            for (SIZE_T iTableIndex = 0; iTableIndex < inputTable.Size(); ++iTableIndex)
+            for (SIZE_T iTableIndex = 0; iTableIndex < inputTable->m_InputTable.Size(); ++iTableIndex)
             {
                 bool foundSemantic = false;
                 for (SIZE_T dTableIndex = 0; dTableIndex < declarationTable.Size(); ++dTableIndex)
                 {
-                    if (declarationTable[dTableIndex].Semantic == inputTable[iTableIndex].Semantic ||
+                    if (declarationTable[dTableIndex].Semantic == inputTable->m_InputTable[iTableIndex].Semantic ||
                         declarationTable[dTableIndex].Index == declarationTable[dTableIndex].Index)
                     {
                         m_InputElementDescs[inputElementDescIndex].SemanticName = ShaderSemanticNames[declarationTable[dTableIndex].Semantic];
                         m_InputElementDescs[inputElementDescIndex].SemanticIndex = declarationTable[dTableIndex].Index;
                         m_InputElementDescs[inputElementDescIndex].Format = DirectXEnumMapping::Get(declarationTable[dTableIndex].Format);
-                        m_InputElementDescs[inputElementDescIndex].InputSlot = inputTable[iTableIndex].Slot;
+                        m_InputElementDescs[inputElementDescIndex].InputSlot = inputTable->m_InputTable[iTableIndex].Slot;
                         m_InputElementDescs[inputElementDescIndex].AlignedByteOffset = declarationTable[dTableIndex].Offset;
                         m_InputElementDescs[inputElementDescIndex].InputSlotClass = DirectXEnumMapping::Get(declarationTable[dTableIndex].InputType);
                         m_InputElementDescs[inputElementDescIndex].InstanceDataStepRate = declarationTable[dTableIndex].InstanceDataStepRate;

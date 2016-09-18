@@ -165,8 +165,6 @@ namespace BladeEngine
 
         struct RHIShaderCreateInfo
         {
-            BString Name;
-            RHIShaderResourceTableRef ResourceTable;
             uint32 DataSize;
             const void* Data;
         };

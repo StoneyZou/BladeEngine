@@ -176,7 +176,7 @@ namespace BladeEngine
             }
 
             ID3DBlob* error = NULL;
-            HRESULT hr = m_D3DCompileFunc(inContext, inContextSize, inFileName, NULL, NULL, VS_EntryPoint, ps_target,
+            HRESULT hr = m_D3DCompileFunc(inContext, inContextSize, inFileName, NULL, NULL, PS_EntryPoint, ps_target,
                 D3DCOMPILE_OPTIMIZATION_LEVEL3 | D3DCOMPILE_ENABLE_STRICTNESS
                 , 0, &m_PSData, &error);
             ComPtrGuard(m_PSData);
@@ -185,6 +185,7 @@ namespace BladeEngine
             if (FAILED(hr))
             {
                 ::printf("DirectX Compile Vertex Shader Error.");
+                ::printf((char*)error->GetBufferPointer());
                 return false;
             }
 
@@ -306,8 +307,8 @@ namespace BladeEngine
 
         bool OutputToFile(const ANSICHAR* inFilename)
         {
-            BString outFilename = BPath::Combine(BPath::GetFilenameWithoutExt(inFilename), TEXT(".shader"));
-            FileHandle outFileHandle = PlatformAPI::OpenFileA(outFilename, EFILE_READ, EFILE_SHARE_READ_WRITE, EFILE_OPEN_EXISTING);
+            BString outFilename = BPath::GetFilenameWithoutExt(inFilename) + TEXT(".shader");
+            FileHandle outFileHandle = PlatformAPI::OpenFileA(outFilename, EFILE_WRITE, EFILE_SHARE_WRITE, EFIlE_CREATE_NEW);
 
             if (!PlatformAPI::CheckFileHandleValid(outFileHandle))
             {
@@ -321,6 +322,7 @@ namespace BladeEngine
             fileWriter.Write((byte*)m_VSData->GetBufferPointer(), m_VSData->GetBufferSize());
             fileWriter << (SIZE_T)m_PSData->GetBufferSize();
             fileWriter.Write((byte*)m_PSData->GetBufferPointer(), m_PSData->GetBufferSize());
+            fileWriter.Flush();
 
             PlatformAPI::CloseFile(outFileHandle);
             return true;

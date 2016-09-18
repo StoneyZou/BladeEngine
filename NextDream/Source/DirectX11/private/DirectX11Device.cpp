@@ -173,7 +173,7 @@ namespace BladeEngine
                 return NULL;
             }
 
-            DirectX11VertexShader* vertexShader = new DirectX11VertexShader(this, pD3D11VertexShader, inCreateInfo);
+            DirectX11VertexShader* vertexShader = new DirectX11VertexShader(this, pD3D11VertexShader);
             return RHIVertexShaderRef(vertexShader);
         }
 
@@ -190,7 +190,7 @@ namespace BladeEngine
                 return NULL;
             }
 
-            DirectX11PixelShader* pixelShader = new DirectX11PixelShader(this, pD3D11PixelShader, inCreateInfo);
+            DirectX11PixelShader* pixelShader = new DirectX11PixelShader(this, pD3D11PixelShader);
             return RHIPixelShaderRef(pixelShader);
         }
 
@@ -241,7 +241,7 @@ namespace BladeEngine
                 return NULL;
             }
 
-            DirectX11GeometryShader* geometryShader = new DirectX11GeometryShader(this, pD3D11GeometryShader, inCreateInfo);
+            DirectX11GeometryShader* geometryShader = new DirectX11GeometryShader(this, pD3D11GeometryShader);
             return RHIGeometryShaderRef(geometryShader);
         }
 

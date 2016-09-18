@@ -4,6 +4,7 @@
 #include <new>
 #include <Utility.h>
 #include <BString.h>
+#include <TArray.h>
 
 namespace BladeEngine
 {

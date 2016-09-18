@@ -59,28 +59,28 @@ namespace BladeEngine
 
         class DirectX11VertexShader : public RHIVertexShader
         {
-        private:
+        private:/*
             byte* m_Data;
-            SIZE_T m_DataSize;
+            SIZE_T m_DataSize;*/
 
             ID3D11VertexShader* m_VertexShader;
 
         public:
-            DirectX11VertexShader(DirectX11Device* inDevice, ID3D11VertexShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
-                RHIVertexShader(inDevice, inCreateInfo),
+            DirectX11VertexShader(DirectX11Device* inDevice, ID3D11VertexShader* inShader) :
+                RHIVertexShader(inDevice),
                 m_VertexShader(inShader)
             {
-                m_DataSize = inCreateInfo.DataSize;
+               /* m_DataSize = inCreateInfo.DataSize;
                 m_Data = (byte*)Malloc::Alloc(m_DataSize);
-                MemUtil::Memcopy(m_Data, m_DataSize, inCreateInfo.Data, inCreateInfo.DataSize);
+                MemUtil::Memcopy(m_Data, m_DataSize, inCreateInfo.Data, inCreateInfo.DataSize);*/
 
                 m_VertexShader->AddRef();
             }
 
             ID3D11VertexShader* GetShader() { return m_VertexShader; }
 
-            const byte* GetData() const { return m_Data; }
-            SIZE_T GetDataSize() const { return m_DataSize; }
+            /*const byte* GetData() const { return m_Data; }
+            SIZE_T GetDataSize() const { return m_DataSize; }*/
         };
 
         class DirectX11HullShader : public RHIHullShader 
@@ -139,8 +139,8 @@ namespace BladeEngine
             ID3D11GeometryShader* m_GeometryShader;
 
         public:
-            DirectX11GeometryShader(DirectX11Device* inDevice, ID3D11GeometryShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
-                RHIGeometryShader(inDevice, inCreateInfo),
+            DirectX11GeometryShader(DirectX11Device* inDevice, ID3D11GeometryShader* inShader) :
+                RHIGeometryShader(inDevice),
                 m_GeometryShader(inShader)
             {
                 m_GeometryShader->AddRef();
@@ -164,8 +164,8 @@ namespace BladeEngine
             ID3D11PixelShader* m_PixelShader;
 
         public:
-            DirectX11PixelShader(DirectX11Device* inDevice, ID3D11PixelShader* inShader, const RHIShaderCreateInfo& inCreateInfo) :
-                RHIPixelShader(inDevice, inCreateInfo),
+            DirectX11PixelShader(DirectX11Device* inDevice, ID3D11PixelShader* inShader) :
+                RHIPixelShader(inDevice),
                 m_PixelShader(inShader)
             {
                 m_PixelShader->AddRef();

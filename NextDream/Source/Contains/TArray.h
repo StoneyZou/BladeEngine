@@ -174,7 +174,7 @@ namespace BladeEngine
 
         void Clear()
         {
-            for (SIZE_T i = 0; i < m_Length - 1; ++i)
+            for (int32 i = 0; i < (int32)m_Length - 1; ++i)
             {
                 Type* element = &m_pData[i];
                 BladeDestruct(element, Type);

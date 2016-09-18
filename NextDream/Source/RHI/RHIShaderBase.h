@@ -398,57 +398,54 @@ namespace BladeEngine
         class RHIShaderBase : public RHIResource
         {
         public:
-            RHIShaderBase(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreareInifo) : RHIResource(inDevice, EONLY_GPU_READ), m_ResourceTable(inCreareInifo.ResourceTable)
+            RHIShaderBase(IRHIDevice* inDevice) : RHIResource(inDevice, EONLY_GPU_READ), m_ResourceTable(NULL)
             {}
 
-            const RHIShaderResourceTableRef& GetResourceTable() const { return m_ResourceTable; }
+            void SetResourceTable(RHIShaderResourceTable* inResourceTable) { m_ResourceTable = inResourceTable; }
+            const RHIShaderResourceTable* GetResourceTable() const { return m_ResourceTable; }
 
         private:
-            RHIShaderResourceTableRef m_ResourceTable;
+            RHIShaderResourceTable* m_ResourceTable;
         };
 
         class RHIVertexShader : public RHIShaderBase 
         {
         private:
-            RHIShaderInputTable m_InputTable;
+            RHIShaderInputTable* m_InputTable;
 
         public:
-            RHIVertexShader(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inDevice, inCreateInfo)
+            RHIVertexShader(IRHIDevice* inDevice) : RHIShaderBase(inDevice), m_InputTable(NULL)
             {}
 
-            void AddInputBindDesc(ESHADER_SEMANTIC_TYPE inSemantic, uint32 inSlot, SIZE_T inIndex)
-            {
-                m_InputTable.AddInputBindDesc(inSemantic, inSlot, inIndex);
-            }
-
-            RHIShaderInputTable& InputTable() { return m_InputTable; }
+            void SetInputTable(RHIShaderInputTable* inInputTable) { m_InputTable = inInputTable; }
+            const RHIShaderInputTable* GetInputTable() { return m_InputTable; }
         };
 
         class RHIHullShader : public RHIShaderBase 
         {
         public:
-            RHIHullShader(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inDevice, inCreateInfo)
+            RHIHullShader(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inDevice)
             {}
         };
 
         class RHIDomainShader : public RHIShaderBase
         {
         public:
-            RHIDomainShader(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inDevice, inCreateInfo)
+            RHIDomainShader(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inDevice)
             {}
         };
 
         class RHIGeometryShader : public RHIShaderBase
         {
         public:
-            RHIGeometryShader(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inDevice, inCreateInfo)
+            RHIGeometryShader(IRHIDevice* inDevice) : RHIShaderBase(inDevice)
             {}
         };
 
         class RHIPixelShader : public RHIShaderBase
         {
         public:
-            RHIPixelShader(IRHIDevice* inDevice, const RHIShaderCreateInfo& inCreateInfo) : RHIShaderBase(inDevice, inCreateInfo)
+            RHIPixelShader(IRHIDevice* inDevice) : RHIShaderBase(inDevice)
             {}
         };
 
