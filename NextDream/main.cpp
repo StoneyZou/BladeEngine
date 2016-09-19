@@ -7,6 +7,7 @@
 #include <RHITextureBase.h>
 #include <RHIShaderBase.h>
 #include <BArchive.h>
+#include <EnumDefine.h>
 
 
 const TCHAR* s_ShaderFileName = "E:/BladeEngine/Media/Shader/VertexShader.shader";
@@ -88,6 +89,8 @@ void main()
 
             RHI::RHIShaderInputTable inputTable;
             RHI::RHIShaderResourceTable resoureceTable;
+            RHI::RHIVertexShaderRef vertexShader = NULL;
+            RHI::RHIPixelShaderRef pixelShader = NULL;
 
             FileHandle fileHandle = PlatformAPI::OpenFile(s_ShaderFileName, EFILE_READ, EFILE_SHARE_READ_WRITE, EFILE_OPEN_EXISTING);
             if (PlatformAPI::CheckFileHandleValid(fileHandle))
@@ -100,7 +103,20 @@ void main()
                     if(fileReader)
                     {
                         RHI::RHIShaderCreateInfo createInfo;
-                        //createInfo.Data = content
+                        fileReader >> createInfo.DataSize;
+                        createInfo.Data = content + createInfo.DataSize;
+                        fileReader.Seek(ESEEK_POS_CUR, createInfo.DataSize);
+
+                        device->CreateVextexShader(createInfo);
+                        vertexShader->SetInputTable(&inputTable);
+                        vertexShader->SetResourceTable(&resoureceTable);
+
+                        fileReader >> createInfo.DataSize;
+                        createInfo.Data = content + createInfo.DataSize;
+                        fileReader.Seek(ESEEK_POS_CUR, createInfo.DataSize);
+
+                        device->CreatePixelShader(createInfo);
+                        pixelShader->SetResourceTable(&resoureceTable);
                     }
                 }
             }
@@ -112,8 +128,16 @@ void main()
 
                 immediateContext->SetViewport(0, 0.0f, 0.0f, window->GetWidth(), window->GetHeight(), 0.0f, 1.0f);
 
+                immediateContext->SetVertexShader(vertexShader);
+                
+                immediateContext->SetPixelShader(pixelShader);
+
+                immediateContext->SetVertexBuufer(vertexBuffer, sizeof(BVector3), 0);
+
                 BColor color(1.0f, 1.0f, 0.0f, 1.0f);
                 immediateContext->ClearRenderTarget(color);
+
+                immediateContext->DrawAuto();
 
                 swapChain->Present();
 
