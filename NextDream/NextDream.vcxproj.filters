@@ -150,9 +150,6 @@
     <ClInclude Include="Source\Platform\Windows\WindowsWindow.h">
       <Filter>头文件\Source\Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Platform\Windows\PlatformWindow.h">
-      <Filter>头文件\Source\Platform</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Platform\Windows\WindowsPCH.h">
       <Filter>头文件\Source\Platform\Windows</Filter>
     </ClInclude>
@@ -195,6 +192,9 @@
     <ClInclude Include="Source\Core\BPath.h">
       <Filter>头文件\Source\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Platform\PlatformWindow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\DirectX11\private\DirectX11Device.cpp">
@@ -216,6 +216,9 @@
       <Filter>头文件\Source\Platform\Private</Filter>
     </ClCompile>
     <ClCompile Include="Source\DirectX11\private\DirectXEnumMapping.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Platform\Windows\Private\WindowsAPI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

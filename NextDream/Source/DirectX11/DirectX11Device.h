@@ -127,7 +127,7 @@ namespace BladeEngine
     private:
         PFN_D3D11_CREATE_DEVICE m_FuncD3D11CreateDevice;
 
-        ModuleHandle m_Module;
+        HModule m_Module;
 		IDXGIFactory* m_DXGIFactory;
         TArray<IDXGIAdapter*> m_Adapters;
 
@@ -137,166 +137,15 @@ namespace BladeEngine
         }
 
     public:
-        virtual bool Load(const BString& inFileName)
-        {
-            m_Module = PlatformAPI::LoadBaseModule(inFileName);
-            if (!PlatformAPI::CheckModuleHandleValid(m_Module))
-            {
-                //log
-                return false;
-            }
-
-            m_FuncD3D11CreateDevice = (PFN_D3D11_CREATE_DEVICE)PlatformAPI::GetProcAddress(m_Module, "D3D11CreateDevice");
-            if (m_FuncD3D11CreateDevice == NULL)
-            {
-                //log
-                return false;
-            }
-
-            return true;
-        }
+        virtual bool Load(const BString& inFileName);
         
-        virtual bool StartUp()
-        {
-            HRESULT hr = CreateDXGIFactory(IID_IDXGIFactory, (void**)&m_DXGIFactory);
-            ComPtrGuard(m_DXGIFactory);
+        virtual bool StartUp();
 
-            if (FAILED(hr))
-            {
-                return false;
-            }
+        virtual void ShutDown();
 
-            uint32 index = 0;
-            IDXGIAdapter* adapter = NULL;
+        virtual void Unload();
 
-            uint64 maxDedicatedVideoMemory = 0;
-            uint64 maxDedicatedSystemMemory = 0;
-            uint64 maxSharedSystemMemory = 0;
-            
-            m_bestAdapterIndex = 0;
-
-            while (!FAILED(m_DXGIFactory->EnumAdapters(index, &adapter)))
-            {
-                ComPtrGuard(adapter);
-                if(adapter == NULL)
-                {
-                    //
-                    return false;
-                }
-
-                DXGI_ADAPTER_DESC desc; 
-                hr = adapter->GetDesc(&desc);
-                if (FAILED(hr))
-                {
-                    continue;
-                }
-
-                if (maxDedicatedVideoMemory < desc.DedicatedVideoMemory)
-                {
-                    m_bestAdapterIndex = index;
-                }
-
-                if (maxDedicatedVideoMemory == 0 && desc.DedicatedSystemMemory)
-                {
-                    m_bestAdapterIndex = index;
-                }
-
-                if (maxDedicatedVideoMemory == 0 && maxSharedSystemMemory == 0 && desc.SharedSystemMemory)
-                {
-                    m_bestAdapterIndex = index;
-                }
-
-                ++index;
-                adapter->AddRef();
-                m_Adapters.Add(adapter);
-                m_AdapterNames.Add(PlatformAPI::WideCahrToAnsiChar(desc.Description));
-            }
-
-            m_DXGIFactory->AddRef();
-            return true;
-        }
-
-        virtual void ShutDown()
-        {
-            if (m_DXGIFactory != NULL) { m_DXGIFactory->Release(); }
-            if (m_Device != NULL) { delete m_Device; }
-
-            for(uint32 i = 0; i < m_Adapters.Size(); ++i)
-            {
-                if(m_Adapters[i] != NULL)
-                {
-                    m_Adapters[i]->Release();
-                }
-            }
-            m_AdapterNames.Clear();
-
-            m_Device = NULL;
-            m_DXGIFactory = NULL;
-        }
-
-        virtual void Unload()
-        {
-            PlatformAPI::FreeBaseModule(m_Module);
-
-            m_FuncD3D11CreateDevice = NULL;
-            m_Module = 0;
-        }
-
-        virtual bool InitDevice(uint32 inAdapterIndex)
-        {
-            if(inAdapterIndex < 0 || inAdapterIndex >= m_Adapters.Size())
-            {
-                //
-                return false;
-            }
-
-            IDXGIAdapter* selectAdapter = m_Adapters[inAdapterIndex];
-
-            D3D_FEATURE_LEVEL feature;
-            ID3D11Device* device = NULL;
-            ID3D11DeviceContext* context = NULL;
-
-            const D3D_FEATURE_LEVEL featureLevel_11_1 = D3D_FEATURE_LEVEL_11_1;
-
-            // test can create device with ferture 11_1
-            HRESULT hr = m_FuncD3D11CreateDevice(
-                selectAdapter, D3D_DRIVER_TYPE_UNKNOWN, 0, 0,
-                &featureLevel_11_1, 1,
-                D3D11_SDK_VERSION,
-                &device, &feature, &context
-            );
-
-            if (FAILED(hr))
-            {
-                const D3D_FEATURE_LEVEL featureLevels[] = {
-                    D3D_FEATURE_LEVEL_11_0,
-                    D3D_FEATURE_LEVEL_10_1,
-                    D3D_FEATURE_LEVEL_10_0,
-                    D3D_FEATURE_LEVEL_9_3,
-                    D3D_FEATURE_LEVEL_9_2,
-                    D3D_FEATURE_LEVEL_9_1,
-                };
-                // create device with lower ferture
-                hr = m_FuncD3D11CreateDevice(
-                    selectAdapter, D3D_DRIVER_TYPE_UNKNOWN, 0, 0,
-                    featureLevels, countof(featureLevels),
-                    D3D11_SDK_VERSION,
-                    &device, &feature, &context
-                );
-            }
-
-            ComPtrGuard(device);
-            ComPtrGuard(context);
-
-            if (FAILED(hr))
-            {
-                //
-                return false;
-            }
-
-            m_Device = new RHI::DirectX11Device(m_DXGIFactory, device, context);
-            return true;
-        }
+        virtual bool InitDevice(uint32 inAdapterIndex);
 
         //virtual void SwitchAdapterByIndex(uint32 inIndex) const = 0;
     };

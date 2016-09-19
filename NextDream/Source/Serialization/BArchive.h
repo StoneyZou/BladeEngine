@@ -155,7 +155,7 @@ namespace BladeEngine
     class FileReader : public IReader
     {
     private:
-        FileHandle m_FileHandle;
+        HFile m_FileHandle;
         SIZE_T m_FileSize;
 
         SIZE_T m_CurPreReadPos;
@@ -166,7 +166,7 @@ namespace BladeEngine
         SIZE_T m_CurFilePos;
 
     public:
-        FileReader(FileHandle inHFile, uint32 inReadBufSize = 1024) 
+        FileReader(HFile inHFile, uint32 inReadBufSize = 1024) 
             : IReader(), 
             m_FileHandle(inHFile),
             m_FileSize(0), 
@@ -257,7 +257,7 @@ namespace BladeEngine
             return m_ReadBufferSize;
         }
 
-        SIZE_T SeekFile(FileHandle inFile, SIZE_T inPos)
+        SIZE_T SeekFile(HFile inFile, SIZE_T inPos)
         {
             SIZE_T result = PlatformAPI::SeekFile(m_FileHandle, inPos, ESEEK_POS_BEGIN);
             if (result == -1)
@@ -568,7 +568,7 @@ namespace BladeEngine
     class FileWriter : public IWriter
     {
     private:
-        FileHandle m_HFile;
+        HFile m_HFile;
 
         SIZE_T m_BufferWrittenLen;
         TArray<byte> m_WritetBuffer;
@@ -577,7 +577,7 @@ namespace BladeEngine
         SIZE_T m_CurFilePos;
 
     public:
-        FileWriter(FileHandle inHFile, uint32 inWriteBufSize = 1024)
+        FileWriter(HFile inHFile, uint32 inWriteBufSize = 1024)
             : IWriter(),
             m_HFile(inHFile),
             m_BufferWrittenLen(0),
@@ -594,7 +594,7 @@ namespace BladeEngine
         virtual bool IsEOF() const { return false; }
 
     private:
-        SIZE_T WriteFile(FileHandle inFile, const byte* inBuf, uint32 inBufSize)
+        SIZE_T WriteFile(HFile inFile, const byte* inBuf, uint32 inBufSize)
         {
             Flush();
             SIZE_T realSize = PlatformAPI::WriteFile(m_HFile, inBuf, inBufSize);
@@ -624,7 +624,7 @@ namespace BladeEngine
             return inBufferSize;
         }
 
-        void SeekFile(FileHandle inFile, uint32 inPos)
+        void SeekFile(HFile inFile, uint32 inPos)
         {
             Flush();
             SIZE_T result = PlatformAPI::SeekFile(m_HFile, inPos, ESEEK_POS_BEGIN);

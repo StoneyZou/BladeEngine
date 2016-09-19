@@ -2,20 +2,18 @@
 #include <stdio.h>
 #include <BVector.h>
 #include <RHIBufferBase.h>
-#include <d3d11.h>
 #include <PlatformAPI.h>
 #include <RHITextureBase.h>
 #include <RHIShaderBase.h>
 #include <BArchive.h>
 #include <EnumDefine.h>
 
-
 const TCHAR* s_ShaderFileName = "E:/BladeEngine/Media/Shader/VertexShader.shader";
 
 using namespace BladeEngine;
 void main()
 {
-    Framework::GlobalConfig::GetInstance().DirectX11DllPath = TEXT("C:\\Windows\\System32\\d3d11.dll");
+    /*Framework::GlobalConfig::GetInstance().DirectX11DllPath = TEXT("C:\\Windows\\System32\\d3d11.dll");
 
     IRHIModule* module = new DirectX11RHIModule();
     
@@ -92,11 +90,11 @@ void main()
             RHI::RHIVertexShaderRef vertexShader = NULL;
             RHI::RHIPixelShaderRef pixelShader = NULL;
 
-            FileHandle fileHandle = PlatformAPI::OpenFile(s_ShaderFileName, EFILE_READ, EFILE_SHARE_READ_WRITE, EFILE_OPEN_EXISTING);
-            if (PlatformAPI::CheckFileHandleValid(fileHandle))
+            HFile fileHandle = PlatformAPI::OpenFile(s_ShaderFileName, EFILE_READ, EFILE_SHARE_READ_WRITE, EFILE_OPEN_EXISTING);
+            if (PlatformAPI::CheckHFileValid(fileHandle))
             {
                 FileReader fileReader(fileHandle);
-                const byte* content = (const byte*)fileReader.ReadAll();
+                const uint8* content = (const uint8*)fileReader.ReadAll();
                 if (content != NULL)
                 {
                     fileReader >> inputTable >> resoureceTable;
@@ -126,7 +124,7 @@ void main()
             {
                 immediateContext->SetRenderTarget(swapChain->AsTexture());
 
-                immediateContext->SetViewport(0, 0.0f, 0.0f, window->GetWidth(), window->GetHeight(), 0.0f, 1.0f);
+                immediateContext->SetViewport(0, 0.0f, 0.0f, (float)window->GetWidth(), (float)window->GetHeight(), 0.0f, 1.0f);
 
                 immediateContext->SetVertexShader(vertexShader);
                 
@@ -151,6 +149,6 @@ void main()
         module->ShutDown();
     }
 
-    module->Unload();
+    module->Unload();*/
     return;
 }

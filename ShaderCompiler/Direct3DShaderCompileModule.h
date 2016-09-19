@@ -12,6 +12,27 @@
 
 namespace BladeEngine
 {
+    class _ComPtrGuard
+    {
+    private:
+        IUnknown* m_Ptr;
+
+    public:
+        _ComPtrGuard(IUnknown* inPtr) : m_Ptr(m_Ptr)
+        {
+        }
+
+        ~_ComPtrGuard()
+        {
+            if (m_Ptr != NULL)
+            {
+                m_Ptr->Release();
+            }
+        }
+    };
+
+    #define ComPtrGuard(ptr) _ComPtrGuard ptr##Guard(ptr)
+
     class Direct3DShaderCompileModule : public ShaderCompileModule
     {
     private:
@@ -38,7 +59,7 @@ namespace BladeEngine
         const char* PS_Target_2_0 = "ps_2_0";
 
     private:
-        ModuleHandle m_ModuleHandle;
+        HModule m_ModuleHandle;
         pD3DCompile m_D3DCompileFunc;
         pD3DReflect m_D3DReflectFunc;
 
@@ -60,7 +81,7 @@ namespace BladeEngine
         virtual bool Load(const BString& inFileName)
         {
             m_ModuleHandle = PlatformAPI::LoadBaseModule(inFileName);
-            if (!PlatformAPI::CheckModuleHandleValid(m_ModuleHandle))
+            if (!PlatformAPI::CheckHModuleValid(m_ModuleHandle))
             {
                 return false;
             }
@@ -91,8 +112,8 @@ namespace BladeEngine
     public:
         virtual bool Compile(const ANSICHAR* inFilename, ESHADER_MODEL inShaderModel)
         {
-            FileHandle fileHandle = PlatformAPI::OpenFile(inFilename, EFILE_READ, EFILE_SHARE_READ_WRITE, EFILE_OPEN_EXISTING);
-            if (PlatformAPI::CheckFileHandleValid(fileHandle))
+            HFile fileHandle = PlatformAPI::OpenFile(inFilename, EFILE_READ, EFILE_SHARE_READ_WRITE, EFILE_OPEN_EXISTING);
+            if (PlatformAPI::CheckHFileValid(fileHandle))
             {
                 FileReader fileReader(fileHandle);
 
@@ -308,9 +329,9 @@ namespace BladeEngine
         bool OutputToFile(const ANSICHAR* inFilename)
         {
             BString outFilename = BPath::GetFilenameWithoutExt(inFilename) + TEXT(".shader");
-            FileHandle outFileHandle = PlatformAPI::OpenFileA(outFilename, EFILE_WRITE, EFILE_SHARE_WRITE, EFIlE_CREATE_NEW);
+            HFile outFileHandle = PlatformAPI::OpenFileA(outFilename, EFILE_WRITE, EFILE_SHARE_WRITE, EFIlE_CREATE_NEW);
 
-            if (!PlatformAPI::CheckFileHandleValid(outFileHandle))
+            if (!PlatformAPI::CheckHFileValid(outFileHandle))
             {
                 return false;
             }

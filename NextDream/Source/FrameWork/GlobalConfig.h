@@ -20,7 +20,7 @@ namespace BladeEngine
         private:
             GlobalConfig()
             {
-                DirectX11DllPath = "";
+                //DirectX11DllPath = "";
                 DefaultAdapterName = "";
             }
 

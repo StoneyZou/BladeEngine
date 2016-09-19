@@ -27,6 +27,12 @@
     <ClCompile Include="..\NextDream\Source\DirectX11\private\DirectXEnumMapping.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="..\NextDream\Source\Platform\Windows\Private\WindowsAPI.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\NextDream\Source\Platform\Private\PlatformAPI.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderCompileModule.h">

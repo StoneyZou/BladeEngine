@@ -4,6 +4,7 @@
 #include <new>
 #include <type_traits>
 #include <TypeDefine.h>
+#include <MacroDefine.h>
 
 namespace BladeEngine
 {
@@ -96,6 +97,9 @@ namespace BladeEngine
     #define BladeCopyConstruct(ptr, value, type) _BladeCopyConstruct ptr##_BladeCopyConstruct(ptr, value);
     #define BladeDestruct(ptr, type) _BladeDestruct ptr##_BladeDestruct(ptr);
     #define BladeConstruct(ptr, type) _BladeConstruct ptr##_BladeConstruct (ptr);
+
+#if defined UNICODE
+    #define TEXT(str) L##str
 
     struct INoncopyable
     {

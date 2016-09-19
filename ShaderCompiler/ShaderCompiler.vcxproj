@@ -92,12 +92,16 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3dCompiler.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -152,6 +156,8 @@
   <ItemGroup>
     <ClCompile Include="..\NextDream\Source\Core\Private\CoreMisc.cpp" />
     <ClCompile Include="..\NextDream\Source\DirectX11\private\DirectXEnumMapping.cpp" />
+    <ClCompile Include="..\NextDream\Source\Platform\Private\PlatformAPI.cpp" />
+    <ClCompile Include="..\NextDream\Source\Platform\Windows\Private\WindowsAPI.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>

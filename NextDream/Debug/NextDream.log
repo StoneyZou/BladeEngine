@@ -1,13 +1,11 @@
-﻿  main.cpp
-e:\bladeengine\nextdream\main.cpp(94): error C2065: “FileReader”: 未声明的标识符
-e:\bladeengine\nextdream\main.cpp(94): error C2146: 语法错误: 缺少“;”(在标识符“fileReader”的前面)
-e:\bladeengine\nextdream\main.cpp(94): error C3861: “fileReader”: 找不到标识符
-e:\bladeengine\nextdream\main.cpp(95): error C2872: “byte”: 不明确的符号
-  c:\program files (x86)\windows kits\8.1\include\shared\rpcndr.h(176): note: 可能是“unsigned char byte”
-  e:\bladeengine\nextdream\source\core\typedefine.h(77): note: 或  “BladeEngine::byte”
-e:\bladeengine\nextdream\main.cpp(95): error C2065: “fileReader”: 未声明的标识符
-e:\bladeengine\nextdream\main.cpp(95): error C2228: “.ReadAll”的左边必须有类/结构/联合
-  e:\bladeengine\nextdream\main.cpp(95): note: 类型是“unknown-type”
-e:\bladeengine\nextdream\main.cpp(98): error C2065: “fileReader”: 未声明的标识符
-e:\bladeengine\nextdream\main.cpp(99): error C2065: “fileReader”: 未声明的标识符
-e:\bladeengine\nextdream\main.cpp(112): warning C4244: “参数”: 从“BladeEngine::uint32”转换到“float”，可能丢失数据
+﻿  DirectX11Context.cpp
+  正在生成代码...
+  正在编译...
+  main.cpp
+  WindowsAPI.cpp
+  PlatformAPI.cpp
+  GlobalConfig.cpp
+  DirectX11Device.cpp
+  正在生成代码...
+  NextDream.vcxproj -> E:\BladeEngine\Debug\BladeEngine.exe
+  NextDream.vcxproj -> E:\BladeEngine\Debug\BladeEngine.pdb (Full PDB)

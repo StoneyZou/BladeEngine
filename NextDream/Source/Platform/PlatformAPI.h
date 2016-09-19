@@ -15,8 +15,8 @@ namespace BladeEngine
     {
     };
 
-    typedef PlatformAPI::ModuleHandle ModuleHandle;
-    typedef PlatformAPI::FileHandle FileHandle;
+    typedef PlatformAPI::HModule HModule;
+    typedef PlatformAPI::HFile HFile;
 }
 
 #endif // !__BLADE_GENERAL_SYSTEM_API_H__

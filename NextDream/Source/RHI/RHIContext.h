@@ -69,6 +69,7 @@ namespace BladeEngine
         public:
             ~RHIContextBase() 
             {
+                m_ResourcesInContext.Clear();
                 if (m_Impl != NULL)
                 {
                     delete m_Impl;

@@ -4,9 +4,31 @@
 #include <DirectX11ShaderBase.h>
 #include <DirectX11TextureBase.h>
 #include <DirectXEnumMapping.h>
+#include <WindowsWindow.h>
 
 namespace BladeEngine
 {
+    class _ComPtrGuard
+    {
+    private:
+        IUnknown* m_Ptr;
+
+    public:
+        _ComPtrGuard(IUnknown* inPtr) : m_Ptr(m_Ptr)
+        {
+        }
+
+        ~_ComPtrGuard()
+        {
+            if (m_Ptr != NULL)
+            {
+                m_Ptr->Release();
+            }
+        }
+    };
+
+    #define ComPtrGuard(ptr) _ComPtrGuard ptr##Guard(ptr)
+
     namespace RHI
     {
         RHITexture2DRef DirectX11Device::CreateTexture2D(const RHITextureCreateInfo& inCreateInfo)
@@ -34,7 +56,7 @@ namespace BladeEngine
             textureData.SysMemPitch = 0;
             textureData.SysMemSlicePitch = 0;
 
-            ID3D11Texture2D* pD3D11Texture2D = NULL;    
+            ID3D11Texture2D* pD3D11Texture2D = NULL;
 
             HRESULT hr = m_pDevice->CreateTexture2D(&textureDesc, &textureData, &pD3D11Texture2D);
             ComPtrGuard(pD3D11Texture2D);
@@ -163,7 +185,7 @@ namespace BladeEngine
         RHIVertexShaderRef DirectX11Device::CreateVextexShader(const RHIShaderCreateInfo& inCreateInfo)
         {
             ID3D11VertexShader* pD3D11VertexShader = NULL;
-            
+
             HRESULT hr = m_pDevice->CreateVertexShader((const char*)inCreateInfo.Data, inCreateInfo.DataSize, NULL, &pD3D11VertexShader);
             ComPtrGuard(pD3D11VertexShader);
 
@@ -394,9 +416,9 @@ namespace BladeEngine
                 }
             }
 
-            if(uniformBuffer != NULL)
+            if (uniformBuffer != NULL)
             {
-                if(inCreateInfo.Data != NULL)
+                if (inCreateInfo.Data != NULL)
                 {
                     D3D11_MAPPED_SUBRESOURCE data;
                     HRESULT hr = m_pImmediateContext->Map(uniformBuffer->GetBuffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &data);
@@ -441,9 +463,9 @@ namespace BladeEngine
 
             // keep a reference
             SIZE_T insertIndex = m_UniformBufferList.Size() - 1;
-            for(SIZE_T i = 0; i < m_UniformBufferList.Size(); ++ i)
+            for (SIZE_T i = 0; i < m_UniformBufferList.Size(); ++i)
             {
-                if(m_UniformBufferList[i]->GetPackSize() > packDataSize)
+                if (m_UniformBufferList[i]->GetPackSize() > packDataSize)
                 {
                     insertIndex = i;
                     break;
@@ -475,16 +497,16 @@ namespace BladeEngine
             IDXGISwapChain* dxgiSwapChain = NULL;
             HRESULT hr = m_pDXGIFactory->CreateSwapChain(m_pDevice, &swapChainDesc, &dxgiSwapChain);
             ComPtrGuard(dxgiSwapChain);
-            
+
             if (FAILED(hr))
             {
                 return NULL;
             }
-            
+
             ID3D11Texture2D* texture2D = NULL;
             hr = dxgiSwapChain->GetBuffer(0, IID_ID3D11Texture2D, (void**)&texture2D);
             ComPtrGuard(texture2D);
-            
+
             if (FAILED(hr))
             {
                 return NULL;
@@ -499,7 +521,7 @@ namespace BladeEngine
             ID3D11ShaderResourceView* shaderResourceView = NULL;
             hr = m_pDevice->CreateShaderResourceView(texture2D, &shadowResourceViewDesc, &shaderResourceView);
             ComPtrGuard(shaderResourceView);
-            
+
             if (FAILED(hr))
             {
                 //Logger::Log()
@@ -588,9 +610,9 @@ namespace BladeEngine
 
         RHISwapChainRef DirectX11Device::GetSwapChain(PlatformWindowRef inWindow)
         {
-            for(uint32 i = 0; i < m_SwapChainList.Size(); ++i)
+            for (uint32 i = 0; i < m_SwapChainList.Size(); ++i)
             {
-                if(m_SwapChainList[i]->GetBelongToWindow() == inWindow)
+                if (m_SwapChainList[i]->GetBelongToWindow() == inWindow)
                 {
                     return m_SwapChainList[i];
                 }
@@ -601,11 +623,11 @@ namespace BladeEngine
         RHIImmediateContextRef DirectX11Device::GetImmediateContext()
         {
             ID3D11DeviceContext* pD3D11DeviceContext = NULL;
-            
+
             m_pDevice->GetImmediateContext(&pD3D11DeviceContext);
             ComPtrGuard(pD3D11DeviceContext);
 
-            if(pD3D11DeviceContext == NULL)
+            if (pD3D11DeviceContext == NULL)
             {
                 //log
                 return NULL;
@@ -631,5 +653,166 @@ namespace BladeEngine
             DirectX11DeferredContextImpl* deferredContext = new DirectX11DeferredContextImpl(pD3D11DeviceContext);
             return RHIDeferredContextRef(new RHIDeferredContext(deferredContext));
         }
+    }
+
+    bool DirectX11RHIModule::Load(const BString& inFileName)
+    {
+        m_Module = PlatformAPI::LoadBaseModule(inFileName);
+        if (!PlatformAPI::CheckHModuleValid(m_Module))
+        {
+            //log
+            return false;
+        }
+
+        m_FuncD3D11CreateDevice = (PFN_D3D11_CREATE_DEVICE)PlatformAPI::GetProcAddress(m_Module, "D3D11CreateDevice");
+        if (m_FuncD3D11CreateDevice == NULL)
+        {
+            //log
+            return false;
+        }
+
+        return true;
+    }
+
+    bool DirectX11RHIModule::StartUp()
+    {
+        HRESULT hr = CreateDXGIFactory(IID_IDXGIFactory, (void**)&m_DXGIFactory);
+        ComPtrGuard(m_DXGIFactory);
+
+        if (FAILED(hr))
+        {
+            return false;
+        }
+
+        uint32 index = 0;
+        IDXGIAdapter* adapter = NULL;
+
+        uint64 maxDedicatedVideoMemory = 0;
+        uint64 maxDedicatedSystemMemory = 0;
+        uint64 maxSharedSystemMemory = 0;
+
+        m_bestAdapterIndex = 0;
+
+        while (!FAILED(m_DXGIFactory->EnumAdapters(index, &adapter)))
+        {
+            ComPtrGuard(adapter);
+            if (adapter == NULL)
+            {
+                //
+                return false;
+            }
+
+            DXGI_ADAPTER_DESC desc;
+            hr = adapter->GetDesc(&desc);
+            if (FAILED(hr))
+            {
+                continue;
+            }
+
+            if (maxDedicatedVideoMemory < desc.DedicatedVideoMemory)
+            {
+                m_bestAdapterIndex = index;
+            }
+
+            if (maxDedicatedVideoMemory == 0 && desc.DedicatedSystemMemory)
+            {
+                m_bestAdapterIndex = index;
+            }
+
+            if (maxDedicatedVideoMemory == 0 && maxSharedSystemMemory == 0 && desc.SharedSystemMemory)
+            {
+                m_bestAdapterIndex = index;
+            }
+
+            ++index;
+            adapter->AddRef();
+            m_Adapters.Add(adapter);
+            m_AdapterNames.Add(PlatformAPI::WideCahrToAnsiChar(desc.Description));
+        }
+
+        m_DXGIFactory->AddRef();
+        return true;
+    }
+
+    void DirectX11RHIModule::ShutDown()
+    {
+        if (m_DXGIFactory != NULL) { m_DXGIFactory->Release(); }
+        if (m_Device != NULL) { delete m_Device; }
+
+        for (uint32 i = 0; i < m_Adapters.Size(); ++i)
+        {
+            if (m_Adapters[i] != NULL)
+            {
+                m_Adapters[i]->Release();
+            }
+        }
+        m_AdapterNames.Clear();
+
+        m_Device = NULL;
+        m_DXGIFactory = NULL;
+    }
+
+    void DirectX11RHIModule::Unload()
+    {
+        PlatformAPI::FreeBaseModule(m_Module);
+
+        m_FuncD3D11CreateDevice = NULL;
+        m_Module = 0;
+    }
+
+    bool DirectX11RHIModule::InitDevice(uint32 inAdapterIndex)
+    {
+        if (inAdapterIndex < 0 || inAdapterIndex >= m_Adapters.Size())
+        {
+            //
+            return false;
+        }
+
+        IDXGIAdapter* selectAdapter = m_Adapters[inAdapterIndex];
+
+        D3D_FEATURE_LEVEL feature;
+        ID3D11Device* device = NULL;
+        ID3D11DeviceContext* context = NULL;
+
+        const D3D_FEATURE_LEVEL featureLevel_11_1 = D3D_FEATURE_LEVEL_11_1;
+
+        // test can create device with ferture 11_1
+        HRESULT hr = m_FuncD3D11CreateDevice(
+            selectAdapter, D3D_DRIVER_TYPE_UNKNOWN, 0, 0,
+            &featureLevel_11_1, 1,
+            D3D11_SDK_VERSION,
+            &device, &feature, &context
+        );
+
+        if (FAILED(hr))
+        {
+            const D3D_FEATURE_LEVEL featureLevels[] = {
+                D3D_FEATURE_LEVEL_11_0,
+                D3D_FEATURE_LEVEL_10_1,
+                D3D_FEATURE_LEVEL_10_0,
+                D3D_FEATURE_LEVEL_9_3,
+                D3D_FEATURE_LEVEL_9_2,
+                D3D_FEATURE_LEVEL_9_1,
+            };
+            // create device with lower ferture
+            hr = m_FuncD3D11CreateDevice(
+                selectAdapter, D3D_DRIVER_TYPE_UNKNOWN, 0, 0,
+                featureLevels, countof(featureLevels),
+                D3D11_SDK_VERSION,
+                &device, &feature, &context
+            );
+        }
+
+        ComPtrGuard(device);
+        ComPtrGuard(context);
+
+        if (FAILED(hr))
+        {
+            //
+            return false;
+        }
+
+        m_Device = new RHI::DirectX11Device(m_DXGIFactory, device, context);
+        return true;
     }
 }

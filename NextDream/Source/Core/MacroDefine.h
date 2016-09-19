@@ -8,6 +8,13 @@ namespace BladeEngine
     #define WINDOWS_PLATFORM 1
 #endif
 
+#if defined(_UNICODE) || defined(UNICODE)
+    #undef UNICODE
+    #define UNICODE 1
+#else
+    #undef ANSI
+    #define ANSI 1
+#endif
 
 }
 

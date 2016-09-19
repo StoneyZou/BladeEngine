@@ -79,6 +79,11 @@ namespace BladeEngine
             m_pData = (Type*)Malloc::Alloc(sizeof(Type) * inCapacity);
         }
 
+        ~TArray()
+        {
+            Clear();
+        }
+
     public:
         Type& operator[] (SIZE_T index)
         {
