@@ -18,11 +18,11 @@ namespace BladeEngine
 
     private:
         SIZE_T m_Length;
-        SIZE_T m_Capacity;
+        SIZE_T m_CapacityInByte;
         TCHAR* m_Buffer;
 
     public:
-        BString() : m_Length(0), m_Capacity(0), m_Buffer(NULL)
+        BString() : m_Length(0), m_CapacityInByte(0), m_Buffer(NULL)
         {}
 
         ~BString()
@@ -33,39 +33,39 @@ namespace BladeEngine
         /**
         * @param inStr      An array of character encoding with ansi/unicode
         */
-        BString(const TCHAR* inStr) : m_Length(0), m_Capacity(0), m_Buffer(NULL)
+        BString(const TCHAR* inStr) : m_Length(0), m_CapacityInByte(0), m_Buffer(NULL)
         {
             SIZE_T newLength = StringUtil::Strlen(inStr);
             if (newLength != 0)
             {
-                m_Capacity = m_Length = newLength;
-                SIZE_T sizeInByte = (m_Capacity + 1) * sizeof(TCHAR);
-                m_Buffer = (TCHAR*)Malloc::Alloc(sizeInByte);
-                StringUtil::Strcpy(m_Buffer, sizeInByte, inStr);
+                m_Length = newLength;
+                m_CapacityInByte = (newLength + 1) * sizeof(TCHAR);
+                m_Buffer = (TCHAR*)Malloc::Alloc(m_CapacityInByte);
+                StringUtil::Strcpy(m_Buffer, m_CapacityInByte, inStr);
             }
         }
 
-        BString(const TCHAR* inStr, const SIZE_T inLen) : m_Length(inLen), m_Capacity(inLen), m_Buffer(NULL)
+        BString(const TCHAR* inStr, const SIZE_T inLen) : m_Length(inLen), m_CapacityInByte(inLen), m_Buffer(NULL)
         {
             if (m_Length != 0)
             {
-                SIZE_T sizeInByte = (m_Capacity + 1) * sizeof(TCHAR);
-                m_Buffer = (TCHAR*)Malloc::Alloc(sizeInByte);
-                StringUtil::Strncpy(m_Buffer, sizeInByte, inStr, inLen);
+                m_CapacityInByte = m_Length * sizeof(TCHAR);
+                m_Buffer = (TCHAR*)Malloc::Alloc(m_CapacityInByte);
+                StringUtil::Strncpy(m_Buffer, m_CapacityInByte, inStr, inLen);
             }
         }
 
-        BString(const BString& rl) : m_Length(rl.m_Length), m_Capacity(rl.m_Length), m_Buffer(NULL)
+        BString(const BString& rl) : m_Length(rl.m_Length), m_CapacityInByte(0), m_Buffer(NULL)
         {
             if (m_Length != 0)
             {
-                SIZE_T sizeInByte = (m_Capacity + 1) * sizeof(TCHAR);
-                m_Buffer = (TCHAR*)Malloc::Alloc(sizeInByte);
-                StringUtil::Strcpy(m_Buffer, sizeInByte, rl.m_Buffer);
+                m_CapacityInByte = (m_Length + 1) * sizeof(TCHAR);
+                m_Buffer = (TCHAR*)Malloc::Alloc(m_CapacityInByte);
+                StringUtil::Strcpy(m_Buffer, m_CapacityInByte, rl.m_Buffer);
             }
         }
 
-        operator const TCHAR*() const { return m_Buffer == NULL ? m_Buffer : NIL; }
+        operator const TCHAR*() const { return m_Buffer != NULL ? m_Buffer : NIL; }
 
     public:
         TCHAR& operator[] (const SIZE_T index)
@@ -96,14 +96,14 @@ namespace BladeEngine
             }
 
             SIZE_T sizeInByte = (rl.m_Length + 1) * sizeof(TCHAR);
-            if (m_Capacity < rl.m_Length)
+            if (m_CapacityInByte < sizeInByte)
             {
-                m_Capacity = rl.m_Length;
-                m_Buffer = (TCHAR*)Malloc::Realloc(m_Buffer, sizeInByte);
+                m_CapacityInByte = sizeInByte;
+                m_Buffer = (TCHAR*)Malloc::Realloc(m_Buffer, m_CapacityInByte);
             }    
 
             m_Length = rl.m_Length;
-            StringUtil::Strcpy(m_Buffer, sizeInByte, rl.m_Buffer);
+            StringUtil::Strcpy(m_Buffer, m_CapacityInByte, rl.m_Buffer);
 
             return *this;
         }
@@ -119,14 +119,14 @@ namespace BladeEngine
             }
 
             SIZE_T sizeInByte = (newLength + 1) * sizeof(TCHAR);
-            if (m_Capacity < newLength)
+            if (m_CapacityInByte < sizeInByte)
             {
-                m_Capacity = newLength;
-                m_Buffer = (TCHAR*)Malloc::Realloc(m_Buffer, sizeInByte);
+                m_CapacityInByte = sizeInByte;
+                m_Buffer = (TCHAR*)Malloc::Realloc(m_Buffer, m_CapacityInByte);
             }
             
             m_Length = newLength;
-            StringUtil::Strcpy(m_Buffer, sizeInByte, inStr);
+            StringUtil::Strcpy(m_Buffer, m_CapacityInByte, inStr);
 
             return *this;
         }
@@ -161,35 +161,42 @@ namespace BladeEngine
 
             newStr.Reserve(m_Length + rh.m_Length);
 
-            StringUtil::Strncpy(newStr.m_Buffer, (newStr.m_Capacity + 1) * sizeof(TCHAR), m_Buffer, m_Length);
-            StringUtil::Strncpy(newStr.m_Buffer + m_Length, (newStr.m_Capacity - m_Length + 1) * sizeof(TCHAR), rh.m_Buffer, rh.m_Length);
+            StringUtil::Strncpy(newStr.m_Buffer, m_CapacityInByte, m_Buffer, m_Length);
+            StringUtil::Strncpy(newStr.m_Buffer + m_Length, m_CapacityInByte - (m_Length + 1) * sizeof(TCHAR), rh.m_Buffer, rh.m_Length);
 
             newStr.m_Length = m_Length + rh.m_Length;
             return newStr;
         }
 
     public:
-        void Reserve(uint32 inNewCapacity)
+        void Reserve(uint32 inNewCapacityInTChar)
         {
-            if (inNewCapacity == 0)
+            ReserveInByte((inNewCapacityInTChar + 1) * sizeof(TCHAR));
+        }
+
+        void ReserveInByte(uint32 inNewCapacityInByte)
+        {
+            if (inNewCapacityInByte == 0)
             {
+                Malloc::Free(m_Buffer);
                 m_Buffer = NULL;
+                m_CapacityInByte = 0;
                 return;
             }
 
-            SIZE_T newSizeInByte = (inNewCapacity + 1) * sizeof(TCHAR);
-            if (m_Capacity < inNewCapacity)
+            if (m_CapacityInByte < inNewCapacityInByte)
             {
-                TCHAR* newBuffer = m_Buffer == NULL ? (TCHAR*)Malloc::Alloc(newSizeInByte) :
-                    (TCHAR*)Malloc::Realloc(m_Buffer, newSizeInByte);
+                TCHAR* newBuffer = m_Buffer == NULL ? (TCHAR*)Malloc::Alloc(inNewCapacityInByte) :
+                    (TCHAR*)Malloc::Realloc(m_Buffer, inNewCapacityInByte);
 
                 if (newBuffer != m_Buffer && NULL != m_Buffer)
                 {
-                    StringUtil::Strncpy(newBuffer, newSizeInByte, m_Buffer, m_Length);
+                    StringUtil::Strncpy(newBuffer, inNewCapacityInByte, m_Buffer, m_Length);
                     Malloc::Free(m_Buffer);
                 }
+
                 m_Buffer = newBuffer;
-                m_Capacity = inNewCapacity;
+                m_CapacityInByte = inNewCapacityInByte;
             }
         }
 
@@ -236,25 +243,25 @@ namespace BladeEngine
                 return inReader;
             }
 
-            /*byte* buffer = (byte*)inStr.m_Buffer;
-            SIZE_T sizeInByte = inStr.m_Length * sizeof(TCHAR);
-
+            byte* buffer = (byte*)inStr.m_Buffer;
+            SIZE_T curSizeInByte = (inStr.m_Length + 1) * sizeof(TCHAR);
             SIZE_T preReadSizeInByte = 0;
+
             while (!inReader.TestStrLen(&preReadSizeInByte))
             {
-                if (sizeInByte + preReadSizeInByte > inStr.m_Capacity * sizeof(TCHAR))
+                if (curSizeInByte + preReadSizeInByte > inStr.m_CapacityInByte)
                 {
-                    inStr.Reserve(length + preReadLen);
+                    inStr.ReserveInByte(curSizeInByte + preReadSizeInByte);
                 }
 
-                inReader.Read(buffer + sizeInByte - 1, preReadLen);
-                sizeInByte = sizeInByte + preReadSizeInByte;
+                inReader.Read(buffer + curSizeInByte, preReadSizeInByte);
+                curSizeInByte = curSizeInByte + preReadSizeInByte;
             }
 
-            if (length % sizeof(TCHAR) != 0)
+            if (curSizeInByte % sizeof(TCHAR) != 0)
             {
                 inReader.MarkFailed();
-            }*/
+            }
 
             return inReader;
         }

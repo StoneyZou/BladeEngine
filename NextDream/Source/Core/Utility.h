@@ -99,7 +99,12 @@ namespace BladeEngine
     #define BladeConstruct(ptr, type) _BladeConstruct ptr##_BladeConstruct (ptr);
 
 #if defined UNICODE
+    #undef TEXT
     #define TEXT(str) L##str
+#else
+    #undef TEXT
+    #define TEXT(str) str
+#endif
 
     struct INoncopyable
     {

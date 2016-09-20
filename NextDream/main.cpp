@@ -13,7 +13,7 @@ const TCHAR* s_ShaderFileName = "E:/BladeEngine/Media/Shader/VertexShader.shader
 using namespace BladeEngine;
 void main()
 {
-    /*Framework::GlobalConfig::GetInstance().DirectX11DllPath = TEXT("C:\\Windows\\System32\\d3d11.dll");
+    Framework::GlobalConfig::GetInstance().DirectX11DllPath = TEXT("C:\\Windows\\System32\\d3d11.dll");
 
     IRHIModule* module = new DirectX11RHIModule();
     
@@ -102,18 +102,18 @@ void main()
                     {
                         RHI::RHIShaderCreateInfo createInfo;
                         fileReader >> createInfo.DataSize;
-                        createInfo.Data = content + createInfo.DataSize;
+                        createInfo.Data = content + fileReader.Tell();
                         fileReader.Seek(ESEEK_POS_CUR, createInfo.DataSize);
 
-                        device->CreateVextexShader(createInfo);
+                        vertexShader = device->CreateVextexShader(createInfo);
                         vertexShader->SetInputTable(&inputTable);
                         vertexShader->SetResourceTable(&resoureceTable);
 
                         fileReader >> createInfo.DataSize;
-                        createInfo.Data = content + createInfo.DataSize;
+                        createInfo.Data = content + fileReader.Tell();
                         fileReader.Seek(ESEEK_POS_CUR, createInfo.DataSize);
 
-                        device->CreatePixelShader(createInfo);
+                        pixelShader = device->CreatePixelShader(createInfo);
                         pixelShader->SetResourceTable(&resoureceTable);
                     }
                 }
@@ -149,6 +149,6 @@ void main()
         module->ShutDown();
     }
 
-    module->Unload();*/
+    module->Unload();
     return;
 }

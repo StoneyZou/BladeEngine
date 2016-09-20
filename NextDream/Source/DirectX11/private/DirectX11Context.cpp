@@ -223,10 +223,22 @@ namespace BladeEngine
 
                 if (!foundSemantic)
                 {
-                    //log
                     return;
                 }
             }
+
+            ID3D11Device* device = NULL;
+            m_Context->GetDevice(&device);
+
+            ID3D11InputLayout* inputLayout = NULL; 
+            HRESULT hr = device->CreateInputLayout(m_InputElementDescs.TypePtr(), inputElementDescIndex, NULL, 0, &inputLayout);
+            if (FAILED(hr))
+            {
+                return;
+            }
+
+            m_Context->IASetInputLayout(inputLayout);
+            inputLayout->Release();
 
             m_Context->DrawAuto();
         }

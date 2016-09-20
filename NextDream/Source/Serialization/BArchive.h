@@ -239,7 +239,7 @@ namespace BladeEngine
             }
 
             MemUtil::Memcopy(inBuffer, inBufferSize, m_ReadBuffer.TypePtr() + m_CurLocalPos - m_CurPreReadPos, inBufferSize);
-            m_CurLocalPos = m_CurFilePos + inBufferSize;
+            m_CurLocalPos = m_CurLocalPos + inBufferSize;
 
             return inBufferSize;
         }
@@ -301,12 +301,6 @@ namespace BladeEngine
 
             if (inBufferSize == 0)
                 return 0;
-
-            if (inBufferSize < m_FileSize - m_CurLocalPos)
-            {
-                m_IsFailed = true;
-                return -1;
-            }
 
             // 可以从读取缓存区读取数据的情况
             SIZE_T preReadPartSize = 0;

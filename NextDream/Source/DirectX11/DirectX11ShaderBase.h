@@ -59,8 +59,8 @@ namespace BladeEngine
 
         class DirectX11VertexShader : public RHIVertexShader
         {
-        private:/*
-            byte* m_Data;
+        private:
+            /*byte* m_Data;
             SIZE_T m_DataSize;*/
 
             ID3D11VertexShader* m_VertexShader;
@@ -70,7 +70,7 @@ namespace BladeEngine
                 RHIVertexShader(inDevice),
                 m_VertexShader(inShader)
             {
-               /* m_DataSize = inCreateInfo.DataSize;
+                /*m_DataSize = inCreateInfo.DataSize;
                 m_Data = (byte*)Malloc::Alloc(m_DataSize);
                 MemUtil::Memcopy(m_Data, m_DataSize, inCreateInfo.Data, inCreateInfo.DataSize);*/
 
