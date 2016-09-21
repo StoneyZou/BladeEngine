@@ -195,6 +195,9 @@
     <ClInclude Include="Source\Platform\PlatformWindow.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Source\OpenGL\Windows\OpenGLWindows.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\DirectX11\private\DirectX11Device.cpp">
@@ -219,6 +222,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Source\Platform\Windows\Private\WindowsAPI.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\OpenGL\Windows\OpenGLWindows.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
