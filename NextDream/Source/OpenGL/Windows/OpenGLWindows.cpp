@@ -1,7 +1,8 @@
 #include <Windows.h>
-#include <TypeDefine.h>
 #include <GL/glew.h>
 #include <GL/wglew.h>
+#include <TypeDefine.h>
+#include <OpenGLWindows.h>
 
 namespace BladeEngine
 {
@@ -9,19 +10,11 @@ namespace BladeEngine
     {
         HWND    DummyWnd;
         HDC     DummyDC;
-        HGLRC   OpenGLContext;
+        HGLRC   Context;
 
         bool MakeCurrentContext()
         {
-            return wglMakeCurrent(DummyDC, OpenGLContext) == TRUE;
-        }
-
-        void ReleaseContext()
-        {
-            if( wglGetCurrentDC() == 
-            if (DummyWnd != NULL) { CloseWindow(DummyWnd); }
-            if (DummyDC != NULL) { CloseWindow(DummyDC); }
-            if (DummyDC != NULL) { CloseWindow(DummyDC); }
+            return wglMakeCurrent(DummyDC, Context) == TRUE;
         }
     };
 
@@ -30,32 +23,37 @@ namespace BladeEngine
         OpenGLWindowsContext m_RenderingContext;
     };
 
-    OpenGLWindowsDevice* CreateOpenGLWindowsDevice()
+    OpenGLWindowsDevice* OpenGLWindowsDeviceUtil::CreateDevice()
     {
-        HWND dummyWnd = CreateDummyWindow();
-        if( dummyWnd == NULL)
+        OpenGLWindowsContext dummyContext;
+        if (!CreateDummyOpenGLContext(&dummyContext, 3, 3))
         {
             return NULL;
         }
 
-        HDC hDc = GetDC(dummyWnd);
-        if (hDc == NULL)
+        MakeCurrentOpenGLContext(&dummyContext);
+        GLenum result = glewInit();
+        if (result != GLEW_OK)
+        {
+            ReleaseDummyOpenGLContext(&dummyContext);
+            return NULL;
+        }
+
+        ReleaseDummyOpenGLContext(&dummyContext);
+
+        OpenGLWindowsDevice* device = new OpenGLWindowsDevice();
+        if (CreateDummyOpenGLContext(&device->m_RenderingContext, 3, 3))
         {
             return NULL;
         }
 
-        if (InitPixelFormatForDC(hDc))
-        {
-            return NULL;
-        }
+        return device;
+    }
 
-        HGLRC hGLRC = CreateOpenGLContext(hDc, 3, 3);
-        if (hGLRC != NULL)
-        {
-            return NULL;
-        }
-
-
+    void ReleaseOpenGLWindowsDevice(OpenGLWindowsDevice* inDevice)
+    {
+        ReleaseDummyOpenGLContext(&inDevice->m_RenderingContext);
+        delete inDevice;
     }
 
     HWND CreateDummyWindow()
@@ -121,5 +119,55 @@ namespace BladeEngine
         };
 
         return wglCreateContextAttribsARB(hDc, NULL, AttribList);
+    }
+   
+    bool CreateDummyOpenGLContext(OpenGLWindowsContext* inContext, int MajorVersion, int MinorVersion)
+    {
+        HWND dummyWnd = CreateDummyWindow();
+        if (dummyWnd == NULL)
+        {
+            return NULL;
+        }
+
+        HDC hDc = GetDC(dummyWnd);
+        if (hDc == NULL || InitPixelFormatForDC(hDc))
+        {
+            CloseWindow(dummyWnd);
+            return NULL;
+        }
+
+        HGLRC hGLRC = CreateOpenGLContext(hDc, 3, 3);
+        if (hGLRC != NULL)
+        {
+            CloseWindow(dummyWnd);
+            return NULL;
+        }
+
+        inContext->DummyWnd = dummyWnd;
+        inContext->DummyDC = hDc;
+        inContext->Context = hGLRC;
+    }
+
+    void ReleaseDummyOpenGLContext(OpenGLWindowsContext* inContext)
+    {
+        if (wglGetCurrentDC() == inContext->DummyDC || wglGetCurrentContext() == inContext->Context)
+        {
+            wglMakeCurrent(NULL, NULL);
+        }
+        if (inContext->DummyWnd != NULL) { CloseWindow(inContext->DummyWnd); }
+        if (inContext->Context != NULL) { wglDeleteContext(inContext->Context); }
+
+        inContext->DummyWnd = NULL;
+        inContext->DummyDC = NULL;
+        inContext->Context = NULL;
+    }
+
+    bool MakeCurrentOpenGLContext(OpenGLWindowsContext* inContext)
+    {
+        if (inContext == NULL)
+        {
+            return wglMakeCurrent(NULL, NULL) == TRUE;
+        }
+        return wglMakeCurrent(inContext->DummyDC, inContext->Context) == TRUE;
     }
 }

@@ -8,7 +8,7 @@
 #include <BArchive.h>
 #include <EnumDefine.h>
 
-const TCHAR* s_ShaderFileName = "E:/BladeEngine/Media/Shader/VertexShader.shader";
+const TCHAR* s_ShaderFileName = "../Media/Shader/VertexShader.shader";
 
 using namespace BladeEngine;
 void main()
