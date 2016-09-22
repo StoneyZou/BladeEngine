@@ -2,7 +2,8 @@
 #include <GL/glew.h>
 #include <GL/wglew.h>
 #include <TypeDefine.h>
-#include <OpenGLWindows.h>
+#include <RHIDevice.h>
+#include <RHITextureBase.h>
 
 namespace BladeEngine
 {
@@ -11,6 +12,7 @@ namespace BladeEngine
         HWND    DummyWnd;
         HDC     DummyDC;
         HGLRC   Context;
+        GLuint  FrameBuffer;
 
         bool MakeCurrentContext()
         {
@@ -25,21 +27,10 @@ namespace BladeEngine
 
     OpenGLWindowsDevice* OpenGLWindowsDeviceUtil::CreateDevice()
     {
-        OpenGLWindowsContext dummyContext;
-        if (!CreateDummyOpenGLContext(&dummyContext, 3, 3))
+        if (!InitOpenGLLibrary(3, 3))
         {
             return NULL;
         }
-
-        MakeCurrentOpenGLContext(&dummyContext);
-        GLenum result = glewInit();
-        if (result != GLEW_OK)
-        {
-            ReleaseDummyOpenGLContext(&dummyContext);
-            return NULL;
-        }
-
-        ReleaseDummyOpenGLContext(&dummyContext);
 
         OpenGLWindowsDevice* device = new OpenGLWindowsDevice();
         if (CreateDummyOpenGLContext(&device->m_RenderingContext, 3, 3))
@@ -143,6 +134,8 @@ namespace BladeEngine
             return NULL;
         }
 
+        glGenFramebuffers(1, &inContext->FrameBuffer);
+
         inContext->DummyWnd = dummyWnd;
         inContext->DummyDC = hDc;
         inContext->Context = hGLRC;
@@ -154,12 +147,16 @@ namespace BladeEngine
         {
             wglMakeCurrent(NULL, NULL);
         }
-        if (inContext->DummyWnd != NULL) { CloseWindow(inContext->DummyWnd); }
+
         if (inContext->Context != NULL) { wglDeleteContext(inContext->Context); }
+        if (inContext->DummyDC != NULL) { ReleaseDC(inContext->DummyWnd, inContext->DummyDC); }
+        if (inContext->DummyWnd != NULL) { CloseWindow(inContext->DummyWnd); }
+        if (inContext->FrameBuffer != 0) { glDeleteFramebuffers(1, &inContext->FrameBuffer); }
 
         inContext->DummyWnd = NULL;
         inContext->DummyDC = NULL;
         inContext->Context = NULL;
+        inContext->FrameBuffer = 0;
     }
 
     bool MakeCurrentOpenGLContext(OpenGLWindowsContext* inContext)
@@ -169,5 +166,48 @@ namespace BladeEngine
             return wglMakeCurrent(NULL, NULL) == TRUE;
         }
         return wglMakeCurrent(inContext->DummyDC, inContext->Context) == TRUE;
+    }
+
+    bool InitOpenGLLibrary(int MajorVersion, int MinorVersion)
+    {
+        static bool bOpenGLLibraryInitialized = false;
+        if (bOpenGLLibraryInitialized)
+        {
+            return true;
+        }
+
+        bool result = false;
+        HWND dummyWnd = CreateDummyWindow();
+        if (dummyWnd != NULL)
+        {
+            HDC hDC = GetDC(dummyWnd);
+            if (hDC != NULL && InitPixelFormatForDC(hDC))
+            {
+                HGLRC hGLRC = CreateOpenGLContext(hDC, MajorVersion, MinorVersion);
+                if (hGLRC != NULL)
+                {
+                    GLenum result = glewInit();
+                    if (result == GLEW_OK)
+                    {
+                        result = true;
+                        bOpenGLLibraryInitialized = true;
+                    }
+                    wglDeleteContext(hGLRC);
+                }
+                ReleaseDC(dummyWnd, hDC);
+            }
+            CloseWindow(dummyWnd);
+        }
+
+        return result;
+    }
+
+    void CreateTexture2D(RHI::RHITextureCreateInfo info)
+    {
+        GLuint texture;
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, info.Width, info.Height, 0, GL_RGBA, GL_FLOAT, info.Data);
+        glTextureRenderbufferEXT
     }
 }
