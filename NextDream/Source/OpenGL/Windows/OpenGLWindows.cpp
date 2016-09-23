@@ -208,6 +208,6 @@ namespace BladeEngine
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, info.Width, info.Height, 0, GL_RGBA, GL_FLOAT, info.Data);
-        glTextureRenderbufferEXT
+        //glTextureRenderbufferEXT
     }
 }

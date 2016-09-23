@@ -99,7 +99,6 @@ namespace BladeEngine
         {
             EONLY_GPU_READ = EGPU_READ,
             EONLY_CPU_READ = EGPU_READ,
-            ECPU_READ_CPU_WRITE = ECPU_READ | ECPU_WRITE,
             EGPU_READ_CPU_WRITE = EGPU_READ | ECPU_WRITE,
             EGPU_READ_GPU_WRITE = EGPU_READ | EGPU_WRITE,
         };

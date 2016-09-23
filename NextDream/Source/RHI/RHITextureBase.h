@@ -16,8 +16,6 @@ namespace BladeEngine
             uint32 SampleCount, SampleQulity;
             uint32 Usage;
             EDATA_FORMAT BaseFormat;
-            EDATA_FORMAT RenderTargetFormat;
-            EDATA_FORMAT DepthStencilFormat;
             ECPU_GPU_ACCESS_MODE AccessMode;
             uint32 DataSize;
             void* Data;

@@ -48,6 +48,7 @@
     <ClInclude Include="Source\Math\BColor.h" />
     <ClInclude Include="Source\Math\BMath.h" />
     <ClInclude Include="Source\Math\BVector.h" />
+    <ClInclude Include="Source\OpenGL\OpenGLTextureBase.h" />
     <ClInclude Include="Source\OpenGL\Windows\OpenGLWindows.h" />
     <ClInclude Include="Source\Platform\PlatformEnum.h" />
     <ClInclude Include="Source\Platform\PlatformAPI.h" />
