@@ -48,7 +48,6 @@ namespace BladeEngine
                 BladeAssert((CanAsDepthStencil() && m_ShaderResource != NULL) || (!CanAsDepthStencil() && m_ShaderResource == NULL));
 
                 m_Texture->AddRef();
-
                 m_ShaderResource->AddRef();
                 if (m_RenderTarget != NULL) { m_RenderTarget->AddRef(); }
                 if (m_DepthStencil != NULL) { m_DepthStencil->AddRef(); }
@@ -87,7 +86,7 @@ namespace BladeEngine
                 }
 #endif
 
-                if (mapType == D3D11_MAP_WRITE_DISCARD && (GetAccessMode() & ECPU_WRITE) == 0)
+                if (mapType == D3D11_MAP_WRITE_DISCARD && (GetUsageMode() & ECPU_WRITE) == 0)
                 {
                     //log
                     return NULL;
@@ -118,7 +117,7 @@ namespace BladeEngine
                     desc.MipLevels = 0;
                     desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
                     desc.MiscFlags = 0;
-                    desc.Format = DirectXEnumMapping::Get(m_DataFormat);
+                    desc.Format = DirectXEnumMapping::GetPixelFormat(m_DataFormat);
 
                     HRESULT hr = device->CreateTexture2D(&desc, NULL, &m_ShadowTexture);
                     if (FAILED(hr))

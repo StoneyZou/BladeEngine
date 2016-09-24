@@ -13,36 +13,34 @@ namespace BladeEngine
         {
             RHITexuteSamplerInfo Sampler;
             uint32 Width, Height, Depth;
-            uint32 SampleCount, SampleQulity;
+            uint32 SampleCount;
             uint32 Usage;
             EDATA_FORMAT BaseFormat;
-            ECPU_GPU_ACCESS_MODE AccessMode;
+            ECPU_GPU_USAGE_MODE UsageMode;
+            ECPU_ACCESS_MODE CpuAccessMode;
             uint32 DataSize;
             void* Data;
         };
 
         struct RHITextureInitInfo
         {
-            bool CanAsRenderTarget, CanAsDepthStencil;
-            uint32 Width, Height;
-            uint32 SampleCount, SampleQulity;
-            uint32 Usage;
+            uint32 Width, Height, Depth;
+            uint32 SampleCount;
             EDATA_FORMAT BaseFormat;
-            ECPU_GPU_ACCESS_MODE AccessMode;
+            ECPU_GPU_USAGE_MODE AccessMode;
         };
 
         class RHITextureBase : public RHIResource, public IResourceLockable
         {
         protected:
             EDATA_FORMAT m_DataFormat;
-            uint32 m_SampleCount, m_SampleQulity;
+            uint32 m_SampleCount;
             bool m_CanAsRenderTarget, m_CanAsDepthStencil;
 
         public:
             RHITextureBase(IRHIDevice* inDevice, const RHITextureInitInfo& inInitInfo) :
                 RHIResource(inDevice, inInitInfo.AccessMode),
                 m_DataFormat(inInitInfo.BaseFormat),
-                m_SampleQulity(inInitInfo.SampleQulity),
                 m_SampleCount(inInitInfo.SampleCount),
                 m_CanAsRenderTarget(inInitInfo.CanAsRenderTarget),
                 m_CanAsDepthStencil(inInitInfo.CanAsDepthStencil)
@@ -52,8 +50,6 @@ namespace BladeEngine
             EDATA_FORMAT GetDataFormat() const { return m_DataFormat; }
 
             uint32 GetSamplerCount() const { return m_SampleCount; }
-            uint32 GetSamplerQuality() const { return m_SampleQulity; }
-
             bool CanAsRenderTarget() const { return m_CanAsRenderTarget; }
             bool CanAsDepthStencil() const { return m_CanAsDepthStencil; }
         };

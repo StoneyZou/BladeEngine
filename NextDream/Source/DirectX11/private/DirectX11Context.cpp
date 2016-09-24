@@ -208,10 +208,10 @@ namespace BladeEngine
                     {
                         m_InputElementDescs[inputElementDescIndex].SemanticName = ShaderSemanticNames[declarationTable[dTableIndex].Semantic];
                         m_InputElementDescs[inputElementDescIndex].SemanticIndex = declarationTable[dTableIndex].Index;
-                        m_InputElementDescs[inputElementDescIndex].Format = DirectXEnumMapping::Get(declarationTable[dTableIndex].Format);
+                        m_InputElementDescs[inputElementDescIndex].Format = DirectXEnumMapping::GetPixelFormat(declarationTable[dTableIndex].Format);
                         m_InputElementDescs[inputElementDescIndex].InputSlot = inputTable->m_InputTable[iTableIndex].Slot;
                         m_InputElementDescs[inputElementDescIndex].AlignedByteOffset = declarationTable[dTableIndex].Offset;
-                        m_InputElementDescs[inputElementDescIndex].InputSlotClass = DirectXEnumMapping::Get(declarationTable[dTableIndex].InputType);
+                        m_InputElementDescs[inputElementDescIndex].InputSlotClass = DirectXEnumMapping::GetPixelFormat(declarationTable[dTableIndex].InputType);
                         m_InputElementDescs[inputElementDescIndex].InstanceDataStepRate = declarationTable[dTableIndex].InstanceDataStepRate;
 
                         ++inputElementDescIndex;

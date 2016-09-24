@@ -33,23 +33,36 @@ namespace BladeEngine
     {
         RHITexture2DRef DirectX11Device::CreateTexture2D(const RHITextureCreateInfo& inCreateInfo)
         {
+            // 检查多重采样支持情况
+            UINT sampleQuality = 0;
+            if (inCreateInfo.SampleCount > 1)
+            {
+                if (m_pDevice->CheckMultisampleQualityLevels(
+                    DirectXEnumMapping::GetPixelFormat(inCreateInfo.BaseFormat),
+                    inCreateInfo.SampleCount, &sampleQuality) != S_OK)
+                {
+                    sampleQuality = 0;
+                }
+            }
+
             D3D11_TEXTURE2D_DESC textureDesc = { 0 };
             //tDesc.BindFlags
             textureDesc.Width = inCreateInfo.Width;
             textureDesc.Height = inCreateInfo.Height;
-            textureDesc.Usage = DirectXEnumMapping::Get(inCreateInfo.AccessMode);
+            textureDesc.Usage = DirectXEnumMapping::GetPixelFormat(inCreateInfo.UsageMode);
             textureDesc.CPUAccessFlags =
-                (inCreateInfo.AccessMode & ECPU_READ ? D3D11_CPU_ACCESS_READ : 0) |
-                (inCreateInfo.AccessMode & ECPU_WRITE ? D3D11_CPU_ACCESS_WRITE : 0);
-            textureDesc.SampleDesc.Count = 1;
-            textureDesc.SampleDesc.Quality = 0;
+                (inCreateInfo.UsageMode & ECPU_READ ? D3D11_CPU_ACCESS_READ : 0) |
+                (inCreateInfo.UsageMode & ECPU_WRITE ? D3D11_CPU_ACCESS_WRITE : 0);
+            textureDesc.SampleDesc.Count = inCreateInfo.SampleCount;
+            textureDesc.SampleDesc.Quality = sampleQuality < D3D11_STANDARD_MULTISAMPLE_PATTERN ?
+                sampleQuality : D3D11_STANDARD_MULTISAMPLE_PATTERN;
             textureDesc.ArraySize = 1;
             textureDesc.MipLevels = 0;
             textureDesc.BindFlags =
-                (inCreateInfo.AccessMode & EGPU_READ ? D3D11_BIND_SHADER_RESOURCE : 0) |
-                (inCreateInfo.AccessMode & EGPU_WRITE ? D3D11_BIND_RENDER_TARGET : 0);
+                (inCreateInfo.UsageMode & EGPU_READ ? D3D11_BIND_SHADER_RESOURCE : 0) |
+                (inCreateInfo.UsageMode & EGPU_WRITE ? D3D11_BIND_RENDER_TARGET : 0);
             textureDesc.MiscFlags = 0;
-            textureDesc.Format = DirectXEnumMapping::Get(inCreateInfo.BaseFormat);
+            textureDesc.Format = DirectXEnumMapping::GetPixelFormat(inCreateInfo.BaseFormat);
 
             D3D11_SUBRESOURCE_DATA textureData = { 0 };
             textureData.pSysMem = inCreateInfo.Data;
@@ -70,7 +83,7 @@ namespace BladeEngine
             ID3D11ShaderResourceView* pD3D11ShaderResourceView = NULL;
             ID3D11SamplerState* pSamplerState = NULL;
 
-            if ((inCreateInfo.AccessMode & EGPU_READ) != 0)
+            if ((inCreateInfo.UsageMode & EGPU_READ) != 0)
             {
                 D3D11_SHADER_RESOURCE_VIEW_DESC desc;
                 desc.Format = textureDesc.Format;
@@ -88,15 +101,15 @@ namespace BladeEngine
                 }
 
                 D3D11_SAMPLER_DESC samplerDesc;
-                samplerDesc.AddressU = DirectXEnumMapping::Get(inCreateInfo.Sampler.AddressU);
-                samplerDesc.AddressV = DirectXEnumMapping::Get(inCreateInfo.Sampler.AddressV);
-                samplerDesc.AddressW = DirectXEnumMapping::Get(inCreateInfo.Sampler.AddressW);
-                samplerDesc.Filter = DirectXEnumMapping::Get(inCreateInfo.Sampler.Filter);
+                samplerDesc.AddressU = DirectXEnumMapping::GetPixelFormat(inCreateInfo.Sampler.AddressU);
+                samplerDesc.AddressV = DirectXEnumMapping::GetPixelFormat(inCreateInfo.Sampler.AddressV);
+                samplerDesc.AddressW = DirectXEnumMapping::GetPixelFormat(inCreateInfo.Sampler.AddressW);
+                samplerDesc.Filter = DirectXEnumMapping::GetPixelFormat(inCreateInfo.Sampler.Filter);
                 samplerDesc.BorderColor[0] = inCreateInfo.Sampler.BorderColor[0];
                 samplerDesc.BorderColor[1] = inCreateInfo.Sampler.BorderColor[1];
                 samplerDesc.BorderColor[2] = inCreateInfo.Sampler.BorderColor[2];
                 samplerDesc.BorderColor[3] = inCreateInfo.Sampler.BorderColor[3];
-                samplerDesc.ComparisonFunc = DirectXEnumMapping::Get(inCreateInfo.Sampler.ComparisonFunc);
+                samplerDesc.ComparisonFunc = DirectXEnumMapping::GetPixelFormat(inCreateInfo.Sampler.ComparisonFunc);
                 samplerDesc.MaxAnisotropy = inCreateInfo.Sampler.MaxAnisotropy;
                 samplerDesc.MaxLOD = inCreateInfo.Sampler.MaxLOD;
                 samplerDesc.MinLOD = inCreateInfo.Sampler.MinLOD;
@@ -118,7 +131,7 @@ namespace BladeEngine
             ID3D11RenderTargetView* pD3D11RenderTargetView = NULL;
             if ((inCreateInfo.Usage & ETEXTURE_USAGE_RENDER_TARGET) != 0)
             {
-                if ((inCreateInfo.AccessMode & EGPU_WRITE) == 0)
+                if ((inCreateInfo.UsageMode & EGPU_WRITE) == 0)
                 {
                     //Logger::Log()
                     return NULL;
@@ -142,7 +155,7 @@ namespace BladeEngine
             ID3D11DepthStencilView* pD3D11DepthStencilView = NULL;
             if ((inCreateInfo.Usage & ETEXTURE_USAGE_DEPTH_STENCIL) != 0)
             {
-                if ((inCreateInfo.AccessMode & EGPU_WRITE) == 0)
+                if ((inCreateInfo.UsageMode & EGPU_WRITE) == 0)
                 {
                     //Logger::Log()
                     return NULL;
@@ -173,10 +186,8 @@ namespace BladeEngine
             initInfo.Width = inCreateInfo.Width;;
             initInfo.Height = inCreateInfo.Height;
             initInfo.SampleCount = inCreateInfo.SampleCount;
-            initInfo.SampleQulity = inCreateInfo.SampleQulity;
-            initInfo.Usage = inCreateInfo.Usage;
             initInfo.BaseFormat = inCreateInfo.BaseFormat;
-            initInfo.AccessMode = inCreateInfo.AccessMode;
+            initInfo.AccessMode = inCreateInfo.UsageMode;
 
             DirectX11Texture2D* texture2D = new DirectX11Texture2D(this, initInfo);
             return RHITexture2DRef(texture2D);
@@ -300,8 +311,8 @@ namespace BladeEngine
         RHIShaderStateRef DirectX11Device::CreateShaderState(const RHIShaderStateCreateInfo& inCreateInfo)
         {
             D3D11_RASTERIZER_DESC rasterizerStateDesc;
-            rasterizerStateDesc.FillMode = DirectXEnumMapping::Get(inCreateInfo.RasterizerDesc.FillMode);
-            rasterizerStateDesc.CullMode = DirectXEnumMapping::Get(inCreateInfo.RasterizerDesc.CullMode);
+            rasterizerStateDesc.FillMode = DirectXEnumMapping::GetPixelFormat(inCreateInfo.RasterizerDesc.FillMode);
+            rasterizerStateDesc.CullMode = DirectXEnumMapping::GetPixelFormat(inCreateInfo.RasterizerDesc.CullMode);
             rasterizerStateDesc.FrontCounterClockwise = inCreateInfo.RasterizerDesc.FrontCounterClockwise;
             rasterizerStateDesc.DepthBias = inCreateInfo.RasterizerDesc.DepthBias;
             rasterizerStateDesc.DepthBiasClamp = inCreateInfo.RasterizerDesc.DepthBiasClamp;
@@ -337,13 +348,13 @@ namespace BladeEngine
                 blendStateDesc.RenderTarget[i].BlendEnable = inCreateInfo.BlendDesc.RenderTarget[i].BlendEnable;
                 blendStateDesc.RenderTarget[i].RenderTargetWriteMask = inCreateInfo.BlendDesc.RenderTarget[i].RenderTargetWriteMask;
 
-                blendStateDesc.RenderTarget[i].BlendOp = DirectXEnumMapping::Get(inCreateInfo.BlendDesc.RenderTarget[i].BlendOp);
-                blendStateDesc.RenderTarget[i].SrcBlend = DirectXEnumMapping::Get(inCreateInfo.BlendDesc.RenderTarget[i].SrcBlend);
-                blendStateDesc.RenderTarget[i].DestBlend = DirectXEnumMapping::Get(inCreateInfo.BlendDesc.RenderTarget[i].DestBlend);
+                blendStateDesc.RenderTarget[i].BlendOp = DirectXEnumMapping::GetPixelFormat(inCreateInfo.BlendDesc.RenderTarget[i].BlendOp);
+                blendStateDesc.RenderTarget[i].SrcBlend = DirectXEnumMapping::GetPixelFormat(inCreateInfo.BlendDesc.RenderTarget[i].SrcBlend);
+                blendStateDesc.RenderTarget[i].DestBlend = DirectXEnumMapping::GetPixelFormat(inCreateInfo.BlendDesc.RenderTarget[i].DestBlend);
 
-                blendStateDesc.RenderTarget[i].BlendOpAlpha = DirectXEnumMapping::Get(inCreateInfo.BlendDesc.RenderTarget[i].BlendOpAlpha);
-                blendStateDesc.RenderTarget[i].SrcBlendAlpha = DirectXEnumMapping::Get(inCreateInfo.BlendDesc.RenderTarget[i].SrcBlendAlpha);
-                blendStateDesc.RenderTarget[i].DestBlendAlpha = DirectXEnumMapping::Get(inCreateInfo.BlendDesc.RenderTarget[i].DestBlendAlpha);
+                blendStateDesc.RenderTarget[i].BlendOpAlpha = DirectXEnumMapping::GetPixelFormat(inCreateInfo.BlendDesc.RenderTarget[i].BlendOpAlpha);
+                blendStateDesc.RenderTarget[i].SrcBlendAlpha = DirectXEnumMapping::GetPixelFormat(inCreateInfo.BlendDesc.RenderTarget[i].SrcBlendAlpha);
+                blendStateDesc.RenderTarget[i].DestBlendAlpha = DirectXEnumMapping::GetPixelFormat(inCreateInfo.BlendDesc.RenderTarget[i].DestBlendAlpha);
             }
 
             ID3D11BlendState* blendState = NULL;
@@ -364,18 +375,18 @@ namespace BladeEngine
             D3D11_DEPTH_STENCIL_DESC depthStencilStateDesc;
             depthStencilStateDesc.DepthEnable = inCreateInfo.DepthStencilDesc.DepthEnable;
             depthStencilStateDesc.DepthWriteMask = inCreateInfo.DepthStencilDesc.DepthEnable ? D3D11_DEPTH_WRITE_MASK_ALL : D3D11_DEPTH_WRITE_MASK_ZERO;
-            depthStencilStateDesc.DepthFunc = DirectXEnumMapping::Get(inCreateInfo.DepthStencilDesc.DepthFunc);
+            depthStencilStateDesc.DepthFunc = DirectXEnumMapping::GetPixelFormat(inCreateInfo.DepthStencilDesc.DepthFunc);
             depthStencilStateDesc.StencilEnable = inCreateInfo.DepthStencilDesc.StencilEnable;
             depthStencilStateDesc.StencilReadMask = inCreateInfo.DepthStencilDesc.StencilReadMask;
             depthStencilStateDesc.StencilWriteMask = inCreateInfo.DepthStencilDesc.StencilWriteMask;
-            depthStencilStateDesc.FrontFace.StencilFailOp = DirectXEnumMapping::Get(inCreateInfo.DepthStencilDesc.FrontFaceSFailFunc);
-            depthStencilStateDesc.FrontFace.StencilDepthFailOp = DirectXEnumMapping::Get(inCreateInfo.DepthStencilDesc.FrontFaceSPassDFailFunc);
-            depthStencilStateDesc.FrontFace.StencilPassOp = DirectXEnumMapping::Get(inCreateInfo.DepthStencilDesc.FrontFaceSPassDPassFunc);
-            depthStencilStateDesc.FrontFace.StencilFunc = DirectXEnumMapping::Get(inCreateInfo.DepthStencilDesc.FrontFaceStencilFunc);
-            depthStencilStateDesc.BackFace.StencilFailOp = DirectXEnumMapping::Get(inCreateInfo.DepthStencilDesc.BackFaceSFailFunc);
-            depthStencilStateDesc.BackFace.StencilDepthFailOp = DirectXEnumMapping::Get(inCreateInfo.DepthStencilDesc.BackFaceSPassDFailFunc);
-            depthStencilStateDesc.BackFace.StencilPassOp = DirectXEnumMapping::Get(inCreateInfo.DepthStencilDesc.BackFaceSPassDPassFunc);
-            depthStencilStateDesc.BackFace.StencilFunc = DirectXEnumMapping::Get(inCreateInfo.DepthStencilDesc.BackFaceStencilFunc);
+            depthStencilStateDesc.FrontFace.StencilFailOp = DirectXEnumMapping::GetPixelFormat(inCreateInfo.DepthStencilDesc.FrontFaceSFailFunc);
+            depthStencilStateDesc.FrontFace.StencilDepthFailOp = DirectXEnumMapping::GetPixelFormat(inCreateInfo.DepthStencilDesc.FrontFaceSPassDFailFunc);
+            depthStencilStateDesc.FrontFace.StencilPassOp = DirectXEnumMapping::GetPixelFormat(inCreateInfo.DepthStencilDesc.FrontFaceSPassDPassFunc);
+            depthStencilStateDesc.FrontFace.StencilFunc = DirectXEnumMapping::GetPixelFormat(inCreateInfo.DepthStencilDesc.FrontFaceStencilFunc);
+            depthStencilStateDesc.BackFace.StencilFailOp = DirectXEnumMapping::GetPixelFormat(inCreateInfo.DepthStencilDesc.BackFaceSFailFunc);
+            depthStencilStateDesc.BackFace.StencilDepthFailOp = DirectXEnumMapping::GetPixelFormat(inCreateInfo.DepthStencilDesc.BackFaceSPassDFailFunc);
+            depthStencilStateDesc.BackFace.StencilPassOp = DirectXEnumMapping::GetPixelFormat(inCreateInfo.DepthStencilDesc.BackFaceSPassDPassFunc);
+            depthStencilStateDesc.BackFace.StencilFunc = DirectXEnumMapping::GetPixelFormat(inCreateInfo.DepthStencilDesc.BackFaceStencilFunc);
 
             ID3D11DepthStencilState* depthStencilState = NULL;
             if (!m_DepthStencilStateMap.TryGetValue(depthStencilStateDesc, &depthStencilState))

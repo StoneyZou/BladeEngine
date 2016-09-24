@@ -23,9 +23,10 @@ namespace BladeEngine
     struct OpenGLWindowsDevice
     {
         OpenGLWindowsContext m_RenderingContext;
+        OpenGLWindowsContext m_SharedContext;
     };
 
-    OpenGLWindowsDevice* OpenGLWindowsDeviceUtil::CreateDevice()
+    OpenGLWindowsDevice* CreateDevice()
     {
         if (!InitOpenGLLibrary(3, 3))
         {
@@ -34,6 +35,11 @@ namespace BladeEngine
 
         OpenGLWindowsDevice* device = new OpenGLWindowsDevice();
         if (CreateDummyOpenGLContext(&device->m_RenderingContext, 3, 3))
+        {
+            return NULL;
+        }
+
+        if (CreateDummyOpenGLContext(&device->m_SharedContext, 3, 3))
         {
             return NULL;
         }
@@ -209,5 +215,10 @@ namespace BladeEngine
         glBindTexture(GL_TEXTURE_2D, texture);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, info.Width, info.Height, 0, GL_RGBA, GL_FLOAT, info.Data);
         //glTextureRenderbufferEXT
+    }
+
+    bool GetRenderBufferImage(GLuint renderBuffer, GLint level, GLenum format, GLenum type, GLsizei bufSize, void *pixels)
+    {
+        glBindFramebuffer();
     }
 }

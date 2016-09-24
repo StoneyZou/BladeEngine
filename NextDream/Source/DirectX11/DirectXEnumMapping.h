@@ -3,6 +3,7 @@
 
 #include <dxgi.h>
 #include <d3d11.h>
+#include <assert.h>
 
 #include <RHIEnum.h>
 #include <TypeDefine.h>
@@ -15,7 +16,7 @@ namespace BladeEngine
         class DirectXEnumMapping
         {
         public:
-            static DXGI_FORMAT Get(EDATA_FORMAT inFormat)
+            static DXGI_FORMAT GetPixelFormat(EDATA_FORMAT inFormat)
             {
                 DXGI_FORMAT result = DXGI_FORMAT_UNKNOWN;
                 switch (inFormat)
@@ -31,50 +32,37 @@ namespace BladeEngine
                 return DXGI_FORMAT_R8G8B8A8_UINT;
             }
 
-            static D3D11_MAP Get(ERES_LOCK_TYPE inType)
+            static D3D11_MAP GetPixelFormat(ERES_LOCK_TYPE inType)
             {
                 //log
                 return D3D11_MAP_READ;
             }
 
-            static D3D11_USAGE Get(ECPU_GPU_ACCESS_MODE inMode)
+            static D3D11_USAGE GetPixelFormat(ECPU_GPU_USAGE_MODE inMode)
             {
-                if((inMode & EGPU_READ) != 0)
+                D3D11_USAGE result = D3D11_USAGE_DEFAULT;
+                switch (inMode)
                 {
-                    if((inMode & EGPU_WRITE) != 0)
-                    {
-                        return D3D11_USAGE_DEFAULT;
-                    }
-                    else if((inMode & ECPU_WRITE) != 0)
-                    {
-                        return D3D11_USAGE_DYNAMIC;
-                    }
-                    else if ((inMode & ECPU_WRITE) == 0 && (inMode & EGPU_WRITE) == 0)
-                    {
-                        return D3D11_USAGE_IMMUTABLE;
-                    }
-                    else
-                    {
-                        //log
-                    }
-                }
-                else if ((inMode & ECPU_READ) != 0)
-                {
-                    if ((inMode & ECPU_WRITE) != 0)
-                    {
-                        return D3D11_USAGE_STAGING;
-                    }
-                    else
-                    {
-                        //log
-                    }
+                case BladeEngine::RHI::EONLY_GPU_READ:
+                    result = D3D11_USAGE_IMMUTABLE;
+                    break;
+                case BladeEngine::RHI::EGPU_READ_GPU_WRITE:
+                case BladeEngine::RHI::EONLY_GPU_WRITE:
+                    result = D3D11_USAGE_DEFAULT;
+                    break;
+                case BladeEngine::RHI::EGPU_READ_CPU_WRITE:
+                    result = D3D11_USAGE_DYNAMIC;
+                    break;
+                default:
+                    assert(0);
+                    break;
                 }
 
                 //log
                 return D3D11_USAGE_DEFAULT;
             }
 
-            static D3D11_FILL_MODE Get(EMESH_FILL_MODE inMode)
+            static D3D11_FILL_MODE GetPixelFormat(EMESH_FILL_MODE inMode)
             {
                 switch (inMode)
                 {
@@ -83,6 +71,7 @@ namespace BladeEngine
                 case EMESH_FILL_WIREFRAME:
                     return D3D11_FILL_WIREFRAME;
                 default:
+                    assert(0);
                     break;
                 }
 
@@ -90,7 +79,7 @@ namespace BladeEngine
                 return D3D11_FILL_SOLID;
             }
 
-            static D3D11_CULL_MODE Get(EFACE_CULL_MODE inMode)
+            static D3D11_CULL_MODE GetPixelFormat(EFACE_CULL_MODE inMode)
             {
                 switch (inMode)
                 {
@@ -108,7 +97,7 @@ namespace BladeEngine
                 return D3D11_CULL_NONE;
             }
 
-            static D3D11_BLEND Get(EBLEND_ARG inArg)
+            static D3D11_BLEND GetPixelFormat(EBLEND_ARG inArg)
             {
                 switch (inArg)
                 {
@@ -154,7 +143,7 @@ namespace BladeEngine
                 return D3D11_BLEND_ZERO;
             }
 
-            static D3D11_BLEND_OP Get(EBLEND_FUNC inFunc)
+            static D3D11_BLEND_OP GetPixelFormat(EBLEND_FUNC inFunc)
             {
                 switch (inFunc)
                 {
@@ -176,7 +165,7 @@ namespace BladeEngine
                 return D3D11_BLEND_OP_ADD;
             }
 
-            static D3D11_COMPARISON_FUNC Get(ECOMPARISON_FUNC inFunc)
+            static D3D11_COMPARISON_FUNC GetPixelFormat(ECOMPARISON_FUNC inFunc)
             {
                 switch (inFunc)
                 {
@@ -204,7 +193,7 @@ namespace BladeEngine
                 return D3D11_COMPARISON_NEVER;
             }
 
-            static D3D11_STENCIL_OP Get(EDEPTH_STENCIL_WRITE_FUNC inFunc)
+            static D3D11_STENCIL_OP GetPixelFormat(EDEPTH_STENCIL_WRITE_FUNC inFunc)
             {
                 switch (inFunc)
                 {
@@ -232,7 +221,7 @@ namespace BladeEngine
                 return D3D11_STENCIL_OP_KEEP;
             }
 
-            static D3D11_TEXTURE_ADDRESS_MODE Get(ETEXTURE_ADDRESS_MODE inMode)
+            static D3D11_TEXTURE_ADDRESS_MODE GetPixelFormat(ETEXTURE_ADDRESS_MODE inMode)
             {
                 switch (inMode)
                 {
@@ -248,7 +237,7 @@ namespace BladeEngine
                 return D3D11_TEXTURE_ADDRESS_WRAP;
             }
 
-            static D3D11_FILTER Get(ETEXTURE_FILTER_MODE inMode)
+            static D3D11_FILTER GetPixelFormat(ETEXTURE_FILTER_MODE inMode)
             {
                 switch (inMode)
                 {
@@ -276,7 +265,7 @@ namespace BladeEngine
                 return D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
             }
 
-            static D3D11_INPUT_CLASSIFICATION Get(EINPUT_CLASSIFICATION inType)
+            static D3D11_INPUT_CLASSIFICATION GetPixelFormat(EINPUT_CLASSIFICATION inType)
             {
                 switch (inType)
                 {

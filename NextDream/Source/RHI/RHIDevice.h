@@ -20,15 +20,16 @@ namespace BladeEngine
         class RHIResource : public INoncopyable
         {
         private:
-            ECPU_GPU_ACCESS_MODE m_AccessMode;
+            ECPU_GPU_USAGE_MODE m_UsageMode;
+            ECPU_ACCESS_MODE m_CpuAccessMode;
             NotThreadSafeRefCount m_RefCount;
 
         protected:
             IRHIDevice* m_Device;
 
         public:
-            RHIResource(IRHIDevice* inDevice, ECPU_GPU_ACCESS_MODE inAccessMode) 
-                : m_AccessMode(inAccessMode), 
+            RHIResource(IRHIDevice* inDevice, ECPU_GPU_USAGE_MODE inAccessMode) 
+                : m_UsageMode(inAccessMode), 
                 m_Device(inDevice)
             {}
 
@@ -39,11 +40,11 @@ namespace BladeEngine
 			void ReleaseRHI();
 
         public:
-            ECPU_GPU_ACCESS_MODE GetAccessMode() const { return m_AccessMode; }
-            bool CanCpuRead()  const    { return ((m_AccessMode & ECPU_READ) != 0); }
-            bool CanCpuWrite() const    { return ((m_AccessMode & ECPU_WRITE) != 0); }
-            bool CanGpuRead()  const    { return ((m_AccessMode & EGPU_READ) != 0); }
-            bool CanGpuWrite() const    { return ((m_AccessMode & EGPU_WRITE) != 0); }
+            ECPU_GPU_USAGE_MODE GetUsageMode() const { return m_UsageMode; }
+            bool CanCpuRead()  const    { return ((m_UsageMode & ECPU_READ) != 0); }
+            bool CanCpuWrite() const    { return ((m_UsageMode & ECPU_WRITE) != 0); }
+            bool CanGpuRead()  const    { return ((m_UsageMode & EGPU_READ) != 0); }
+            bool CanGpuWrite() const    { return ((m_UsageMode & EGPU_WRITE) != 0); }
 
         public:
             int32 AddRef() const { return m_RefCount.AddRef(); }
@@ -73,7 +74,7 @@ namespace BladeEngine
         {
             friend RHIContextBase;
         protected:
-            virtual RHIResource* Copy(RHIContextBase* inContext, ECPU_GPU_ACCESS_MODE inMode) = 0;
+            virtual RHIResource* Copy(RHIContextBase* inContext, ECPU_GPU_USAGE_MODE inMode) = 0;
         };
 
         class IResourceLockable;

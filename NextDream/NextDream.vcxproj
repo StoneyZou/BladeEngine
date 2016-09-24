@@ -48,6 +48,8 @@
     <ClInclude Include="Source\Math\BColor.h" />
     <ClInclude Include="Source\Math\BMath.h" />
     <ClInclude Include="Source\Math\BVector.h" />
+    <ClInclude Include="Source\OpenGL\OpenGLBase.h" />
+    <ClInclude Include="Source\OpenGL\OpenGLEnumMapping.h" />
     <ClInclude Include="Source\OpenGL\OpenGLTextureBase.h" />
     <ClInclude Include="Source\OpenGL\Windows\OpenGLWindows.h" />
     <ClInclude Include="Source\Platform\PlatformEnum.h" />
@@ -131,7 +133,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\3rdParty\include;.\Source\Serialization;.\Source\Platform\Windows;.\Source\Platform;.\Source\FrameWork;.\Source\Math;.\Source\Contains;.\Source\Core\Platforms;.\Source\DirectX11;.\Source\RHI;.\Source\Core;$(IncludePath)</IncludePath>
+    <IncludePath>..\3rdParty\include;E:\BladeEngine\NextDream\Source\OpenGL;.\Source\Serialization;.\Source\Platform\Windows;.\Source\Platform;.\Source\FrameWork;.\Source\Math;.\Source\Contains;.\Source\Core\Platforms;.\Source\DirectX11;.\Source\RHI;.\Source\Core;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>

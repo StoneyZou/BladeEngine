@@ -201,6 +201,12 @@
     <ClInclude Include="Source\OpenGL\OpenGLTextureBase.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Source\OpenGL\OpenGLBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\OpenGL\OpenGLEnumMapping.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\DirectX11\private\DirectX11Device.cpp">
