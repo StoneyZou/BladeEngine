@@ -36,15 +36,14 @@ namespace BladeEngine
             virtual ~RHIResource() {}
 
 		public:
-			void InitRHI();
-			void ReleaseRHI();
+            void InitRHI() {};
+            void ReleaseRHI() {};
 
         public:
+            ECPU_ACCESS_MODE GetAccessMode() const { return m_CpuAccessMode; }
             ECPU_GPU_USAGE_MODE GetUsageMode() const { return m_UsageMode; }
-            bool CanCpuRead()  const    { return ((m_UsageMode & ECPU_READ) != 0); }
-            bool CanCpuWrite() const    { return ((m_UsageMode & ECPU_WRITE) != 0); }
-            bool CanGpuRead()  const    { return ((m_UsageMode & EGPU_READ) != 0); }
-            bool CanGpuWrite() const    { return ((m_UsageMode & EGPU_WRITE) != 0); }
+            bool CanCpuRead()  const    { return ((m_CpuAccessMode & ECPU_READ_ACCESS_MODE) != 0); }
+            bool CanCpuWrite() const { return ((m_CpuAccessMode & ECPU_WRITE_ACCESS_MODE) != 0); }
 
         public:
             int32 AddRef() const { return m_RefCount.AddRef(); }

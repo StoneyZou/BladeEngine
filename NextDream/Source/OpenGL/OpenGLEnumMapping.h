@@ -45,6 +45,17 @@ namespace BladeEngine
                 }
                 return result;
             }
+
+            static uint32 GetPixelTypeSize(EDATA_FORMAT inFormat)
+            {
+                uint32 result = 0;
+                switch (inFormat)
+                {
+                default:
+                    break;
+                }
+                return result;
+            }
         };
     }
 }

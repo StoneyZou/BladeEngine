@@ -133,7 +133,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\3rdParty\include;E:\BladeEngine\NextDream\Source\OpenGL;.\Source\Serialization;.\Source\Platform\Windows;.\Source\Platform;.\Source\FrameWork;.\Source\Math;.\Source\Contains;.\Source\Core\Platforms;.\Source\DirectX11;.\Source\RHI;.\Source\Core;$(IncludePath)</IncludePath>
+    <IncludePath>..\3rdParty\include;.\Source\OpenGL;.\Source\Serialization;.\Source\Platform\Windows;.\Source\Platform;.\Source\FrameWork;.\Source\Math;.\Source\Contains;.\Source\Core\Platforms;.\Source\DirectX11;.\Source\RHI;.\Source\Core;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>

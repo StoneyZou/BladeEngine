@@ -27,7 +27,8 @@ namespace BladeEngine
             uint32 Width, Height, Depth;
             uint32 SampleCount;
             EDATA_FORMAT BaseFormat;
-            ECPU_GPU_USAGE_MODE AccessMode;
+            ECPU_GPU_USAGE_MODE UsageMode;
+            ECPU_ACCESS_MODE CpuAccessMode;
         };
 
         class RHITextureBase : public RHIResource, public IResourceLockable
@@ -39,7 +40,7 @@ namespace BladeEngine
 
         public:
             RHITextureBase(IRHIDevice* inDevice, const RHITextureInitInfo& inInitInfo) :
-                RHIResource(inDevice, inInitInfo.AccessMode),
+                RHIResource(inDevice, inInitInfo.UsageMode),
                 m_DataFormat(inInitInfo.BaseFormat),
                 m_SampleCount(inInitInfo.SampleCount),
                 m_CanAsRenderTarget(inInitInfo.CanAsRenderTarget),
@@ -103,7 +104,7 @@ namespace BladeEngine
 
         public:
             RHISwapChain(IRHIDevice* inDevice, const RHISwapChainInitInfo& inInitInfo) :
-                RHIResource(inDevice, EGPU_READ_GPU_WRITE),
+                RHIResource(inDevice, ESUIT_GPU_WRITE),
                 m_texture2D(inInitInfo.Texture),
                 m_belongToWindow(inInitInfo.Window)
             {}

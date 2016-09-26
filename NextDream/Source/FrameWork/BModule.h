@@ -15,6 +15,7 @@ namespace BladeEngine
     enum EMODULE_RHI_SUBTYPE
     {
         EMODULE_RHI_DIRECTX11,
+        EMODULE_RHI_OPENGL,
     };
 
     namespace Framework

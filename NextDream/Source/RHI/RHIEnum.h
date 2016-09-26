@@ -33,8 +33,7 @@ namespace BladeEngine
         {
             EDATA_FORMAT_R8G8B8A8_UINT =        ( EDATA_LAYOUT_R8G8B8A8 << DATA_LAYOUT_SHIFT ) + EDATA_ELEMENT_UINT,
             EDATA_FORMAT_R8G8B8A8_SINT =        ( EDATA_LAYOUT_R8G8B8A8 << DATA_LAYOUT_SHIFT ) + EDATA_ELEMENT_SINT,
-            EDATA_FORMAT_R8G8B8A8_FLOAT =       ( EDATA_LAYOUT_R8G8B8A8 << DATA_LAYOUT_SHIFT ) + EDATA_ELEMENT_FLOAT,
-            EDATA_FORMAT_R8G8B8A8_TYPELESS =    ( EDATA_LAYOUT_R8G8B8A8 << DATA_LAYOUT_SHIFT ) + EDATA_ELEMENT_TYPELESS,
+            EDATA_FORMAT_R8G8B8A8_FLOAT =       ( EDATA_LAYOUT_R8G8B8A8 << DATA_LAYOUT_SHIFT ) + EDATA_ELEMENT_FLOAT
         };
 
         enum ETEXTURE_USAGE
@@ -82,28 +81,20 @@ namespace BladeEngine
             ESHADER_SEMANTIC_TEXCOORD,
         };
 
-        enum ECPU_GPU_USAGE_SUB_MODE
-        {
-            ECPU_READ = 0x01,
-            ECPU_WRITE = 0x02,
-            EGPU_READ = 0x04,
-            EGPU_WRITE = 0x08,
-        };
-
         enum ECPU_GPU_USAGE_MODE
         {
-            EONLY_GPU_READ = EGPU_READ,
-            EONLY_GPU_WRITE = EGPU_WRITE,
-            EGPU_READ_CPU_WRITE = EGPU_READ | ECPU_WRITE,
-            EGPU_READ_GPU_WRITE = EGPU_READ | EGPU_WRITE,
+            ESUIT_GPU_WRITE,
+            ESUIT_GPU_READ,
+            ESUIT_GPU_READ_WRITE,
+            ESUIT_CPU_READ_WRITE,
         };
 
         enum ECPU_ACCESS_MODE
         {
             ECPU_NO_ACCESS = 0x00,
-            ECPU_READ_MODE = 0x01,
-            ECPU_WRITE_MODE = 0x02,
-            ECPU_READ_WRITE_MODE = ECPU_READ_MODE | ECPU_WRITE_MODE;
+            ECPU_READ_ACCESS_MODE = 0x01,
+            ECPU_WRITE_ACCESS_MODE = 0x02,
+            ECPU_READ_WRITE_MODE = ECPU_READ_ACCESS_MODE | ECPU_WRITE_ACCESS_MODE,
         };
 
         enum ERES_LOCK_SUB_TYPE

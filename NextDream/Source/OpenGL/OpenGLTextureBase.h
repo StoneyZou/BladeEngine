@@ -18,21 +18,21 @@ namespace BladeEngine
         class OpenGLTexture2D : public RHITexture2D
         {
         private:
-            bool m_IsRenderBuffer;
             GLuint m_Buffer;
-            GLuint m_ShadowTexture;
+            void* m_LockingBuffer;
+
+        private:
+            bool UseRenderBuffer() const { return GetUsageMode() == ESUIT_GPU_WRITE ; }
+            bool UseMultiSample() const { return m_SampleCount > 1; }
 
         public:
             static OpenGLTexture2D* Create(IRHIDevice* inDevice, const RHITextureCreateInfo& inCreateInfo)
             {
-                bool cpuRead = (inCreateInfo.UsageMode & ECPU_READ != 0);
-                bool gpuRead = (inCreateInfo.UsageMode & EGPU_READ != 0);
-                bool gpuWrite = (inCreateInfo.UsageMode & EGPU_WRITE != 0);
                 bool multisample = (inCreateInfo.SampleCount > 1);
 
                 GLuint textureOpenGL = 0;
                 GLuint renderBufferOpenGL = 0;
-                if (cpuRead || gpuRead)
+                if (inCreateInfo.UsageMode != ESUIT_GPU_WRITE)
                 {
                     glGenTextures(1, &textureOpenGL);
                     if (inCreateInfo.Data == NULL)
@@ -85,7 +85,7 @@ namespace BladeEngine
                 }
                 else
                 {
-                    // 不需要GPU或CPU读，直接使用RenderBuffer
+                    // 仅GPU写，直接使用RenderBuffer
                     glGenRenderbuffersEXT(1, &renderBufferOpenGL);
                     if (!multisample)
                     {
@@ -111,7 +111,7 @@ namespace BladeEngine
                 }
 
                 OpenGLTextureInitInfo initInfo;
-                initInfo.AccessMode = inCreateInfo.UsageMode;
+                initInfo.UsageMode = inCreateInfo.UsageMode;
                 initInfo.BaseFormat = inCreateInfo.BaseFormat;
                 initInfo.Depth = 0;
                 initInfo.Height = inCreateInfo.Height;
@@ -126,15 +126,15 @@ namespace BladeEngine
         public:
             OpenGLTexture2D(IRHIDevice* inDevice, const OpenGLTextureInitInfo& inInitInfo)
                 : RHITexture2D(inDevice, inInitInfo),
-                m_IsRenderBuffer(inInitInfo.m_IsRenderBuffer),
+                m_LockingBuffer(NULL),
                 m_Buffer(inInitInfo.m_Buffer)
             {
-                
+                m_LockingBuffer = Malloc::Alloc(inInitInfo.Width * inInitInfo.Height * OpenGLEnumMapping::GetPixelTypeSize(inInitInfo.BaseFormat));
             }
 
             ~OpenGLTexture2D()
             {
-                if (m_IsRenderBuffer)
+                if (!UseRenderBuffer())
                 {
                     glDeleteTextures(1, &m_Buffer);
                 }
@@ -142,19 +142,35 @@ namespace BladeEngine
                 {
                     glDeleteRenderbuffersEXT(1, &m_Buffer);
                 }
-                m_IsRenderBuffer = false;
+
                 m_Buffer = 0;
             }
 
         public:
             virtual void* Lock(RHIContextBase* inContext, ERES_LOCK_TYPE inType, const SIZE_T inIndex)
             {
-                if (m_IsRenderBuffer)
+                if (UseRenderBuffer())
                 {
-                    // 不能直接读取RenderBuffer，生成一个影子纹理
-                    glGenTexturesEXT(1, &m_ShadowTexture);
                     glBindRenderbuffer(GL_RENDERBUFFER_EXT, m_Buffer);
-                    glframe
+                    //glFramebufferRenderbufferEXT(GL_RENDERBUFFER_EXT, )
+                }
+                else
+                {
+                    if (UseMultiSample())
+                    {
+                        //glGetTextureImageEXT()
+                    }
+                    else
+                    {
+                        glGetTextureImageEXT(
+                            m_Buffer,
+                            GL_TEXTURE_2D,
+                            inIndex,
+                            OpenGLEnumMapping::GetPixelFormat(m_DataFormat),
+                            OpenGLEnumMapping::GetPixelType(m_DataFormat),
+                            NULL
+                        );
+                    }
                 }
 
                 glTextureRenderbufferEXT()
@@ -166,7 +182,7 @@ namespace BladeEngine
                 }
 #endif
 
-                if (mapType == D3D11_MAP_WRITE_DISCARD && (GetUsageMode() & ECPU_WRITE) == 0)
+                if (mapType == D3D11_MAP_WRITE_DISCARD && (GetUsageMode() & ECPU_WRITE_SUB_USAGE) == 0)
                 {
                     //log
                     return NULL;

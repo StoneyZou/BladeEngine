@@ -43,14 +43,14 @@ namespace BladeEngine
                 D3D11_USAGE result = D3D11_USAGE_DEFAULT;
                 switch (inMode)
                 {
-                case BladeEngine::RHI::EONLY_GPU_READ:
+                case BladeEngine::RHI::EONLY_GPU_READ_USAGE:
                     result = D3D11_USAGE_IMMUTABLE;
                     break;
-                case BladeEngine::RHI::EGPU_READ_GPU_WRITE:
-                case BladeEngine::RHI::EONLY_GPU_WRITE:
+                case BladeEngine::RHI::EGPU_READ_GPU_WRITE_USAGE:
+                case BladeEngine::RHI::EONLY_GPU_WRITE_USAGE:
                     result = D3D11_USAGE_DEFAULT;
                     break;
-                case BladeEngine::RHI::EGPU_READ_CPU_WRITE:
+                case BladeEngine::RHI::EGPU_READ_CPU_WRITE_USAGE:
                     result = D3D11_USAGE_DYNAMIC;
                     break;
                 default:

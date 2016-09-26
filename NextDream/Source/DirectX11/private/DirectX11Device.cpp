@@ -51,16 +51,16 @@ namespace BladeEngine
             textureDesc.Height = inCreateInfo.Height;
             textureDesc.Usage = DirectXEnumMapping::GetPixelFormat(inCreateInfo.UsageMode);
             textureDesc.CPUAccessFlags =
-                (inCreateInfo.UsageMode & ECPU_READ ? D3D11_CPU_ACCESS_READ : 0) |
-                (inCreateInfo.UsageMode & ECPU_WRITE ? D3D11_CPU_ACCESS_WRITE : 0);
+                (inCreateInfo.CpuAccessMode & ECPU_READ_ACCESS_MODE ? D3D11_CPU_ACCESS_READ : 0) |
+                (inCreateInfo.CpuAccessMode & ECPU_WRITE_ACCESS_MODE ? D3D11_CPU_ACCESS_WRITE : 0);
             textureDesc.SampleDesc.Count = inCreateInfo.SampleCount;
             textureDesc.SampleDesc.Quality = sampleQuality < D3D11_STANDARD_MULTISAMPLE_PATTERN ?
                 sampleQuality : D3D11_STANDARD_MULTISAMPLE_PATTERN;
             textureDesc.ArraySize = 1;
             textureDesc.MipLevels = 0;
             textureDesc.BindFlags =
-                (inCreateInfo.UsageMode & EGPU_READ ? D3D11_BIND_SHADER_RESOURCE : 0) |
-                (inCreateInfo.UsageMode & EGPU_WRITE ? D3D11_BIND_RENDER_TARGET : 0);
+                (inCreateInfo.UsageMode & EGPU_READ_SUB_USAGE ? D3D11_BIND_SHADER_RESOURCE : 0) |
+                (inCreateInfo.UsageMode & EGPU_WRITE_SUB_USAGE ? D3D11_BIND_RENDER_TARGET : 0);
             textureDesc.MiscFlags = 0;
             textureDesc.Format = DirectXEnumMapping::GetPixelFormat(inCreateInfo.BaseFormat);
 
@@ -83,7 +83,7 @@ namespace BladeEngine
             ID3D11ShaderResourceView* pD3D11ShaderResourceView = NULL;
             ID3D11SamplerState* pSamplerState = NULL;
 
-            if ((inCreateInfo.UsageMode & EGPU_READ) != 0)
+            if ((inCreateInfo.UsageMode & EGPU_READ_SUB_USAGE) != 0)
             {
                 D3D11_SHADER_RESOURCE_VIEW_DESC desc;
                 desc.Format = textureDesc.Format;
@@ -131,7 +131,7 @@ namespace BladeEngine
             ID3D11RenderTargetView* pD3D11RenderTargetView = NULL;
             if ((inCreateInfo.Usage & ETEXTURE_USAGE_RENDER_TARGET) != 0)
             {
-                if ((inCreateInfo.UsageMode & EGPU_WRITE) == 0)
+                if ((inCreateInfo.UsageMode & EGPU_WRITE_SUB_USAGE) == 0)
                 {
                     //Logger::Log()
                     return NULL;
@@ -155,7 +155,7 @@ namespace BladeEngine
             ID3D11DepthStencilView* pD3D11DepthStencilView = NULL;
             if ((inCreateInfo.Usage & ETEXTURE_USAGE_DEPTH_STENCIL) != 0)
             {
-                if ((inCreateInfo.UsageMode & EGPU_WRITE) == 0)
+                if ((inCreateInfo.UsageMode & EGPU_WRITE_SUB_USAGE) == 0)
                 {
                     //Logger::Log()
                     return NULL;
@@ -187,7 +187,7 @@ namespace BladeEngine
             initInfo.Height = inCreateInfo.Height;
             initInfo.SampleCount = inCreateInfo.SampleCount;
             initInfo.BaseFormat = inCreateInfo.BaseFormat;
-            initInfo.AccessMode = inCreateInfo.UsageMode;
+            initInfo.UsageMode = inCreateInfo.UsageMode;
 
             DirectX11Texture2D* texture2D = new DirectX11Texture2D(this, initInfo);
             return RHITexture2DRef(texture2D);
@@ -585,7 +585,7 @@ namespace BladeEngine
             DirectX11Texture2DInitInfo textureInitInfo;
             textureInitInfo.CanAsRenderTarget = true;
             textureInitInfo.CanAsDepthStencil = false;
-            textureInitInfo.AccessMode = EGPU_READ_GPU_WRITE;
+            textureInitInfo.UsageMode = EGPU_READ_GPU_WRITE_USAGE;
             textureInitInfo.Width = inCreateInfo.Window->GetWidth();
             textureInitInfo.Height = inCreateInfo.Window->GetHeight();
             textureInitInfo.SampleCount = inCreateInfo.SampleCount;
