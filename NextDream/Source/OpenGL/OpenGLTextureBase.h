@@ -19,7 +19,10 @@ namespace BladeEngine
         {
         private:
             GLuint m_Buffer;
+            
+            GLsizei m_LockingBufferSize;
             void* m_LockingBuffer;
+            ERES_LOCK_TYPE m_LockingType;
 
         private:
             bool UseRenderBuffer() const { return GetUsageMode() == ESUIT_GPU_WRITE ; }
@@ -129,7 +132,8 @@ namespace BladeEngine
                 m_LockingBuffer(NULL),
                 m_Buffer(inInitInfo.m_Buffer)
             {
-                m_LockingBuffer = Malloc::Alloc(inInitInfo.Width * inInitInfo.Height * OpenGLEnumMapping::GetPixelTypeSize(inInitInfo.BaseFormat));
+                m_LockingBufferSize = inInitInfo.Width * inInitInfo.Height * OpenGLEnumMapping::GetPixelTypeSize(inInitInfo.BaseFormat);
+                m_LockingBuffer = Malloc::Alloc(m_LockingBufferSize);
             }
 
             ~OpenGLTexture2D()
@@ -149,6 +153,12 @@ namespace BladeEngine
         public:
             virtual void* Lock(RHIContextBase* inContext, ERES_LOCK_TYPE inType, const SIZE_T inIndex)
             {
+                m_LockingType = inType;
+                if ((inType & ERES_LOCK_READ) == 0)
+                {
+                    return m_LockingBuffer;
+                }
+
                 if (UseRenderBuffer())
                 {
                     glBindRenderbuffer(GL_RENDERBUFFER_EXT, m_Buffer);
@@ -156,82 +166,30 @@ namespace BladeEngine
                 }
                 else
                 {
-                    if (UseMultiSample())
-                    {
-                        //glGetTextureImageEXT()
-                    }
-                    else
-                    {
-                        glGetTextureImageEXT(
-                            m_Buffer,
-                            GL_TEXTURE_2D,
-                            inIndex,
-                            OpenGLEnumMapping::GetPixelFormat(m_DataFormat),
-                            OpenGLEnumMapping::GetPixelType(m_DataFormat),
-                            NULL
-                        );
-                    }
+                    GLenum target = UseMultiSample() ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+                    glBindTextureEXT(target, m_Buffer);
+                    glGetnTexImage(
+                        target,
+                        inIndex,
+                        OpenGLEnumMapping::GetPixelFormat(m_DataFormat),
+                        OpenGLEnumMapping::GetPixelType(m_DataFormat),
+                        m_LockingBufferSize,
+                        m_LockingBuffer
+                    );
+                    glBindTextureEXT(target, 0);
                 }
 
-                glTextureRenderbufferEXT()
-
-#if _DEBUG
-                if (!CanGpuWrite() && inType == ERES_LOCK_ONLY_WRITE)
-                {
-                    //log can create texture use EGPU_READ_CPU_WRITE
-                }
-#endif
-
-                if (mapType == D3D11_MAP_WRITE_DISCARD && (GetUsageMode() & ECPU_WRITE_SUB_USAGE) == 0)
-                {
-                    //log
-                    return NULL;
-                }
-
-                if (cantLock)
-                {
-                    m_ShadowTexture = m_Texture;
-                    return contextImpl->LockGpuResource(m_Texture, inIndex, mapType, true);
-                }
-
-                if (m_ShadowTexture != NULL)
-                {
-                    ID3D11Device* device = contextImpl->GetDevice();
-                    if (device == NULL)
-                    {
-                        return NULL;
-                    }
-
-                    D3D11_TEXTURE2D_DESC desc = { 0 };
-                    desc.Width = m_Width;
-                    desc.Height = m_Height;
-                    desc.Usage = D3D11_USAGE_STAGING;
-                    desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
-                    desc.SampleDesc.Count = m_SampleCount;
-                    desc.SampleDesc.Quality = m_SampleQulity;
-                    desc.ArraySize = 1;
-                    desc.MipLevels = 0;
-                    desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
-                    desc.MiscFlags = 0;
-                    desc.Format = DirectXEnumMapping::GetPixelFormat(m_DataFormat);
-
-                    HRESULT hr = device->CreateTexture2D(&desc, NULL, &m_ShadowTexture);
-                    if (FAILED(hr))
-                    {
-                        //log
-                    }
-                }
-
-                contextImpl->CopyGpuResource(m_Texture, m_ShadowTexture);
-
-                m_ShadowTexture = m_ShadowTexture;
-                return contextImpl->LockGpuResource(m_ShadowTexture, 0, mapType, true);
+                return m_LockingBuffer;
             }
 
             virtual void Unlock(RHIContextBase* inContext, const SIZE_T inIndex)
             {
-                DirectX11ContextBaseImpl* contextImpl = static_cast<DirectX11ContextBaseImpl*>(inContext->GetImpl());
-                contextImpl->UnlockGpuResource(m_ShadowTexture, 0);
+                if ((m_LockingType & ERES_LOCK_READ) == 0)
+                {
+                    GLenum target = UseMultiSample() ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+                    glTextureImage2DEXT(m_Buffer, )
+                    return m_LockingBuffer;
+                }
             }
         };
     }

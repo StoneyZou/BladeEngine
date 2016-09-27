@@ -51,6 +51,9 @@ namespace BladeEngine
                 uint32 result = 0;
                 switch (inFormat)
                 {
+                case BladeEngine::RHI::EDATA_FORMAT_R8G8B8A8_UINT:
+                    result = 32;
+                    break;
                 default:
                     break;
                 }

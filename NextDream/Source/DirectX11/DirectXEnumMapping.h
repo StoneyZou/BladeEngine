@@ -25,11 +25,12 @@ namespace BladeEngine
                     result = DXGI_FORMAT_R8G8B8A8_UINT;
                     break;
                 default:
+                    assert(0);
                     break;
                 }
 
                 //log
-                return DXGI_FORMAT_R8G8B8A8_UINT;
+                return result;
             }
 
             static D3D11_MAP GetPixelFormat(ERES_LOCK_TYPE inType)
@@ -43,18 +44,17 @@ namespace BladeEngine
                 D3D11_USAGE result = D3D11_USAGE_DEFAULT;
                 switch (inMode)
                 {
-                case BladeEngine::RHI::EONLY_GPU_READ_USAGE:
+                case BladeEngine::RHI::ESUIT_GPU_READ:
                     result = D3D11_USAGE_IMMUTABLE;
                     break;
-                case BladeEngine::RHI::EGPU_READ_GPU_WRITE_USAGE:
-                case BladeEngine::RHI::EONLY_GPU_WRITE_USAGE:
+                case BladeEngine::RHI::ESUIT_GPU_WRITE:
+                case BladeEngine::RHI::ESUIT_GPU_READ_WRITE:
                     result = D3D11_USAGE_DEFAULT;
                     break;
-                case BladeEngine::RHI::EGPU_READ_CPU_WRITE_USAGE:
+                case BladeEngine::RHI::ESUIT_CPU_READ_WRITE:
                     result = D3D11_USAGE_DYNAMIC;
                     break;
                 default:
-                    assert(0);
                     break;
                 }
 
