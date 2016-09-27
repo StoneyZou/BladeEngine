@@ -1,167 +1,66 @@
-﻿  main.cpp
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhienum.h(37): error C2065: “EDATA_ELEMENT_TYPELESS”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhienum.h(37): error C2056: 非法表达式
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(46): error C2039: “CanAsRenderTarget”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(47): error C2039: “CanAsDepthStencil”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(107): error C2065: “EGPU_READ_GPU_WRITE_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhishaderbase.h(372): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhishaderbase.h(401): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\main.cpp(59): error C2039: “EDATA_FORMAT_R32G32B32A32_FLOAT”: 不是“BladeEngine::RHI”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhishaderbase.h(15): note: 参见“BladeEngine::RHI”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\main.cpp(59): error C2065: “EDATA_FORMAT_R32G32B32A32_FLOAT”: 未声明的标识符
-  OpenGLWindows.cpp
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhienum.h(37): error C2065: “EDATA_ELEMENT_TYPELESS”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhienum.h(37): error C2056: 非法表达式
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(46): error C2039: “CanAsRenderTarget”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(47): error C2039: “CanAsDepthStencil”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(107): error C2065: “EGPU_READ_GPU_WRITE_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\opengl\windows\openglwindows.cpp(31): error C3861: “InitOpenGLLibrary”: 找不到标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\opengl\windows\openglwindows.cpp(37): error C3861: “CreateDummyOpenGLContext”: 找不到标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\opengl\windows\openglwindows.cpp(42): error C3861: “CreateDummyOpenGLContext”: 找不到标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\opengl\windows\openglwindows.cpp(52): error C3861: “ReleaseDummyOpenGLContext”: 找不到标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\opengl\windows\openglwindows.cpp(222): error C2198: “PFNGLBINDFRAMEBUFFERPROC”: 用于调用的参数太少
+﻿  OpenGLWindows.cpp
+e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(46): error C2039: “CanAsRenderTarget”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
+  e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
+e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(47): error C2039: “CanAsDepthStencil”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
+  e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
+e:\bladeengine\nextdream\source\opengl\windows\openglwindows.cpp(31): error C3861: “InitOpenGLLibrary”: 找不到标识符
+e:\bladeengine\nextdream\source\opengl\windows\openglwindows.cpp(37): error C3861: “CreateDummyOpenGLContext”: 找不到标识符
+e:\bladeengine\nextdream\source\opengl\windows\openglwindows.cpp(42): error C3861: “CreateDummyOpenGLContext”: 找不到标识符
+e:\bladeengine\nextdream\source\opengl\windows\openglwindows.cpp(52): error C3861: “ReleaseDummyOpenGLContext”: 找不到标识符
+e:\bladeengine\nextdream\source\opengl\windows\openglwindows.cpp(222): error C2198: “PFNGLBINDFRAMEBUFFERPROC”: 用于调用的参数太少
   DirectXEnumMapping.cpp
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhienum.h(37): error C2065: “EDATA_ELEMENT_TYPELESS”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhienum.h(37): error C2056: 非法表达式
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(46): error C2039: “EONLY_GPU_READ_USAGE”: 不是“BladeEngine::RHI”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(14): note: 参见“BladeEngine::RHI”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(46): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(46): error C2131: 表达式的计算结果不是常数
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(46): note: 非常量参数或对非常量符号的引用导致了故障
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(46): note: 请参见“EONLY_GPU_READ_USAGE”的用法
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(49): error C2039: “EGPU_READ_GPU_WRITE_USAGE”: 不是“BladeEngine::RHI”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(14): note: 参见“BladeEngine::RHI”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(49): error C2065: “EGPU_READ_GPU_WRITE_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(49): error C2131: 表达式的计算结果不是常数
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(49): note: 非常量参数或对非常量符号的引用导致了故障
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(49): note: 请参见“EGPU_READ_GPU_WRITE_USAGE”的用法
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(50): error C2039: “EONLY_GPU_WRITE_USAGE”: 不是“BladeEngine::RHI”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(14): note: 参见“BladeEngine::RHI”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(50): error C2065: “EONLY_GPU_WRITE_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(50): error C2131: 表达式的计算结果不是常数
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(50): note: 非常量参数或对非常量符号的引用导致了故障
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(50): note: 请参见“EONLY_GPU_WRITE_USAGE”的用法
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(53): error C2039: “EGPU_READ_CPU_WRITE_USAGE”: 不是“BladeEngine::RHI”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(14): note: 参见“BladeEngine::RHI”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(53): error C2065: “EGPU_READ_CPU_WRITE_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(53): error C2131: 表达式的计算结果不是常数
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(53): note: 非常量参数或对非常量符号的引用导致了故障
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(53): note: 请参见“EGPU_READ_CPU_WRITE_USAGE”的用法
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(46): error C2051: case 表达式不是常量
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(49): error C2051: case 表达式不是常量
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(50): error C2051: case 表达式不是常量
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(53): error C2051: case 表达式不是常量
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(59): warning C4065: switch 语句包含“default”但是未包含“case”标签
   DirectX11Device.cpp
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhienum.h(37): error C2065: “EDATA_ELEMENT_TYPELESS”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhienum.h(37): error C2056: 非法表达式
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhishaderbase.h(372): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhishaderbase.h(401): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directx11bufferbase.h(42): error C2065: “ECPU_WRITE_SUB_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directx11bufferbase.h(43): error C2065: “EGPU_READ_SUB_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directx11bufferbase.h(93): error C3861: “CanGpuWrite”: 找不到标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(46): error C2039: “CanAsRenderTarget”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(47): error C2039: “CanAsDepthStencil”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(107): error C2065: “EGPU_READ_GPU_WRITE_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(46): error C2039: “EONLY_GPU_READ_USAGE”: 不是“BladeEngine::RHI”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(14): note: 参见“BladeEngine::RHI”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(46): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(46): error C2131: 表达式的计算结果不是常数
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(46): note: 非常量参数或对非常量符号的引用导致了故障
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(46): note: 请参见“EONLY_GPU_READ_USAGE”的用法
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(49): error C2039: “EGPU_READ_GPU_WRITE_USAGE”: 不是“BladeEngine::RHI”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(14): note: 参见“BladeEngine::RHI”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(49): error C2065: “EGPU_READ_GPU_WRITE_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(49): error C2131: 表达式的计算结果不是常数
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(49): note: 非常量参数或对非常量符号的引用导致了故障
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(49): note: 请参见“EGPU_READ_GPU_WRITE_USAGE”的用法
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(50): error C2039: “EONLY_GPU_WRITE_USAGE”: 不是“BladeEngine::RHI”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(14): note: 参见“BladeEngine::RHI”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(50): error C2065: “EONLY_GPU_WRITE_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(50): error C2131: 表达式的计算结果不是常数
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(50): note: 非常量参数或对非常量符号的引用导致了故障
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(50): note: 请参见“EONLY_GPU_WRITE_USAGE”的用法
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(53): error C2039: “EGPU_READ_CPU_WRITE_USAGE”: 不是“BladeEngine::RHI”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(14): note: 参见“BladeEngine::RHI”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(53): error C2065: “EGPU_READ_CPU_WRITE_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(53): error C2131: 表达式的计算结果不是常数
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(53): note: 非常量参数或对非常量符号的引用导致了故障
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(53): note: 请参见“EGPU_READ_CPU_WRITE_USAGE”的用法
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(46): error C2051: case 表达式不是常量
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(49): error C2051: case 表达式不是常量
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(50): error C2051: case 表达式不是常量
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(53): error C2051: case 表达式不是常量
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(59): warning C4065: switch 语句包含“default”但是未包含“case”标签
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directx11texturebase.h(83): error C3861: “SuitGpuWrite”: 找不到标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directx11texturebase.h(89): error C2065: “ECPU_WRITE_SUB_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directx11texturebase.h(115): error C2065: “m_SampleQulity”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\private\directx11device.cpp(62): error C2065: “EGPU_READ_SUB_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\private\directx11device.cpp(63): error C2065: “EGPU_WRITE_SUB_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\private\directx11device.cpp(86): error C2065: “EGPU_READ_SUB_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\private\directx11device.cpp(134): error C2065: “EGPU_WRITE_SUB_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\private\directx11device.cpp(158): error C2065: “EGPU_WRITE_SUB_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\private\directx11device.cpp(184): error C2039: “CanAsRenderTarget”: 不是“BladeEngine::RHI::DirectX11Texture2DInitInfo”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directx11texturebase.h(15): note: 参见“BladeEngine::RHI::DirectX11Texture2DInitInfo”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\private\directx11device.cpp(185): error C2039: “CanAsDepthStencil”: 不是“BladeEngine::RHI::DirectX11Texture2DInitInfo”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directx11texturebase.h(15): note: 参见“BladeEngine::RHI::DirectX11Texture2DInitInfo”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\private\directx11device.cpp(586): error C2039: “CanAsRenderTarget”: 不是“BladeEngine::RHI::DirectX11Texture2DInitInfo”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directx11texturebase.h(15): note: 参见“BladeEngine::RHI::DirectX11Texture2DInitInfo”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\private\directx11device.cpp(587): error C2039: “CanAsDepthStencil”: 不是“BladeEngine::RHI::DirectX11Texture2DInitInfo”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directx11texturebase.h(15): note: 参见“BladeEngine::RHI::DirectX11Texture2DInitInfo”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\private\directx11device.cpp(588): error C2065: “EGPU_READ_GPU_WRITE_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\private\directx11device.cpp(592): error C2039: “SampleQulity”: 不是“BladeEngine::RHI::DirectX11Texture2DInitInfo”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directx11texturebase.h(15): note: 参见“BladeEngine::RHI::DirectX11Texture2DInitInfo”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\private\directx11device.cpp(593): error C2039: “Usage”: 不是“BladeEngine::RHI::DirectX11Texture2DInitInfo”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directx11texturebase.h(15): note: 参见“BladeEngine::RHI::DirectX11Texture2DInitInfo”的声明
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(372): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(401): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\directx11bufferbase.h(42): error C2065: “ECPU_WRITE_SUB_USAGE”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\directx11bufferbase.h(43): error C2065: “EGPU_READ_SUB_USAGE”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\directx11bufferbase.h(93): error C3861: “CanGpuWrite”: 找不到标识符
+e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(46): error C2039: “CanAsRenderTarget”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
+  e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
+e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(47): error C2039: “CanAsDepthStencil”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
+  e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
+e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(83): error C3861: “SuitGpuWrite”: 找不到标识符
+e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(89): error C2065: “ECPU_WRITE_SUB_USAGE”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(115): error C2065: “m_SampleQulity”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(62): error C2065: “EGPU_READ_SUB_USAGE”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(63): error C2065: “EGPU_WRITE_SUB_USAGE”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(86): error C2065: “EGPU_READ_SUB_USAGE”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(134): error C2065: “EGPU_WRITE_SUB_USAGE”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(158): error C2065: “EGPU_WRITE_SUB_USAGE”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(184): error C2039: “CanAsRenderTarget”: 不是“BladeEngine::RHI::DirectX11Texture2DInitInfo”的成员
+  e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(15): note: 参见“BladeEngine::RHI::DirectX11Texture2DInitInfo”的声明
+e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(185): error C2039: “CanAsDepthStencil”: 不是“BladeEngine::RHI::DirectX11Texture2DInitInfo”的成员
+  e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(15): note: 参见“BladeEngine::RHI::DirectX11Texture2DInitInfo”的声明
+e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(586): error C2039: “CanAsRenderTarget”: 不是“BladeEngine::RHI::DirectX11Texture2DInitInfo”的成员
+  e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(15): note: 参见“BladeEngine::RHI::DirectX11Texture2DInitInfo”的声明
+e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(587): error C2039: “CanAsDepthStencil”: 不是“BladeEngine::RHI::DirectX11Texture2DInitInfo”的成员
+  e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(15): note: 参见“BladeEngine::RHI::DirectX11Texture2DInitInfo”的声明
+e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(588): error C2065: “EGPU_READ_GPU_WRITE_USAGE”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(592): error C2039: “SampleQulity”: 不是“BladeEngine::RHI::DirectX11Texture2DInitInfo”的成员
+  e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(15): note: 参见“BladeEngine::RHI::DirectX11Texture2DInitInfo”的声明
+e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(593): error C2039: “Usage”: 不是“BladeEngine::RHI::DirectX11Texture2DInitInfo”的成员
+  e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(15): note: 参见“BladeEngine::RHI::DirectX11Texture2DInitInfo”的声明
   DirectX11Context.cpp
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhienum.h(37): error C2065: “EDATA_ELEMENT_TYPELESS”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhienum.h(37): error C2056: 非法表达式
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhishaderbase.h(372): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhishaderbase.h(401): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directx11bufferbase.h(42): error C2065: “ECPU_WRITE_SUB_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directx11bufferbase.h(43): error C2065: “EGPU_READ_SUB_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directx11bufferbase.h(93): error C3861: “CanGpuWrite”: 找不到标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(46): error C2039: “CanAsRenderTarget”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(47): error C2039: “CanAsDepthStencil”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\rhi\rhitexturebase.h(107): error C2065: “EGPU_READ_GPU_WRITE_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(46): error C2039: “EONLY_GPU_READ_USAGE”: 不是“BladeEngine::RHI”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(14): note: 参见“BladeEngine::RHI”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(46): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(46): error C2131: 表达式的计算结果不是常数
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(46): note: 非常量参数或对非常量符号的引用导致了故障
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(46): note: 请参见“EONLY_GPU_READ_USAGE”的用法
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(49): error C2039: “EGPU_READ_GPU_WRITE_USAGE”: 不是“BladeEngine::RHI”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(14): note: 参见“BladeEngine::RHI”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(49): error C2065: “EGPU_READ_GPU_WRITE_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(49): error C2131: 表达式的计算结果不是常数
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(49): note: 非常量参数或对非常量符号的引用导致了故障
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(49): note: 请参见“EGPU_READ_GPU_WRITE_USAGE”的用法
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(50): error C2039: “EONLY_GPU_WRITE_USAGE”: 不是“BladeEngine::RHI”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(14): note: 参见“BladeEngine::RHI”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(50): error C2065: “EONLY_GPU_WRITE_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(50): error C2131: 表达式的计算结果不是常数
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(50): note: 非常量参数或对非常量符号的引用导致了故障
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(50): note: 请参见“EONLY_GPU_WRITE_USAGE”的用法
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(53): error C2039: “EGPU_READ_CPU_WRITE_USAGE”: 不是“BladeEngine::RHI”的成员
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(14): note: 参见“BladeEngine::RHI”的声明
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(53): error C2065: “EGPU_READ_CPU_WRITE_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(53): error C2131: 表达式的计算结果不是常数
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(53): note: 非常量参数或对非常量符号的引用导致了故障
-  c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(53): note: 请参见“EGPU_READ_CPU_WRITE_USAGE”的用法
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(46): error C2051: case 表达式不是常量
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(49): error C2051: case 表达式不是常量
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(50): error C2051: case 表达式不是常量
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(53): error C2051: case 表达式不是常量
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directxenummapping.h(59): warning C4065: switch 语句包含“default”但是未包含“case”标签
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directx11texturebase.h(83): error C3861: “SuitGpuWrite”: 找不到标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directx11texturebase.h(89): error C2065: “ECPU_WRITE_SUB_USAGE”: 未声明的标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\directx11\directx11texturebase.h(115): error C2065: “m_SampleQulity”: 未声明的标识符
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(372): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(401): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\directx11bufferbase.h(42): error C2065: “ECPU_WRITE_SUB_USAGE”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\directx11bufferbase.h(43): error C2065: “EGPU_READ_SUB_USAGE”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\directx11bufferbase.h(93): error C3861: “CanGpuWrite”: 找不到标识符
+e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(46): error C2039: “CanAsRenderTarget”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
+  e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
+e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(47): error C2039: “CanAsDepthStencil”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
+  e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
+e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(83): error C3861: “SuitGpuWrite”: 找不到标识符
+e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(89): error C2065: “ECPU_WRITE_SUB_USAGE”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(115): error C2065: “m_SampleQulity”: 未声明的标识符
+  main.cpp
+e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(46): error C2039: “CanAsRenderTarget”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
+  e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
+e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(47): error C2039: “CanAsDepthStencil”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
+  e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(372): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
+e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(401): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
+e:\bladeengine\nextdream\main.cpp(59): error C2039: “EDATA_FORMAT_R32G32B32A32_FLOAT”: 不是“BladeEngine::RHI”的成员
+  e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(15): note: 参见“BladeEngine::RHI”的声明
+e:\bladeengine\nextdream\main.cpp(59): error C2065: “EDATA_FORMAT_R32G32B32A32_FLOAT”: 未声明的标识符
   正在生成代码...

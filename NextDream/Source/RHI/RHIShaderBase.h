@@ -369,7 +369,7 @@ namespace BladeEngine
             RHIShaderStateCreateInfo m_CreateInfo;
             
         public:
-            RHIShaderState(IRHIDevice* inDevice, const RHIShaderStateCreateInfo& inCreateInfo) : RHIResource(inDevice, EONLY_GPU_READ_USAGE),
+            RHIShaderState(IRHIDevice* inDevice, const RHIShaderStateCreateInfo& inCreateInfo) : RHIResource(inDevice, ESUIT_GPU_READ),
                 m_CreateInfo(inCreateInfo)
             {}
 
@@ -398,7 +398,7 @@ namespace BladeEngine
         class RHIShaderBase : public RHIResource
         {
         public:
-            RHIShaderBase(IRHIDevice* inDevice) : RHIResource(inDevice, EONLY_GPU_READ_USAGE), m_ResourceTable(NULL)
+            RHIShaderBase(IRHIDevice* inDevice) : RHIResource(inDevice, ESUIT_GPU_READ), m_ResourceTable(NULL)
             {}
 
             void SetResourceTable(RHIShaderResourceTable* inResourceTable) { m_ResourceTable = inResourceTable; }

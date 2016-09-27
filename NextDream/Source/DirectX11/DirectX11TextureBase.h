@@ -106,13 +106,23 @@ namespace BladeEngine
                         return NULL;
                     }
 
+                    // 检查多重采样支持情况
+                    UINT sampleQuality = 0;
+                    if (m_SampleCount > 1)
+                    {
+                        if (device->CheckMultisampleQualityLevels(DirectXEnumMapping::GetPixelFormat(m_DataFormat), m_SampleCount, &sampleQuality) != S_OK)
+                        {
+                            sampleQuality = 0;
+                        }
+                    }
+
                     D3D11_TEXTURE2D_DESC desc = { 0 };
                     desc.Width = m_Width;
                     desc.Height = m_Height;
                     desc.Usage = D3D11_USAGE_STAGING;
                     desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
                     desc.SampleDesc.Count = m_SampleCount;
-                    desc.SampleDesc.Quality = m_SampleQulity;
+                    desc.SampleDesc.Quality = sampleQuality;
                     desc.ArraySize = 1;
                     desc.MipLevels = 0;
                     desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;

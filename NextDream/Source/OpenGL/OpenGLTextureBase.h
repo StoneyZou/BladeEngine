@@ -147,11 +147,15 @@ namespace BladeEngine
                     glDeleteRenderbuffersEXT(1, &m_Buffer);
                 }
 
+                if (m_LockingBuffer != NULL) { Malloc::Free(m_LockingBuffer); }
+
+                m_LockingBuffer = NULL;
+                m_LockingBufferSize = 0;
                 m_Buffer = 0;
             }
 
         public:
-            virtual void* Lock(RHIContextBase* inContext, ERES_LOCK_TYPE inType, const SIZE_T inIndex)
+            virtual void* Lock(RHIContextBase* inContext, ERES_LOCK_TYPE inType, const SIZE_T inLevel)
             {
                 m_LockingType = inType;
                 if ((inType & ERES_LOCK_READ) == 0)
@@ -170,7 +174,7 @@ namespace BladeEngine
                     glBindTextureEXT(target, m_Buffer);
                     glGetnTexImage(
                         target,
-                        inIndex,
+                        inLevel,
                         OpenGLEnumMapping::GetPixelFormat(m_DataFormat),
                         OpenGLEnumMapping::GetPixelType(m_DataFormat),
                         m_LockingBufferSize,
@@ -182,13 +186,22 @@ namespace BladeEngine
                 return m_LockingBuffer;
             }
 
-            virtual void Unlock(RHIContextBase* inContext, const SIZE_T inIndex)
+            virtual void Unlock(RHIContextBase* inContext, const SIZE_T inLevel)
             {
-                if ((m_LockingType & ERES_LOCK_READ) == 0)
+                if ((m_LockingType & ERES_LOCK_ONLY_WRITE) != 0)
                 {
                     GLenum target = UseMultiSample() ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
-                    glTextureImage2DEXT(m_Buffer, )
-                    return m_LockingBuffer;
+                    glBindTextureEXT(target, m_Buffer);
+                    glTexSubImage2D(
+                        target,
+                        inLevel,
+                        0, 0,
+                        m_Width, m_Height,
+                        OpenGLEnumMapping::GetPixelFormat(m_DataFormat),
+                        OpenGLEnumMapping::GetPixelType(m_DataFormat),
+                        m_LockingBuffer
+                    );
+                    glBindTextureEXT(target, 0);
                 }
             }
         };

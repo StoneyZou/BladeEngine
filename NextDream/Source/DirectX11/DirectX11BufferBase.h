@@ -39,8 +39,7 @@ namespace BladeEngine
             void* Lock(RHIContextBase* inContext, ERES_LOCK_TYPE inType, const SIZE_T inIndex)
             {
                 BladeAssert(inType == ERES_LOCK_WRITE_DISCARD);
-                BladeAssert((GetAccessMode() & ECPU_WRITE_SUB_USAGE) != 0);
-                BladeAssert((GetAccessMode() & EGPU_READ_SUB_USAGE) != 0);
+                BladeAssert(CanCpuWrite());
 
                 DirectX11ContextBaseImpl* contextImpl = static_cast<DirectX11ContextBaseImpl*>(inContext->GetImpl());
                 return contextImpl->LockGpuResource(m_Buffer, 0, D3D11_MAP_WRITE_DISCARD, true);
