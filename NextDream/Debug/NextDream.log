@@ -1,4 +1,12 @@
-﻿  OpenGLWindows.cpp
+﻿  main.cpp
+e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(46): error C2039: “CanAsRenderTarget”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
+  e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
+e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(47): error C2039: “CanAsDepthStencil”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
+  e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
+e:\bladeengine\nextdream\main.cpp(59): error C2039: “EDATA_FORMAT_R32G32B32A32_FLOAT”: 不是“BladeEngine::RHI”的成员
+  e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(15): note: 参见“BladeEngine::RHI”的声明
+e:\bladeengine\nextdream\main.cpp(59): error C2065: “EDATA_FORMAT_R32G32B32A32_FLOAT”: 未声明的标识符
+  OpenGLWindows.cpp
 e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(46): error C2039: “CanAsRenderTarget”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
   e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
 e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(47): error C2039: “CanAsDepthStencil”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
@@ -8,20 +16,13 @@ e:\bladeengine\nextdream\source\opengl\windows\openglwindows.cpp(37): error C386
 e:\bladeengine\nextdream\source\opengl\windows\openglwindows.cpp(42): error C3861: “CreateDummyOpenGLContext”: 找不到标识符
 e:\bladeengine\nextdream\source\opengl\windows\openglwindows.cpp(52): error C3861: “ReleaseDummyOpenGLContext”: 找不到标识符
 e:\bladeengine\nextdream\source\opengl\windows\openglwindows.cpp(222): error C2198: “PFNGLBINDFRAMEBUFFERPROC”: 用于调用的参数太少
-  DirectXEnumMapping.cpp
   DirectX11Device.cpp
-e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(372): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
-e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(401): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
-e:\bladeengine\nextdream\source\directx11\directx11bufferbase.h(42): error C2065: “ECPU_WRITE_SUB_USAGE”: 未声明的标识符
-e:\bladeengine\nextdream\source\directx11\directx11bufferbase.h(43): error C2065: “EGPU_READ_SUB_USAGE”: 未声明的标识符
-e:\bladeengine\nextdream\source\directx11\directx11bufferbase.h(93): error C3861: “CanGpuWrite”: 找不到标识符
+e:\bladeengine\nextdream\source\directx11\directx11bufferbase.h(92): error C3861: “CanGpuWrite”: 找不到标识符
 e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(46): error C2039: “CanAsRenderTarget”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
   e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
 e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(47): error C2039: “CanAsDepthStencil”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
   e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
-e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(83): error C3861: “SuitGpuWrite”: 找不到标识符
-e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(89): error C2065: “ECPU_WRITE_SUB_USAGE”: 未声明的标识符
-e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(115): error C2065: “m_SampleQulity”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(83): error C2065: “Suit”: 未声明的标识符
 e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(62): error C2065: “EGPU_READ_SUB_USAGE”: 未声明的标识符
 e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(63): error C2065: “EGPU_WRITE_SUB_USAGE”: 未声明的标识符
 e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(86): error C2065: “EGPU_READ_SUB_USAGE”: 未声明的标识符
@@ -41,26 +42,10 @@ e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(592): erro
 e:\bladeengine\nextdream\source\directx11\private\directx11device.cpp(593): error C2039: “Usage”: 不是“BladeEngine::RHI::DirectX11Texture2DInitInfo”的成员
   e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(15): note: 参见“BladeEngine::RHI::DirectX11Texture2DInitInfo”的声明
   DirectX11Context.cpp
-e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(372): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
-e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(401): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
-e:\bladeengine\nextdream\source\directx11\directx11bufferbase.h(42): error C2065: “ECPU_WRITE_SUB_USAGE”: 未声明的标识符
-e:\bladeengine\nextdream\source\directx11\directx11bufferbase.h(43): error C2065: “EGPU_READ_SUB_USAGE”: 未声明的标识符
-e:\bladeengine\nextdream\source\directx11\directx11bufferbase.h(93): error C3861: “CanGpuWrite”: 找不到标识符
+e:\bladeengine\nextdream\source\directx11\directx11bufferbase.h(92): error C3861: “CanGpuWrite”: 找不到标识符
 e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(46): error C2039: “CanAsRenderTarget”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
   e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
 e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(47): error C2039: “CanAsDepthStencil”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
   e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
-e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(83): error C3861: “SuitGpuWrite”: 找不到标识符
-e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(89): error C2065: “ECPU_WRITE_SUB_USAGE”: 未声明的标识符
-e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(115): error C2065: “m_SampleQulity”: 未声明的标识符
-  main.cpp
-e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(46): error C2039: “CanAsRenderTarget”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
-  e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
-e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(47): error C2039: “CanAsDepthStencil”: 不是“BladeEngine::RHI::RHITextureInitInfo”的成员
-  e:\bladeengine\nextdream\source\rhi\rhitexturebase.h(26): note: 参见“BladeEngine::RHI::RHITextureInitInfo”的声明
-e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(372): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
-e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(401): error C2065: “EONLY_GPU_READ_USAGE”: 未声明的标识符
-e:\bladeengine\nextdream\main.cpp(59): error C2039: “EDATA_FORMAT_R32G32B32A32_FLOAT”: 不是“BladeEngine::RHI”的成员
-  e:\bladeengine\nextdream\source\rhi\rhishaderbase.h(15): note: 参见“BladeEngine::RHI”的声明
-e:\bladeengine\nextdream\main.cpp(59): error C2065: “EDATA_FORMAT_R32G32B32A32_FLOAT”: 未声明的标识符
+e:\bladeengine\nextdream\source\directx11\directx11texturebase.h(83): error C2065: “Suit”: 未声明的标识符
   正在生成代码...

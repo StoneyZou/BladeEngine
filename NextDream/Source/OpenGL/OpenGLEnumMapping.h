@@ -14,10 +14,13 @@ namespace BladeEngine
             {
                 GLenum result = GL_RGBA;
                 EDATA_LAYOUT_DESC layout = (EDATA_LAYOUT_DESC)(inFormat >> DATA_LAYOUT_SHIFT);
-                switch (layout)
+                switch (inFormat)
                 {
-                case BladeEngine::RHI::EDATA_LAYOUT_R8G8B8A8:
-                    result = GL_RGBA;
+                case BladeEngine::EDATA_FORMAT_R8G8B8A8_UINT:
+                    break;
+                case BladeEngine::EDATA_FORMAT_R8G8B8A8_SINT:
+                    break;
+                case BladeEngine::EDATA_FORMAT_R8G8B8A8_FLOAT:
                     break;
                 default:
                     break;
@@ -27,19 +30,29 @@ namespace BladeEngine
 
             static GLenum GetPixelType(EDATA_FORMAT inFormat)
             {
-                GLenum result = GL_FLOAT;
+                GLenum result = GL_NONE;
                 EDATA_ELEMENT_TYPE layout = (EDATA_ELEMENT_TYPE)(inFormat & DATA_TYPE_MASK);
                 switch (layout)
                 {
-                case BladeEngine::RHI::EDATA_ELEMENT_UINT:
+                case BladeEngine::EDATA_ELEMENT_TYPELESS:
+                    result = GL_NONE;
+                    break;
+                case BladeEngine::EDATA_ELEMENT_UINT:
                     result = GL_UNSIGNED_INT;
                     break;
-                case BladeEngine::RHI::EDATA_ELEMENT_SINT:
+                case BladeEngine::EDATA_ELEMENT_SINT:
                     result = GL_INT;
                     break;
-                case BladeEngine::RHI::EDATA_ELEMENT_FLOAT:
+                case BladeEngine::EDATA_ELEMENT_FLOAT:
                     result = GL_FLOAT;
                     break;
+                case BladeEngine::EDATA_ELEMENT_UNORM:
+                    result = GL_UNSIGNED_NORMALIZED;
+                    break;
+                case BladeEngine::EDATA_ELEMENT_SNORM:
+                    result = GL_SIGNED_NORMALIZED;
+                    break;
+                case BladeEngine::EDATA_ELEMENT_INTERNAL:
                 default:
                     break;
                 }
@@ -51,7 +64,7 @@ namespace BladeEngine
                 uint32 result = 0;
                 switch (inFormat)
                 {
-                case BladeEngine::RHI::EDATA_FORMAT_R8G8B8A8_UINT:
+                case BladeEngine::EDATA_FORMAT_R8G8B8A8_UINT:
                     result = 32;
                     break;
                 default:

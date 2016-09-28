@@ -51,7 +51,7 @@ namespace BladeEngine
                 case BladeEngine::RHI::ESUIT_GPU_READ_WRITE:
                     result = D3D11_USAGE_DEFAULT;
                     break;
-                case BladeEngine::RHI::ESUIT_CPU_READ_WRITE:
+                case BladeEngine::RHI::ESUIT_GPU_READ_CPU_WRITE:
                     result = D3D11_USAGE_DYNAMIC;
                     break;
                 default:

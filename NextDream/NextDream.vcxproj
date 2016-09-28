@@ -58,14 +58,14 @@
     <ClInclude Include="Source\Platform\Windows\WindowsPCH.h" />
     <ClInclude Include="Source\Platform\Windows\WindowsAPI.h" />
     <ClInclude Include="Source\Platform\Windows\WindowsWindow.h" />
-    <ClInclude Include="Source\RHI\RHI.h" />
-    <ClInclude Include="Source\RHI\RHIConstant.h" />
+    <ClInclude Include="Source\RHI\RHICommandBase.h" />
     <ClInclude Include="Source\RHI\RHIDataFormat.h" />
     <ClInclude Include="Source\RHI\RHIDevice.h" />
     <ClInclude Include="Source\RHI\RHIEnum.h" />
     <ClInclude Include="Source\RHI\RHIShaderBase.h" />
     <ClInclude Include="Source\RHI\RHIBufferBase.h" />
     <ClInclude Include="Source\RHI\RHITextureBase.h" />
+    <ClInclude Include="Source\RHI\RHIUtility.h" />
     <ClInclude Include="Source\Serialization\BArchive.h" />
   </ItemGroup>
   <ItemGroup>

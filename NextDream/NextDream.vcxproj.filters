@@ -90,9 +90,6 @@
     <ClInclude Include="Source\Contains\TArray.h">
       <Filter>头文件\Source\Contains</Filter>
     </ClInclude>
-    <ClInclude Include="Source\RHI\RHI.h">
-      <Filter>头文件\Source\RHI</Filter>
-    </ClInclude>
     <ClInclude Include="Source\RHI\RHIDevice.h">
       <Filter>头文件\Source\RHI</Filter>
     </ClInclude>
@@ -186,9 +183,6 @@
     <ClInclude Include="Source\FrameWork\ConstantDefine.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Source\RHI\RHIConstant.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\BPath.h">
       <Filter>头文件\Source\Core</Filter>
     </ClInclude>
@@ -206,6 +200,12 @@
     </ClInclude>
     <ClInclude Include="Source\OpenGL\OpenGLEnumMapping.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\RHIUtility.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\RHICommandBase.h">
+      <Filter>头文件\Source\RHI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

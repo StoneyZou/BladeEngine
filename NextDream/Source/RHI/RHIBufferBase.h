@@ -14,7 +14,7 @@ namespace BladeEngine
 
         public:
             RHIUniformBuffer(IRHIDevice* inDevice, const RHIUniformCreateInfo& inCreateInfo) 
-                : RHIResource(inDevice, ESUIT_CPU_READ_WRITE),
+                : RHIResource(inDevice, ESUIT_GPU_READ_CPU_WRITE),
                 m_Size(inCreateInfo.DataSize)
             {}
         };
@@ -42,7 +42,7 @@ namespace BladeEngine
 
         public:
             RHIVertexBuffer(IRHIDevice* inDevice, const RHIVertexBufferCreateInfo& inCreateInfo)
-                : RHIResource(inDevice, inCreateInfo.CanCpuWrite ? ESUIT_CPU_READ_WRITE : ESUIT_GPU_READ_WRITE),
+                : RHIResource(inDevice, inCreateInfo.CanCpuWrite ? ESUIT_GPU_READ_CPU_WRITE : ESUIT_GPU_READ_WRITE),
                 m_DataSize(inCreateInfo.DataSize)
             {}
 

@@ -79,14 +79,14 @@ namespace BladeEngine
                 mapType = (inType == ERES_LOCK_READ_WRITE ? D3D11_MAP_READ_WRITE : mapType);
                 mapType = (inType == ERES_LOCK_WRITE_DISCARD ? D3D11_MAP_WRITE_DISCARD : mapType);
 
-#if _DEBUG
-                if(!SuitGpuWrite() && inType == ERES_LOCK_ONLY_WRITE)
-                {
-                    //log can create texture use EGPU_READ_CPU_WRITE
-                }
-#endif
+//#if _DEBUG
+//                if(!Suit && inType == ERES_LOCK_ONLY_WRITE)
+//                {
+//                    //log can create texture use EGPU_READ_CPU_WRITE
+//                }
+//#endif
 
-                if (mapType == D3D11_MAP_WRITE_DISCARD && (GetUsageMode() & ECPU_WRITE_SUB_USAGE) == 0)
+                if (mapType == D3D11_MAP_WRITE_DISCARD && (GetUsageMode() == ESUIT_GPU_READ_CPU_WRITE))
                 {
                     //log
                     return NULL;
