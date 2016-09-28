@@ -5,11 +5,30 @@
 
 namespace BladeEngine
 {
-    class RHIUtility
+    struct RHIUtility
     {
-        static bool CanAsRenderTarget(EDATA_FORMAT inFormat, ECPU_GPU_USAGE_MODE inUsageMode)
+        static bool CanAsShadowResource(ETEX_FORMAT inFormat, ECPU_GPU_USAGE_MODE inUsageMode)
         {
-            return inFormat == EDATA_FORMAT_R8G8B8A8_UINT && (inUsageMode == ESUIT_GPU_WRITE || inUsageMode == ESUIT_GPU_READ_WRITE);
+            return RHIDataFormat::CheckDateUsage(inFormat, ETEX_FORMAT_USAGE_SHADER_RESOURCE) && (
+                inUsageMode == ESUIT_GPU_READ || inUsageMode == ESUIT_GPU_READ_WRITE);
+        }
+
+        static bool CanAsRenderTarget(ETEX_FORMAT inFormat, ECPU_GPU_USAGE_MODE inUsageMode)
+        {
+            return RHIDataFormat::CheckDateUsage(inFormat, ETEX_FORMAT_USAGE_RENDER_TARGET) && (
+                inUsageMode == ESUIT_GPU_WRITE || inUsageMode == ESUIT_GPU_READ_WRITE);
+        }
+
+        static bool CanAsDepthStencil(ETEX_FORMAT inFormat, ECPU_GPU_USAGE_MODE inUsageMode)
+        {
+            return RHIDataFormat::CheckDateUsage(inFormat, ETEX_FORMAT_USAGE_DEPTH_STENCIL) && (
+                    inUsageMode == ESUIT_GPU_WRITE );
+        }
+
+        static bool CheckUsageMode(ETEX_FORMAT inFormat, ECPU_GPU_USAGE_MODE inUsageMode)
+        {
+            return RHIDataFormat::CheckDateUsage(inFormat, ETEX_FORMAT_USAGE_DEPTH_STENCIL) && (
+                inUsageMode == ESUIT_GPU_WRITE);
         }
     };
 }

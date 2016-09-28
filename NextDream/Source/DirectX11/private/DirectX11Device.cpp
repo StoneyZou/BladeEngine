@@ -45,6 +45,10 @@ namespace BladeEngine
                 }
             }
 
+            bool canAsShadowResource = RHIUtility::CanAsShadowResource(inCreateInfo.BaseFormat, inCreateInfo.UsageMode);
+            bool canAsRenderTarget = RHIUtility::CanAsRenderTarget(inCreateInfo.BaseFormat, inCreateInfo.UsageMode);
+            bool canAsDepthStencil = RHIUtility::CanAsDepthStencil(inCreateInfo.BaseFormat, inCreateInfo.UsageMode);
+
             D3D11_TEXTURE2D_DESC textureDesc = { 0 };
             //tDesc.BindFlags
             textureDesc.Width = inCreateInfo.Width;
@@ -59,8 +63,9 @@ namespace BladeEngine
             textureDesc.ArraySize = 1;
             textureDesc.MipLevels = 0;
             textureDesc.BindFlags =
-                (inCreateInfo.UsageMode & EGPU_READ_SUB_USAGE ? D3D11_BIND_SHADER_RESOURCE : 0) |
-                (inCreateInfo.UsageMode & EGPU_WRITE_SUB_USAGE ? D3D11_BIND_RENDER_TARGET : 0);
+                (canAsShadowResource ? D3D11_BIND_SHADER_RESOURCE : 0) |
+                (canAsRenderTarget ? D3D11_BIND_RENDER_TARGET : 0) |
+                (canAsDepthStencil ? D3D11_BIND_DEPTH_STENCIL : 0);
             textureDesc.MiscFlags = 0;
             textureDesc.Format = DirectXEnumMapping::GetPixelFormat(inCreateInfo.BaseFormat);
 
@@ -83,7 +88,7 @@ namespace BladeEngine
             ID3D11ShaderResourceView* pD3D11ShaderResourceView = NULL;
             ID3D11SamplerState* pSamplerState = NULL;
 
-            if ((inCreateInfo.UsageMode & EGPU_READ_SUB_USAGE) != 0)
+            if (canAsShadowResource)
             {
                 D3D11_SHADER_RESOURCE_VIEW_DESC desc;
                 desc.Format = textureDesc.Format;
@@ -129,14 +134,8 @@ namespace BladeEngine
             }
 
             ID3D11RenderTargetView* pD3D11RenderTargetView = NULL;
-            if ((inCreateInfo.Usage & ETEXTURE_USAGE_RENDER_TARGET) != 0)
+            if (canAsRenderTarget)
             {
-                if ((inCreateInfo.UsageMode & EGPU_WRITE_SUB_USAGE) == 0)
-                {
-                    //Logger::Log()
-                    return NULL;
-                }
-
                 D3D11_RENDER_TARGET_VIEW_DESC desc;
                 desc.Format = textureDesc.Format;
                 desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
@@ -153,14 +152,8 @@ namespace BladeEngine
             }
 
             ID3D11DepthStencilView* pD3D11DepthStencilView = NULL;
-            if ((inCreateInfo.Usage & ETEXTURE_USAGE_DEPTH_STENCIL) != 0)
+            if (canAsDepthStencil)
             {
-                if ((inCreateInfo.UsageMode & EGPU_WRITE_SUB_USAGE) == 0)
-                {
-                    //Logger::Log()
-                    return NULL;
-                }
-
                 D3D11_DEPTH_STENCIL_VIEW_DESC desc;
                 desc.Format = textureDesc.Format;
                 desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
@@ -181,8 +174,6 @@ namespace BladeEngine
             initInfo.RenderTargetView = pD3D11RenderTargetView;
             initInfo.DepthStencilView = pD3D11DepthStencilView;
             initInfo.ShaderResourceView = pD3D11ShaderResourceView;
-            initInfo.CanAsRenderTarget = (inCreateInfo.Usage & ETEXTURE_USAGE_RENDER_TARGET) != 0;
-            initInfo.CanAsDepthStencil = (inCreateInfo.Usage & ETEXTURE_USAGE_DEPTH_STENCIL) != 0;
             initInfo.Width = inCreateInfo.Width;;
             initInfo.Height = inCreateInfo.Height;
             initInfo.SampleCount = inCreateInfo.SampleCount;
@@ -523,22 +514,6 @@ namespace BladeEngine
                 return NULL;
             }
 
-            D3D11_SHADER_RESOURCE_VIEW_DESC shadowResourceViewDesc;
-            shadowResourceViewDesc.Format = swapChainDesc.BufferDesc.Format;
-            shadowResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-            shadowResourceViewDesc.Texture2D.MipLevels = 1;
-            shadowResourceViewDesc.Texture2D.MostDetailedMip = 0;
-
-            ID3D11ShaderResourceView* shaderResourceView = NULL;
-            hr = m_pDevice->CreateShaderResourceView(texture2D, &shadowResourceViewDesc, &shaderResourceView);
-            ComPtrGuard(shaderResourceView);
-
-            if (FAILED(hr))
-            {
-                //Logger::Log()
-                return NULL;
-            }
-
             /*D3D11_SAMPLER_DESC samplerDesc;
             samplerDesc.AddressU = DirectXEnumMapping::Get(inCreateInfo.Sampler.AddressU);
             samplerDesc.AddressV = DirectXEnumMapping::Get(inCreateInfo.Sampler.AddressV);
@@ -583,17 +558,13 @@ namespace BladeEngine
             }
 
             DirectX11Texture2DInitInfo textureInitInfo;
-            textureInitInfo.CanAsRenderTarget = true;
-            textureInitInfo.CanAsDepthStencil = false;
-            textureInitInfo.UsageMode = EGPU_READ_GPU_WRITE_USAGE;
+            textureInitInfo.UsageMode = ESUIT_GPU_WRITE;
             textureInitInfo.Width = inCreateInfo.Window->GetWidth();
             textureInitInfo.Height = inCreateInfo.Window->GetHeight();
             textureInitInfo.SampleCount = inCreateInfo.SampleCount;
-            textureInitInfo.SampleQulity = inCreateInfo.SampleQulity;
-            textureInitInfo.Usage = ETEXTURE_USAGE_RENDER_TARGET | ETEXTURE_USAGE_RENDER_TARGET;
             textureInitInfo.DepthStencilView = NULL;
             textureInitInfo.RenderTargetView = renderTargetView;
-            textureInitInfo.ShaderResourceView = shaderResourceView;
+            textureInitInfo.ShaderResourceView = NULL;
             textureInitInfo.Texture = texture2D;
 
             RHITexture2DRef rhiTexture2D(new DirectX11Texture2D(this, textureInitInfo));

@@ -208,7 +208,7 @@ namespace BladeEngine
         return result;
     }
 
-    void CreateTexture2D(RHI::RHITextureCreateInfo info)
+    void CreateTexture2D(RHITextureCreateInfo info)
     {
         GLuint texture;
         glGenTextures(1, &texture);

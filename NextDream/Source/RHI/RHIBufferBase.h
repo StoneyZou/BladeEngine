@@ -26,7 +26,7 @@ namespace BladeEngine
             {
                 ESHADER_SEMANTIC_TYPE Semantic;
                 uint32 Index;
-                EDATA_FORMAT Format;
+                ETEX_FORMAT Format;
                 uint32 Offset;
                 EINPUT_CLASSIFICATION InputType;
                 uint32 InstanceDataStepRate;
@@ -47,7 +47,7 @@ namespace BladeEngine
             {}
 
         public:
-            void AddVertexDeclaration(ESHADER_SEMANTIC_TYPE inSemantic, SIZE_T inIndex, EDATA_FORMAT Format, SIZE_T inOffset)
+            void AddVertexDeclaration(ESHADER_SEMANTIC_TYPE inSemantic, SIZE_T inIndex, ETEX_FORMAT Format, SIZE_T inOffset)
             {
                 m_DeclarationTable.Add(Declaration{ inSemantic, inIndex, Format, inOffset });
             }

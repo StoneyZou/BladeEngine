@@ -88,13 +88,6 @@ namespace BladeEngine
                 mapType = (inType == ERES_LOCK_READ_WRITE ? D3D11_MAP_READ_WRITE : mapType);
                 mapType = (inType == ERES_LOCK_WRITE_DISCARD ? D3D11_MAP_WRITE_DISCARD : mapType);
 
-#if _DEBUG
-                if (!CanGpuWrite() && inType == ERES_LOCK_ONLY_WRITE)
-                {
-                    //log can create texture use EGPU_READ_CPU_WRITE
-                }
-#endif
-
                 if (mapType == D3D11_MAP_WRITE_DISCARD && !CanCpuWrite())
                 {
                     //log

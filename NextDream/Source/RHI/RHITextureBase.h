@@ -4,6 +4,7 @@
 #include <PlatformAPI.h>
 #include <RHIDevice.h>
 #include <RHIContext.h>
+#include <RHIUtility.h>
 
 namespace BladeEngine
 {
@@ -12,8 +13,7 @@ namespace BladeEngine
         RHITexuteSamplerInfo Sampler;
         uint32 Width, Height, Depth;
         uint32 SampleCount;
-        uint32 Usage;
-        EDATA_FORMAT BaseFormat;
+        ETEX_FORMAT BaseFormat;
         ECPU_GPU_USAGE_MODE UsageMode;
         ECPU_ACCESS_MODE CpuAccessMode;
         uint32 DataSize;
@@ -24,7 +24,7 @@ namespace BladeEngine
     {
         uint32 Width, Height, Depth;
         uint32 SampleCount;
-        EDATA_FORMAT BaseFormat;
+        ETEX_FORMAT BaseFormat;
         ECPU_GPU_USAGE_MODE UsageMode;
         ECPU_ACCESS_MODE CpuAccessMode;
     };
@@ -32,7 +32,7 @@ namespace BladeEngine
     class RHITextureBase : public RHIResource, public IResourceLockable
     {
     protected:
-        EDATA_FORMAT m_DataFormat;
+        ETEX_FORMAT m_DataFormat;
         uint32 m_SampleCount;
 
     public:
@@ -43,13 +43,13 @@ namespace BladeEngine
         {}
 
     public:
-        EDATA_FORMAT GetDataFormat() const { return m_DataFormat; }
+        ETEX_FORMAT GetDataFormat() const { return m_DataFormat; }
 
         uint32 GetSamplerCount() const { return m_SampleCount; }
 
-        bool CanAsRenderTarget() const { return m_CanAsRenderTarget; }
-        bool CanAsDepthStencil() const { return m_CanAsDepthStencil; }
-        bool CanAsDepthStencil() const { return m_CanAsDepthStencil; }
+        bool CanAsRenderTarget() const { return RHIUtility::CanAsRenderTarget(m_DataFormat, GetUsageMode()); }
+        bool CanAsDepthStencil() const { return RHIUtility::CanAsRenderTarget(m_DataFormat, GetUsageMode());; }
+        bool CanAsShadowResource() const { return RHIUtility::CanAsRenderTarget(m_DataFormat, GetUsageMode());; }
     };
 
     class RHITexture2D : public RHITextureBase

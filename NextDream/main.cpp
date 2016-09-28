@@ -37,7 +37,7 @@ void main()
         {
             ::printf("InitDevice Success!");
 
-            RHI::IRHIDevice* device = module->GetDevice();
+            IRHIDevice* device = module->GetDevice();
 
             BVector3 vertexs[] =
             {
@@ -46,17 +46,17 @@ void main()
                 { 1.0f, 1.0f, 0.0f },
             };
 
-            RHI::RHIVertexBufferCreateInfo info;
+            RHIVertexBufferCreateInfo info;
             info.CanCpuWrite = false;
             info.Data = vertexs;
             info.DataSize = sizeof(vertexs);
             info.VertexNum = 3;
 
-            RHI::RHIVertexBufferRef vertexBuffer = device->CreateVertexBuffer(info);
+            RHIVertexBufferRef vertexBuffer = device->CreateVertexBuffer(info);
             if(vertexBuffer != NULL)
             {
                 ::printf("Create VertexBuffer Success!");
-                vertexBuffer->AddVertexDeclaration(RHI::ESHADER_SEMANTIC_POSITION, 0, RHI::EDATA_FORMAT_R32G32B32A32_FLOAT, 0);
+                vertexBuffer->AddVertexDeclaration(ESHADER_SEMANTIC_POSITION, 0, EDATA_FORMAT_FLOAT4, 0);
             }
 
             PlatformWindowRef window = PlatformAPI::CreatePlatformWindow("Test", 0, 0, 800, 600);
@@ -65,7 +65,7 @@ void main()
                 ::printf("Create Window Success!");
             }
 
-            RHI::RHISwapChainCreateInfo swapChainCreateInfo;
+            RHISwapChainCreateInfo swapChainCreateInfo;
             swapChainCreateInfo.BufferNum = 2;
             swapChainCreateInfo.RefreshRateDenominator = 60;
             swapChainCreateInfo.RefreshRateNumerator = 1;
@@ -73,22 +73,22 @@ void main()
             swapChainCreateInfo.SampleQulity = 0;
             swapChainCreateInfo.Window = window;
 
-            RHI::RHISwapChainRef swapChain = device->CreateSwapChain(swapChainCreateInfo);
+            RHISwapChainRef swapChain = device->CreateSwapChain(swapChainCreateInfo);
             if (swapChain != NULL)
             {
                 ::printf("Create SwapChain Success!");
             }
 
-            RHI::RHIImmediateContextRef immediateContext = device->GetImmediateContext();
+            RHIImmediateContextRef immediateContext = device->GetImmediateContext();
             if (immediateContext != NULL)
             {
                 ::printf("Create immediateContext Success!");
             }
 
-            RHI::RHIShaderInputTable inputTable;
-            RHI::RHIShaderResourceTable resoureceTable;
-            RHI::RHIVertexShaderRef vertexShader = NULL;
-            RHI::RHIPixelShaderRef pixelShader = NULL;
+            RHIShaderInputTable inputTable;
+            RHIShaderResourceTable resoureceTable;
+            RHIVertexShaderRef vertexShader = NULL;
+            RHIPixelShaderRef pixelShader = NULL;
 
             HFile fileHandle = PlatformAPI::OpenFile(s_ShaderFileName, EFILE_READ, EFILE_SHARE_READ_WRITE, EFILE_OPEN_EXISTING);
             if (PlatformAPI::CheckHFileValid(fileHandle))
@@ -100,7 +100,7 @@ void main()
                     fileReader >> inputTable >> resoureceTable;
                     if(fileReader)
                     {
-                        RHI::RHIShaderCreateInfo createInfo;
+                        RHIShaderCreateInfo createInfo;
                         fileReader >> createInfo.DataSize;
                         createInfo.Data = content + fileReader.Tell();
                         fileReader.Seek(ESEEK_POS_CUR, createInfo.DataSize);

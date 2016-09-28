@@ -69,8 +69,8 @@ namespace BladeEngine
         ID3DBlob* m_GSData;
         ID3DBlob* m_PSData;
 
-        RHI::RHIShaderInputTable m_InputTable;
-        RHI::RHIShaderResourceTable m_ResourceTable;
+        RHIShaderInputTable m_InputTable;
+        RHIShaderResourceTable m_ResourceTable;
 
     public:
         Direct3DShaderCompileModule() : ShaderCompileModule(ESHADER_COMPILE_DIRECT3D), 
@@ -232,7 +232,7 @@ namespace BladeEngine
             while (reflection->GetInputParameterDesc(inputParamIndex++, &inputParamDesc) == S_OK)
             {
                 m_InputTable.AddInputBindDesc(
-                    RHI::DirectXEnumMapping::GetSematicType(inputParamDesc.SemanticName),
+                    DirectXEnumMapping::GetSematicType(inputParamDesc.SemanticName),
                     inputParamDesc.SemanticIndex,
                     inputParamDesc.Register);
             }
@@ -268,10 +268,10 @@ namespace BladeEngine
                     }
                     break;
                 case D3D_SIT_TEXTURE:
-                    m_ResourceTable.AddResourceBindDesc(resourceDesc.Name, resourceDesc.BindPoint, resourceDesc.BindCount, RHI::ESHADER_RESOURCE_TEXTURE);
+                    m_ResourceTable.AddResourceBindDesc(resourceDesc.Name, resourceDesc.BindPoint, resourceDesc.BindCount, ESHADER_RESOURCE_TEXTURE);
                     break;
                 case D3D_SIT_SAMPLER:
-                    m_ResourceTable.AddResourceBindDesc(resourceDesc.Name, resourceDesc.BindPoint, resourceDesc.BindCount, RHI::ESHADER_RESOURCE_SAMPLER);
+                    m_ResourceTable.AddResourceBindDesc(resourceDesc.Name, resourceDesc.BindPoint, resourceDesc.BindCount, ESHADER_RESOURCE_SAMPLER);
                     break;
                 default:
                     break;
@@ -316,7 +316,7 @@ namespace BladeEngine
                             cbuffer_index.index,
                             variableDesc.StartOffset,
                             variableDesc.Size,
-                            RHI::DirectXEnumMapping::GetAttrType(typeDesc.Type),
+                            DirectXEnumMapping::GetAttrType(typeDesc.Type),
                             typeDesc.Rows,
                             typeDesc.Columns,
                             variableDesc.DefaultValue);

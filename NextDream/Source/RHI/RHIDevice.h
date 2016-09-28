@@ -296,7 +296,7 @@ namespace BladeEngine
     {
     protected:
         // 需要在子类赋值，放在这里只是为了避免多态
-        RHI::IRHIDevice* m_Device;
+        IRHIDevice* m_Device;
 
         uint32 m_bestAdapterIndex;
         TArray<BString> m_AdapterNames;
@@ -327,7 +327,7 @@ namespace BladeEngine
 
         uint32 GetBestAdapterIndex() const { return m_bestAdapterIndex; }
 
-        RHI::IRHIDevice* GetDevice() { return m_Device; }
+        IRHIDevice* GetDevice() { return m_Device; }
     };
 }
 #endif // !__BLADE_RHI_RHI_DEVICE_H__
