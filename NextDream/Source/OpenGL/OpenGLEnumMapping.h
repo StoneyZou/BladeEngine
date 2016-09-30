@@ -16,9 +16,9 @@ namespace BladeEngine
                 ETEX_FORMAT_LAYOUT layout = (ETEX_FORMAT_LAYOUT)(inFormat >> DATA_LAYOUT_SHIFT);
                 switch (inFormat)
                 {
-                case BladeEngine::EDATA_FORMAT_R8G8B8A8_UINT:
+                case BladeEngine::ETEX_FORMAT_R8G8B8A8_UINT:
                     break;
-                case BladeEngine::EDATA_FORMAT_R8G8B8A8_SINT:
+                case BladeEngine::ETEX_FORMAT_R8G8B8A8_SINT:
                     break;
                 case BladeEngine::EDATA_FORMAT_R8G8B8A8_FLOAT:
                     break;
@@ -64,7 +64,7 @@ namespace BladeEngine
                 uint32 result = 0;
                 switch (inFormat)
                 {
-                case BladeEngine::EDATA_FORMAT_R8G8B8A8_UINT:
+                case BladeEngine::ETEX_FORMAT_R8G8B8A8_UINT:
                     result = 32;
                     break;
                 default:

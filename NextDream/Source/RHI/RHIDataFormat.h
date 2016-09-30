@@ -21,10 +21,10 @@ namespace BladeEngine
             template<>  \
             struct DataFormatDesc<format> : public DataFormatBaseDesc<isCompressed, byteWidth, type> {};
 
-    AddDataFormatDesc(EDATA_FORMAT_R8G8B8A8_UINT, false, 32, ETEX_FORMAT_TYPE_UINT);
-    AddDataFormatDesc(EDATA_FORMAT_R8G8B8A8_SINT, false, 32, ETEX_FORMAT_TYPE_SINT);
+    AddDataFormatDesc(ETEX_FORMAT_R8G8B8A8_UINT, false, 32, ETEX_FORMAT_TYPE_UINT);
+    AddDataFormatDesc(ETEX_FORMAT_R8G8B8A8_SINT, false, 32, ETEX_FORMAT_TYPE_SINT);
     AddDataFormatDesc(EDATA_FORMAT_R8G8B8A8_FLOAT, false, 32, ETEX_FORMAT_TYPE_FLOAT);
-    AddDataFormatDesc(EDATA_FORMAT_R8G8B8A8_TYPELESS, false, 32, ETEX_FORMAT_TYPE_TYPELESS);
+    AddDataFormatDesc(ETEX_FORMAT_R8G8B8A8_TYPELESS, false, 32, ETEX_FORMAT_TYPE_TYPELESS);
 }
 
 #endif // !__BLADE_RHI_DATA_FORMAT_H__

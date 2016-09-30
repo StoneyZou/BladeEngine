@@ -14,39 +14,63 @@ namespace BladeEngine
     class DirectXEnumMapping
     {
     public:
+        static DXGI_FORMAT GetDataFormat(EDATA_FORMAT inFormat)
+        {
+            DXGI_FORMAT result = DXGI_FORMAT_UNKNOWN;
+            switch (inFormat)
+            {
+            case BladeEngine::EDATA_FORMAT_FLOAT4:
+                result = DXGI_FORMAT_R32G32B32A32_FLOAT;
+                break;
+            case BladeEngine::EDATA_FORMAT_FLOAT3:
+                result = DXGI_FORMAT_R32G32B32_FLOAT;
+                break;
+            case BladeEngine::EDATA_FORMAT_FLOAT2:
+                result = DXGI_FORMAT_R32G32_FLOAT;
+                break;
+            case BladeEngine::EDATA_FORMAT_FLOAT:
+                result = DXGI_FORMAT_R32_FLOAT;
+                break;
+            default:
+                assert(0);
+                break;
+            }
+            return result;
+        }
+
         static DXGI_FORMAT GetPixelFormat(ETEX_FORMAT inFormat)
         {
             DXGI_FORMAT result = DXGI_FORMAT_UNKNOWN;
             switch (inFormat)
             {
-            case BladeEngine::EDATA_FORMAT_R8G8B8A8_TYPELESS:
+            case BladeEngine::ETEX_FORMAT_R8G8B8A8_TYPELESS:
                 result = DXGI_FORMAT_R8G8B8A8_TYPELESS;
                 break;
-            case BladeEngine::EDATA_FORMAT_R8G8B8A8_UINT:
+            case BladeEngine::ETEX_FORMAT_R8G8B8A8_UINT:
                 result = DXGI_FORMAT_R8G8B8A8_UINT;
                 break;
-            case BladeEngine::EDATA_FORMAT_R8G8B8A8_SINT:
+            case BladeEngine::ETEX_FORMAT_R8G8B8A8_SINT:
                 result = DXGI_FORMAT_R8G8B8A8_SINT;
                 break;
-            case BladeEngine::EDATA_FORMAT_R8G8B8A8_UNORM:
+            case BladeEngine::ETEX_FORMAT_R8G8B8A8_UNORM:
                 result = DXGI_FORMAT_R8G8B8A8_UNORM;
                 break;
-            case BladeEngine::EDATA_FORMAT_R8G8B8A8_SNORM:
+            case BladeEngine::ETEX_FORMAT_R8G8B8A8_SNORM:
                 result = DXGI_FORMAT_R8G8B8A8_SNORM;
                 break;
-            case BladeEngine::EDATA_FORMAT_D32_FLOAT_S8_UINT:
+            case BladeEngine::ETEX_FORMAT_D32_FLOAT_S8_UINT:
                 result = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
                 break;
-            case BladeEngine::EDATA_FORMAT_D32_FLOAT:
+            case BladeEngine::ETEX_FORMAT_D32_FLOAT:
                 result = DXGI_FORMAT_D32_FLOAT;
                 break;
-            case BladeEngine::EDATA_FORMAT_D24_UNORM_S8_UINT:
+            case BladeEngine::ETEX_FORMAT_D24_UNORM_S8_UINT:
                 result = DXGI_FORMAT_D24_UNORM_S8_UINT;
                 break;
-            case BladeEngine::EDATA_FORMAT_D24_UNORM:
+            case BladeEngine::ETEX_FORMAT_D24_UNORM:
                 result = DXGI_FORMAT_D24_UNORM_S8_UINT;
                 break;
-            case BladeEngine::EDATA_FORMAT_D16_UNORM:
+            case BladeEngine::ETEX_FORMAT_D16_UNORM:
                 result = DXGI_FORMAT_D16_UNORM;
                 break;
             default:
@@ -58,13 +82,13 @@ namespace BladeEngine
             return result;
         }
 
-        static D3D11_MAP GetPixelFormat(ERES_LOCK_TYPE inType)
+        static D3D11_MAP GetLockType(ERES_LOCK_TYPE inType)
         {
             //log
             return D3D11_MAP_READ;
         }
 
-        static D3D11_USAGE GetPixelFormat(ECPU_GPU_USAGE_MODE inMode)
+        static D3D11_USAGE GetCpuGpuUsageMode(ECPU_GPU_USAGE_MODE inMode)
         {
             D3D11_USAGE result = D3D11_USAGE_DEFAULT;
             switch (inMode)
@@ -80,6 +104,7 @@ namespace BladeEngine
                 result = D3D11_USAGE_DYNAMIC;
                 break;
             default:
+                assert(0);
                 break;
             }
 
@@ -87,7 +112,7 @@ namespace BladeEngine
             return D3D11_USAGE_DEFAULT;
         }
 
-        static D3D11_FILL_MODE GetPixelFormat(EMESH_FILL_MODE inMode)
+        static D3D11_FILL_MODE GetFillMode(EMESH_FILL_MODE inMode)
         {
             switch (inMode)
             {
@@ -104,7 +129,7 @@ namespace BladeEngine
             return D3D11_FILL_SOLID;
         }
 
-        static D3D11_CULL_MODE GetPixelFormat(EFACE_CULL_MODE inMode)
+        static D3D11_CULL_MODE GetCullMode(EFACE_CULL_MODE inMode)
         {
             switch (inMode)
             {
@@ -115,6 +140,7 @@ namespace BladeEngine
             case BladeEngine::EFACE_CULL_BACK:
                 return D3D11_CULL_FRONT;
             default:
+                assert(0);
                 break;
             }
 
@@ -122,7 +148,7 @@ namespace BladeEngine
             return D3D11_CULL_NONE;
         }
 
-        static D3D11_BLEND GetPixelFormat(EBLEND_ARG inArg)
+        static D3D11_BLEND GetBlendArg(EBLEND_ARG inArg)
         {
             switch (inArg)
             {
@@ -161,6 +187,7 @@ namespace BladeEngine
             case BladeEngine::EBLEND_ARG_INV_SRC1_ALPHA:
                 return D3D11_BLEND_INV_SRC1_ALPHA;
             default:
+                assert(0);
                 break;
             }
 
@@ -168,7 +195,7 @@ namespace BladeEngine
             return D3D11_BLEND_ZERO;
         }
 
-        static D3D11_BLEND_OP GetPixelFormat(EBLEND_FUNC inFunc)
+        static D3D11_BLEND_OP GetBlendFunc(EBLEND_FUNC inFunc)
         {
             switch (inFunc)
             {
@@ -183,6 +210,7 @@ namespace BladeEngine
             case BladeEngine::EBLEND_FUNC_MAX:
                 return D3D11_BLEND_OP_MAX;;
             default:
+                assert(0);
                 break;
             }
 
@@ -190,7 +218,7 @@ namespace BladeEngine
             return D3D11_BLEND_OP_ADD;
         }
 
-        static D3D11_COMPARISON_FUNC GetPixelFormat(ECOMPARISON_FUNC inFunc)
+        static D3D11_COMPARISON_FUNC GetComparisonFunc(ECOMPARISON_FUNC inFunc)
         {
             switch (inFunc)
             {
@@ -211,6 +239,7 @@ namespace BladeEngine
             case BladeEngine::ECOMPARISON_ALWAYS:
                 return D3D11_COMPARISON_ALWAYS;
             default:
+                assert(0);
                 break;
             }
 
@@ -218,7 +247,7 @@ namespace BladeEngine
             return D3D11_COMPARISON_NEVER;
         }
 
-        static D3D11_STENCIL_OP GetPixelFormat(EDEPTH_STENCIL_WRITE_FUNC inFunc)
+        static D3D11_STENCIL_OP GetStencilFunc(EDEPTH_STENCIL_WRITE_FUNC inFunc)
         {
             switch (inFunc)
             {
@@ -239,6 +268,7 @@ namespace BladeEngine
             case BladeEngine::EDEPTH_STENCIL_WRITE_DECR:
                 return D3D11_STENCIL_OP_DECR;
             default:
+                assert(0);
                 break;
             }
 
@@ -246,7 +276,7 @@ namespace BladeEngine
             return D3D11_STENCIL_OP_KEEP;
         }
 
-        static D3D11_TEXTURE_ADDRESS_MODE GetPixelFormat(ETEXTURE_ADDRESS_MODE inMode)
+        static D3D11_TEXTURE_ADDRESS_MODE GetTextureAddress(ETEXTURE_ADDRESS_MODE inMode)
         {
             switch (inMode)
             {
@@ -262,7 +292,7 @@ namespace BladeEngine
             return D3D11_TEXTURE_ADDRESS_WRAP;
         }
 
-        static D3D11_FILTER GetPixelFormat(ETEXTURE_FILTER_MODE inMode)
+        static D3D11_FILTER GetTextureFilter(ETEXTURE_FILTER_MODE inMode)
         {
             switch (inMode)
             {
@@ -283,6 +313,7 @@ namespace BladeEngine
             case BladeEngine::ETEXTURE_FILTER_MIN_MAG_MIP_LINEAR:
                 return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
             default:
+                assert(0);
                 break;
             }
 
@@ -290,7 +321,7 @@ namespace BladeEngine
             return D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
         }
 
-        static D3D11_INPUT_CLASSIFICATION GetPixelFormat(EINPUT_CLASSIFICATION inType)
+        static D3D11_INPUT_CLASSIFICATION GetInputClassification(EINPUT_CLASSIFICATION inType)
         {
             switch (inType)
             {
@@ -299,6 +330,7 @@ namespace BladeEngine
             case BladeEngine::EINPUT_PER_INSTANCE_DATA:
                 return D3D11_INPUT_PER_INSTANCE_DATA;
             default:
+                assert(0);
                 break;
             }
 
@@ -321,6 +353,7 @@ namespace BladeEngine
                 result = ESHADER_ATTRIB_FLOAT;
                 break;
             default:
+                assert(0);
                 break;
                 // log
             }
