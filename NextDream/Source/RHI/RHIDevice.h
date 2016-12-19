@@ -151,6 +151,7 @@ namespace BladeEngine
     struct RHIUniformCreateInfo
     {
         uint32 DataSize;
+		uint32 ResourseOffset;
         void* Data;
     };
 

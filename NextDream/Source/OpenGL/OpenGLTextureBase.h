@@ -19,7 +19,6 @@ namespace BladeEngine
         {
         private:
             GLuint m_Buffer;
-            
             GLsizei m_LockingBufferSize;
             void* m_LockingBuffer;
             ERES_LOCK_TYPE m_LockingType;

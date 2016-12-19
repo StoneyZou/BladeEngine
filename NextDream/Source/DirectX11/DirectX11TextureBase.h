@@ -42,12 +42,12 @@ namespace BladeEngine
             m_ShaderResource(inInitInfo.ShaderResourceView)
         {
             BladeAssert(m_Texture != NULL);
-            BladeAssert(m_ShaderResource != NULL)
-                BladeAssert((CanAsRenderTarget() && m_RenderTarget != NULL) || (!CanAsRenderTarget() && m_RenderTarget == NULL));
-            BladeAssert((CanAsDepthStencil() && m_ShaderResource != NULL) || (!CanAsDepthStencil() && m_ShaderResource == NULL));
+            BladeAssert((CanAsShadowResource() && m_ShaderResource != NULL) || (!CanAsShadowResource() && m_RenderTarget == NULL));
+            BladeAssert((CanAsRenderTarget() && m_RenderTarget != NULL) || (!CanAsRenderTarget() && m_RenderTarget == NULL));
+            BladeAssert((CanAsDepthStencil() && m_DepthStencil != NULL) || (!CanAsDepthStencil() && m_ShaderResource == NULL));
 
             m_Texture->AddRef();
-            m_ShaderResource->AddRef();
+            if (m_ShaderResource != NULL) { m_ShaderResource->AddRef(); };
             if (m_RenderTarget != NULL) { m_RenderTarget->AddRef(); }
             if (m_DepthStencil != NULL) { m_DepthStencil->AddRef(); }
         }

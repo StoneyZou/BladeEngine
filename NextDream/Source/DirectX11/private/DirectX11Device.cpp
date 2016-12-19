@@ -195,7 +195,7 @@ namespace BladeEngine
             return NULL;
         }
 
-        DirectX11VertexShader* vertexShader = new DirectX11VertexShader(this, pD3D11VertexShader);
+        DirectX11VertexShader* vertexShader = new DirectX11VertexShader(this, pD3D11VertexShader, (byte*)inCreateInfo.Data, inCreateInfo.DataSize);
         return RHIVertexShaderRef(vertexShader);
     }
 
@@ -556,6 +556,7 @@ namespace BladeEngine
         }
 
         DirectX11Texture2DInitInfo textureInitInfo;
+        textureInitInfo.BaseFormat = ETEX_FORMAT_R8G8B8A8_UNORM;
         textureInitInfo.UsageMode = ESUIT_GPU_WRITE;
         textureInitInfo.Width = inCreateInfo.Window->GetWidth();
         textureInitInfo.Height = inCreateInfo.Window->GetHeight();

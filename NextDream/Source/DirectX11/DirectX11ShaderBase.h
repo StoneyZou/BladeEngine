@@ -58,27 +58,34 @@ namespace BladeEngine
     class DirectX11VertexShader : public RHIVertexShader
     {
     private:
-        /*byte* m_Data;
-        SIZE_T m_DataSize;*/
-
+        byte* m_ShaderCode;
+        SIZE_T m_ShaderCodeLen;
         ID3D11VertexShader* m_VertexShader;
 
     public:
-        DirectX11VertexShader(DirectX11Device* inDevice, ID3D11VertexShader* inShader) :
+        DirectX11VertexShader(DirectX11Device* inDevice, ID3D11VertexShader* inShader, const byte* inShaderCode, SIZE_T inShaderCodeLen) :
             RHIVertexShader(inDevice),
             m_VertexShader(inShader)
         {
-            /*m_DataSize = inCreateInfo.DataSize;
-            m_Data = (byte*)Malloc::Alloc(m_DataSize);
-            MemUtil::Memcopy(m_Data, m_DataSize, inCreateInfo.Data, inCreateInfo.DataSize);*/
+            BladeAssert(inShader != NULL);
+            BladeAssert(inShaderCode != NULL);
+
+            m_ShaderCodeLen = inShaderCodeLen;
+            m_ShaderCode = (byte*)Malloc::Alloc(m_ShaderCodeLen);
+            MemUtil::Memcopy(m_ShaderCode, m_ShaderCodeLen, inShaderCode, inShaderCodeLen);
 
             m_VertexShader->AddRef();
         }
 
-        ID3D11VertexShader* GetShader() { return m_VertexShader; }
+        ~DirectX11VertexShader()
+        {
+            m_VertexShader->Release();
+            Malloc::Free(m_ShaderCode);
+        }
 
-        /*const byte* GetData() const { return m_Data; }
-        SIZE_T GetDataSize() const { return m_DataSize; }*/
+        ID3D11VertexShader* GetShader() { return m_VertexShader; }
+        const byte* GetShaderCode() const { return m_ShaderCode; }
+        SIZE_T GetShaderCodeLen() const { return m_ShaderCodeLen; }
     };
 
     class DirectX11HullShader : public RHIHullShader

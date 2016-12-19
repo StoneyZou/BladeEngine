@@ -16,14 +16,19 @@ namespace BladeEngine
         static const UINT8 SamplerMask = 0;
 
     private:
-        const TCHAR* ShaderSemanticNames[6] =
+        const TCHAR* ShaderSemanticNames[ESHADER_SEMANTIC_COUNT] =
         {
             TEXT("Unknown"),
-            TEXT("Position"),
-            TEXT("Normal"),
-            TEXT("Color"),
-            TEXT("Tangent"),
-            TEXT("Texcoord"),
+            TEXT("BINORMAL")
+            TEXT("BLEINDICES"),
+            TEXT("BLENDWEIGHT"),
+            TEXT("COLOR"),
+            TEXT("NORMAL"),
+            TEXT("POSITION"),
+            TEXT("POSITIONT"),
+            TEXT("PSIZE"),
+            TEXT("TANGENT"),
+            TEXT("TEXCOORD"),
         };
 
     private:

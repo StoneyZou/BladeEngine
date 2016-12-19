@@ -41,9 +41,9 @@ void main()
 
             BVector3 vertexs[] =
             {
-                { 0.0f, 0.0f, 0.0f },
+				{ 0.0f, 0.0f, 0.0f },
+				{ 1.0f, 1.0f, 0.0f },
                 { 1.0f, 0.0f, 0.0f },
-                { 1.0f, 1.0f, 0.0f },
             };
 
             RHIVertexBufferCreateInfo info;
@@ -56,7 +56,7 @@ void main()
             if(vertexBuffer != NULL)
             {
                 ::printf("Create VertexBuffer Success!");
-                vertexBuffer->AddVertexDeclaration(ESHADER_SEMANTIC_POSITION, 0, EDATA_FORMAT_FLOAT4, 0);
+                vertexBuffer->AddVertexDeclaration(ESHADER_SEMANTIC_POSITION, 0, EDATA_FORMAT_FLOAT3, 0);
             }
 
             PlatformWindowRef window = PlatformAPI::CreatePlatformWindow("Test", 0, 0, 800, 600);
@@ -122,6 +122,9 @@ void main()
 
             while (!window->IsClosed())
             {
+                BColor color(0.0f, 0.0f, 0.0f, 1.0f);
+                immediateContext->ClearRenderTarget(color);
+
                 immediateContext->SetRenderTarget(swapChain->AsTexture());
 
                 immediateContext->SetViewport(0, 0.0f, 0.0f, (float)window->GetWidth(), (float)window->GetHeight(), 0.0f, 1.0f);
@@ -131,9 +134,6 @@ void main()
                 immediateContext->SetPixelShader(pixelShader);
 
                 immediateContext->SetVertexBuufer(vertexBuffer, sizeof(BVector3), 0);
-
-                BColor color(1.0f, 1.0f, 0.0f, 1.0f);
-                immediateContext->ClearRenderTarget(color);
 
                 immediateContext->DrawAuto();
 

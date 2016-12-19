@@ -20,7 +20,7 @@ const char* ShaderModel_2_0 = "--SM_2_0";
 
 int main(int argc, const char *argv[])
 {
-    const char* _argv[] = { "", DirectXName, ShaderModel_5_0, "E:/BladeEngine/Media/Shader/VertexShader.hlsl" };
+    const char* _argv[] = { "", DirectXName, ShaderModel_5_0, "../Media/Shader/VertexShader.hlsl" };
     argv = _argv;
     argc = 4;
 
@@ -62,7 +62,7 @@ int main(int argc, const char *argv[])
     }
 
     ShaderCompileModule* module = new Direct3DShaderCompileModule();
-    if (module->Load("../3rdParty/bin/DirectX/d3dCompiler_47.dll"))
+        if (module->Load("C:/Windows/System32/D3DCompiler_47.dll"))
     {
         if (module->StartUp())
         {

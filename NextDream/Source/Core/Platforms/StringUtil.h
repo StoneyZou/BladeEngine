@@ -5,6 +5,7 @@
 
 #include <CharDefine.h>
 #include <TypeDefine.h>
+#include <MacroDefine.h>
 
 namespace BladeEngine
 {
@@ -21,24 +22,36 @@ namespace BladeEngine
             return wcslen(inStr);
         }
 
-        static SIZE_T Strcpy(ANSICHAR* inDest, SIZE_T inDestLen, const ANSICHAR* inSrc)
+        static void Strcpy(ANSICHAR* inDest, SIZE_T inDestSizeInByte, const ANSICHAR* inSrc)
         {
-            return strcpy_s(inDest, inDestLen, inSrc);
+#if DEBUG || _DEBUG
+            //assert(inDestSizeInByte >= (strlen(inSrc) + 1));
+#endif
+            strcpy(inDest, inSrc);
         }
 
-        static SIZE_T Strncpy(ANSICHAR* inDest, SIZE_T inDestLen, const ANSICHAR* inSrc, SIZE_T inSrcLen)
+        static void Strncpy(ANSICHAR* inDest, SIZE_T inDestSizeInByte, const ANSICHAR* inSrc, SIZE_T inSrcLen)
         {
-            return strncpy_s(inDest, inDestLen, inSrc, inSrcLen);
+#if DEBUG || _DEBUG
+            //assert(inDestSizeInByte >= (inSrcLen + 1));
+#endif
+            strncpy(inDest, inSrc, inSrcLen);
         }
 
-        static SIZE_T Strcpy(WIDECHAR* inDest, SIZE_T inDestLen, const WIDECHAR* inSrc)
+        static void Strcpy(WIDECHAR* inDest, SIZE_T inDestSizeInByte, const WIDECHAR* inSrc)
         {
-            return wcscpy_s(inDest, inDestLen, inSrc);
+#if DEBUG || _DEBUG
+            //assert(inDestSizeInByte >= (wcslen(inSrc) + 1) * sizeof(WIDECHAR));
+#endif
+            wcscpy(inDest, inSrc);
         }
 
-        static SIZE_T Strncpy(WIDECHAR* inDest, SIZE_T inDestLen, const WIDECHAR* inSrc, SIZE_T inSrcLen)
+        static void Strncpy(WIDECHAR* inDest, SIZE_T inDestSizeInByte, const WIDECHAR* inSrc, SIZE_T inSrcLen)
         {
-            return wcsncpy_s(inDest, inDestLen, inSrc, inSrcLen);
+#if DEBUG || _DEBUG
+            //assert(inDestSizeInByte >= (inSrcLen + 1) * sizeof(WIDECHAR));
+#endif
+            wcsncpy(inDest, inSrc, inSrcLen);
         }
 
         static SIZE_T Strcmp(const ANSICHAR* inSrc1, const ANSICHAR* inSrc2, SIZE_T inMaxLen)

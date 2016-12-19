@@ -229,8 +229,10 @@ namespace BladeEngine
         ID3D11Device* device = NULL;
         m_Context->GetDevice(&device);
 
+        DirectX11VertexShader* vs = (DirectX11VertexShader*) m_StateCahce.VS;
+
         ID3D11InputLayout* inputLayout = NULL;
-        HRESULT hr = device->CreateInputLayout(m_InputElementDescs.TypePtr(), inputElementDescIndex, NULL, 0, &inputLayout);
+        HRESULT hr = device->CreateInputLayout(m_InputElementDescs.TypePtr(), inputElementDescIndex, vs->GetShaderCode(), vs->GetShaderCodeLen(), &inputLayout);
         if (FAILED(hr))
         {
             return;
@@ -239,7 +241,10 @@ namespace BladeEngine
         m_Context->IASetInputLayout(inputLayout);
         inputLayout->Release();
 
-        m_Context->DrawAuto();
+		if (m_StateCahce.VertexBuffer != NULL)
+		{
+			m_Context->Draw(m_StateCahce.VertexBuffer->GetVertexNum(), 0);
+		}
     }
 
     void DirectX11ContextBaseImpl::Draw(uint32 inVertexNum, uint32 inVertexOffset)
@@ -262,12 +267,12 @@ namespace BladeEngine
         }
 
         D3D11_VIEWPORT viewport = { 0 };
-        FLOAT TopLeftX = inLeft;
-        FLOAT TopLeftY = inTop;
-        FLOAT Width = inWidth;
-        FLOAT Height = inHeight;
-        FLOAT MinDepth = inMinDepth;
-        FLOAT MaxDepth = inMaxDepth;
+        viewport.TopLeftX = inLeft;
+        viewport.TopLeftY = inTop;
+        viewport.Width = inWidth;
+        viewport.Height = inHeight;
+        viewport.MinDepth = inMinDepth;
+        viewport.MaxDepth = inMaxDepth;
 
         m_StateCahce.Viewports[inIndex] = viewport;
 

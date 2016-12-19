@@ -41,7 +41,8 @@ namespace BladeEngine
     public:
         RHIVertexBuffer(IRHIDevice* inDevice, const RHIVertexBufferCreateInfo& inCreateInfo)
             : RHIResource(inDevice, inCreateInfo.CanCpuWrite ? ESUIT_GPU_READ_CPU_WRITE : ESUIT_GPU_READ_WRITE),
-            m_DataSize(inCreateInfo.DataSize)
+            m_DataSize(inCreateInfo.DataSize),
+			m_VertexNum(inCreateInfo.VertexNum)
         {}
 
     public:

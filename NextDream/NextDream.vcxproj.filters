@@ -132,9 +132,6 @@
     <ClInclude Include="Source\FrameWork\GlobalConfig.h">
       <Filter>头文件\Source\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\BVector.h">
-      <Filter>头文件\Source\Math</Filter>
-    </ClInclude>
     <ClInclude Include="Source\FrameWork\BFramework.h">
       <Filter>头文件\Source\Framework</Filter>
     </ClInclude>
@@ -189,23 +186,26 @@
     <ClInclude Include="Source\Platform\PlatformWindow.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Source\OpenGL\Windows\OpenGLWindows.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\OpenGL\OpenGLTextureBase.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\OpenGL\OpenGLBase.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\OpenGL\OpenGLEnumMapping.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Source\RHI\RHIUtility.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Source\RHI\RHICommandBase.h">
       <Filter>头文件\Source\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\RHIContext.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mesh\StaticMesh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mesh\MeshUtility.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\BVector3.h">
+      <Filter>头文件\Source\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\BVector2.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -231,9 +231,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Source\Platform\Windows\Private\WindowsAPI.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\OpenGL\Windows\OpenGLWindows.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

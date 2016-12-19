@@ -3,6 +3,7 @@
 
 namespace BladeEngine
 {
+    #pragma warning(disable:4996)
 
 #if defined(_WIN32) || defined(_WIN64)
     #define WINDOWS_PLATFORM 1

@@ -329,7 +329,7 @@ namespace BladeEngine
         bool OutputToFile(const ANSICHAR* inFilename)
         {
             BString outFilename = BPath::GetFilenameWithoutExt(inFilename) + TEXT(".shader");
-            HFile outFileHandle = PlatformAPI::OpenFileA(outFilename, EFILE_WRITE, EFILE_SHARE_WRITE, EFIlE_CREATE_NEW);
+            HFile outFileHandle = PlatformAPI::OpenFileA(outFilename, EFILE_WRITE, EFILE_SHARE_WRITE, EFIlE_CREATE);
 
             if (!PlatformAPI::CheckHFileValid(outFileHandle))
             {

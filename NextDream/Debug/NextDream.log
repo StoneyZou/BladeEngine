@@ -1,12 +1,9 @@
-﻿  OpenGLWindows.cpp
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\opengl\windows\openglwindows.cpp(31): error C3861: “InitOpenGLLibrary”: 找不到标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\opengl\windows\openglwindows.cpp(37): error C3861: “CreateDummyOpenGLContext”: 找不到标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\opengl\windows\openglwindows.cpp(42): error C3861: “CreateDummyOpenGLContext”: 找不到标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\opengl\windows\openglwindows.cpp(52): error C3861: “ReleaseDummyOpenGLContext”: 找不到标识符
-c:\users\rockzou\documents\visual studio 2015\projects\nextdream\nextdream\source\opengl\windows\openglwindows.cpp(222): error C2198: “PFNGLBINDFRAMEBUFFERPROC”: 用于调用的参数太少
-  DirectX11Context.cpp
+﻿  DirectX11Context.cpp
   正在生成代码...
   正在编译...
-  DirectXEnumMapping.cpp
   DirectX11Device.cpp
   正在生成代码...
+  正在跳过...(未检测到相关更改)
+  main.cpp
+  NextDream.vcxproj -> C:\Users\rockzou\Documents\Visual Studio 2015\Projects\NextDream\Debug\BladeEngine.exe
+  NextDream.vcxproj -> C:\Users\rockzou\Documents\Visual Studio 2015\Projects\NextDream\Debug\BladeEngine.pdb (Full PDB)

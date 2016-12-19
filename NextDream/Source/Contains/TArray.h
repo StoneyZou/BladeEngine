@@ -107,20 +107,18 @@ namespace BladeEngine
     public:
         void Resize(SIZE_T inNewLength)
         {
-            SIZE_T oldLength = m_Length;
-            m_Length = inNewLength;
-            m_Capacity = m_Length < m_Capacity ? m_Capacity : m_Length;
-
-            if (oldLength < m_Capacity)
+            if (m_Capacity < inNewLength)
             {
-                _ExpandCapacity();
+                _ExpandCapacity(inNewLength * 2 + 1);
             }
 
-            for (SIZE_T i = oldLength; i < inNewLength; ++i)
+            for (SIZE_T i = m_Length; i < inNewLength; ++i)
             {
                 Type* newElement = &m_pData[i];
                 BladeConstruct(newElement, Type);
             }
+
+            m_Length = inNewLength;
         }
 
         Type& Add(const Type& inValue)

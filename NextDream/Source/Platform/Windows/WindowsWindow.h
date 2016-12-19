@@ -94,7 +94,7 @@ namespace BladeEngine
         void Update()
         {
             MSG msg = { 0 };
-            while (GetMessage(&msg, NULL, 0, 0))
+            while (PeekMessage(&msg, m_windowHandle, 0, 0, PM_REMOVE))
             {
                 if (!TranslateAccelerator(msg.hwnd, 0, &msg))
                 {
